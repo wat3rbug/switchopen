@@ -4,6 +4,4 @@ switches.csv
 *.todo
 *.numbers
 putty.exe
-dist/
-build/
 

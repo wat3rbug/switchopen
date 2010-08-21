@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<project name="SwitchOpen" basedir="." default="run">
+  <property name="build" location="build"/>
+  <property name ="src" location="src"/>
+  <property name="dist" location="dist"/>
+  <property name ="lib" location="lib"/>
+  <property name="napkin" location="net"/>
+  <property name="config" location="config"/>
+
+  <description>
+    SwitchOpen build file
+  </description>
+
+<!-- INIT - setup the directories and copy files. -->
+
+  <target name="init" description="sets up directories">
+    <mkdir dir="${build}"/>
+    <mkdir dir ="${dist}"/>
+
+<!-- uncomment out the following lines for MAc users -->
+
+    <!-- <mkdir dir ="${dist}/${napkin}"/>
+    <mkdir dir ="${build}/${napkin}"/> -->
+
+    <copy todir="${dist}">
+      <fileset dir = "${lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist}/net">
+      <fileset dir="${napkin}"/>
+    </copy>
+    <copy todir="${build}/net">
+      <fileset dir="${napkin}"/>
+    </copy>
+	<copy todir="${basedir}">
+	  <fileset dir="${config}"/>
+	</copy>
+	<copy todir="${dist}">
+		<fileset dir="${config}"/>
+	</copy>
+	<copy todir="${build}">
+	        <fileset dir="${config}"/>
+	</copy>	
+  </target>
+
+<!-- COMPILE - all the compiler stuff is done here. -->
+
+  <target name="compile" depends="init" description ="Compile" >
+    <echo>Compiling...</echo>
+    <javac debug="on" srcdir="${src}" destdir="${build}">
+      <compilerarg value="-Xlint"/> 
+       <!-- or -->
+      <compilerarg value="-Xlint:unchecked"/> 
+    </javac>
+  </target>
+
+<!-- CLEAN - deletes old files and directories for a clean build. -->
+
+    <target name="clean" description="Deletes generated directories">
+      <echo>Starting from scratch.  Deleting class and jars</echo>
+      <delete dir="${build}" />
+      <delete dir="${dist}" />
+    </target>
+
+<!-- JAR - Wraps up everything for customer delivery. -->
+
+	<target name = "jar" depends="compile" description="builds the jar file">
+	   <jar destfile="${dist}/switchopen.jar" basedir="${build}">
+	      <manifest>
+		 	<attribute name="Main-Class" value="SwitchOpen"/>
+	      </manifest>
+	   </jar>
+	</target>
+	
+<!-- RUN - used for testing.  It also does the jarball. -->
+	
+    <target name="run" depends="jar" description="runs the application">
+      <echo>Starting SwitchOpener</echo>
+      <java jar="${dist}/switchopen.jar" fork="true" />
+    </target>
+
+<!-- REBUILD - cleans up and runs after a compile and jar.  Used for testing -->
+
+    <target name="rebuild" depends="clean,compile,run" description="cleanly compiles all sources."/>
+
+<!-- END of PROJECT -->
+
+</project>

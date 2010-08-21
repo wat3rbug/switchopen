@@ -19,29 +19,34 @@
 
 <!-- uncomment out the following lines for MAc users -->
 
-    <!-- <mkdir dir ="${dist}/${napkin}"/>
-    <mkdir dir ="${build}/${napkin}"/> -->
+    <mkdir dir ="${dist}/${napkin}"/>
+    <mkdir dir ="${build}/${napkin}"/>
 
     <copy todir="${dist}">
       <fileset dir = "${lib}">
         <include name="*.jar"/>
       </fileset>
     </copy>
+
     <copy todir="${dist}/net">
       <fileset dir="${napkin}"/>
     </copy>
+
     <copy todir="${build}/net">
       <fileset dir="${napkin}"/>
     </copy>
-	<copy todir="${basedir}">
-	  <fileset dir="${config}"/>
-	</copy>
-	<copy todir="${dist}">
-		<fileset dir="${config}"/>
-	</copy>
-	<copy todir="${build}">
-	        <fileset dir="${config}"/>
-	</copy>	
+
+    <copy todir="${basedir}">
+      <fileset dir="${config}"/>
+    </copy>
+
+    <copy todir="${dist}">
+        <fileset dir="${config}"/>
+    </copy>
+
+    <copy todir="${build}">
+            <fileset dir="${config}"/>
+    </copy> 
   </target>
 
 <!-- COMPILE - all the compiler stuff is done here. -->
@@ -65,16 +70,16 @@
 
 <!-- JAR - Wraps up everything for customer delivery. -->
 
-	<target name = "jar" depends="compile" description="builds the jar file">
-	   <jar destfile="${dist}/switchopen.jar" basedir="${build}">
-	      <manifest>
-		 	<attribute name="Main-Class" value="SwitchOpen"/>
-	      </manifest>
-	   </jar>
-	</target>
-	
+    <target name = "jar" depends="compile" description="builds the jar file">
+       <jar destfile="${dist}/switchopen.jar" basedir="${build}">
+          <manifest>
+            <attribute name="Main-Class" value="SwitchOpen"/>
+          </manifest>
+       </jar>
+    </target>
+    
 <!-- RUN - used for testing.  It also does the jarball. -->
-	
+    
     <target name="run" depends="jar" description="runs the application">
       <echo>Starting SwitchOpener</echo>
       <java jar="${dist}/switchopen.jar" fork="true" />

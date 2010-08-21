@@ -14,21 +14,20 @@ public class Pass {
 
     public static void setPassword(String newPassword, boolean decider) {
 
-	if (decider) {
-	    username = newPassword;
-	} else {
-	    password = newPassword;
-	}
-	if (debug) System.out.println("set user-" + username + 
-	    "\nset pass-" + password);
+        if (decider) {
+            username = newPassword;
+        } else {
+            password = newPassword;
+        }
+        if (debug) System.out.println("set user-" + username + "\nset pass-" + password);
     }
     public static String getPassword(boolean decider) {
-	if (debug) System.out.println("get user-" + username + 
-				      "\nget pass-" + password);
-	if (decider) {
-	    return username;
-	} else {
-	    return password;
-	}
+
+        if (debug) System.out.println("get user-" + username + "\nget pass-" + password);
+        if (decider) {
+            return username;
+        } else {
+            return password;
+        }
     }
 }

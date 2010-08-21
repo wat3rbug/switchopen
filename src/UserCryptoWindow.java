@@ -6,7 +6,6 @@
 /* This class just opens a dialog window for entry either
    password or username.
 */
-// import debug.Debug;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -34,71 +33,74 @@ public class UserCryptoWindow {
 
     public UserCryptoWindow(boolean decider, Debug passedframe) {
 
-	this(decider);
-	debugger = passedframe;
+        this(decider);
+        debugger = passedframe;
     }
+
     public UserCryptoWindow(boolean decider) {
-	if (debugger == null) debugger = new Debug();
-	inUse = true;
-	contents.setLayout(new BoxLayout(contents, BoxLayout.X_AXIS));
-	whichIsIt = decider;
-	if (decider == USER) {
-	    if (debug) debugger.update("Opening user window");
-	    contents.add(userNameLabel);
-	    contents.add(username);
-	    username.addKeyListener(new KeyboardUpdater());
-	} else {
-	    if (debug) debugger.update("Opening password window");
-	    contents.add(passwordLabel);
-	    contents.add(passwordEntry);
-	passwordEntry.addKeyListener(new KeyboardUpdater());
-	}
-	contents.add(enter);
-	enter.addActionListener(new MouseUpdater());
-	background.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-	background.add(contents);
-	frame.getContentPane().add(background);
-	frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	frame.pack();
-	frame.setVisible(true);
+    
+        if (debugger == null) debugger = new Debug();
+        inUse = true;
+        contents.setLayout(new BoxLayout(contents, BoxLayout.X_AXIS));
+        whichIsIt = decider;
+        if (decider == USER) {
+            if (debug) debugger.update("Opening user window");
+            contents.add(userNameLabel);
+            contents.add(username);
+            username.addKeyListener(new KeyboardUpdater());
+        } else {
+            if (debug) debugger.update("Opening password window");
+            contents.add(passwordLabel);
+            contents.add(passwordEntry);
+            passwordEntry.addKeyListener(new KeyboardUpdater());
+        }
+        contents.add(enter);
+        enter.addActionListener(new MouseUpdater());
+        background.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        background.add(contents);
+        frame.getContentPane().add(background);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
     }
     // methods
 
     private void updateThePassword() {
 
-	if (whichIsIt == USER) {
-	    if (debug) debugger.update("updating username");
-	    new Pass().setPassword(username.getText(), USER);
-	    inUse = false;
-	    frame.dispose();
-	} else {
-	    if (debug) debugger.update("updating password" );
-	    new Pass().setPassword(new String(passwordEntry.getPassword()), PASSWORD);
-	    inUse = false;
-	    frame.dispose();
-	}
+        if (whichIsIt == USER) {
+            if (debug) debugger.update("updating username");
+            new Pass().setPassword(username.getText(), USER);
+            inUse = false;
+            frame.dispose();
+        } else {
+            if (debug) debugger.update("updating password" );
+            new Pass().setPassword(new String(passwordEntry.getPassword()), PASSWORD);
+            inUse = false;
+            frame.dispose();
+        }
     }
+
     public static boolean exists() {
 
-	return inUse;
+        return inUse;
     }
     // inner classes
 
     public class KeyboardUpdater extends KeyAdapter {
 
-	public void keyPressed(KeyEvent e) {
+        public void keyPressed(KeyEvent e) {
 
-	    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-		updateThePassword();
-	    }
-	}
-	
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                updateThePassword();
+            }
+        }
     }
+
     public class MouseUpdater implements ActionListener {
 
-	public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
 
-	    updateThePassword();
-	}
+            updateThePassword();
+        }
     }
 }

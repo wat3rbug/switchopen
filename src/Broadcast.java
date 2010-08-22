@@ -17,79 +17,69 @@ public class Broadcast {
     private static int port = 10077;
     private boolean debug = true;
     private Debug debugger = null;
-    private String addressTxt = "139.169.118.255";
+    private String addressTxt = "255.255.255.255"; // can restrict this to just subnet broadcast
 
     // constructors
 
     public Broadcast(Debug passedframe) {
 
-	debugger = passedframe;
-	finishConstructor();
+		debugger = passedframe;
+		finishConstructor();
     }
     public Broadcast() {
 	
-	if (debug && debugger == null) {
-	    debugger = new Debug();
-	}
-	finishConstructor();
+		if (debug && debugger == null) debugger = new Debug();
+		finishConstructor();
     }
     // methods 
 
     private void finishConstructor() {
 	
-	File switchFile = new File(filename);
-	fileDate = switchFile.lastModified();
-	if (debug) {
-	    debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
-	}
+		File switchFile = new File(filename);
+		fileDate = switchFile.lastModified();
+		if (debug) debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
     }
+
     public void sendMessage() {
 
-	try {
-	    if (debug) {
-		debugger.update(" --- Start broadcast --- ");
-	    }
-	    broadcastSocket = new DatagramSocket();
-	    broadcastSocket.setBroadcast(true);
-	    DatagramPacket message;
-	    InetAddress address = InetAddress.getByName(addressTxt);
-	    broadcastSocket.connect(address, port);
-	    if (debug) {
-		debugger.update("Opened port");
-	    }
-	    byte[] sendBuff = ( new Long(fileDate).toString().getBytes());
-	    message = new DatagramPacket(sendBuff, sendBuff.length);
-	    broadcastSocket.send(message);
-	    if (debug) {
-		debugger.update("Sent message");
-	    }
-	    broadcastSocket.disconnect();
-	    broadcastSocket.close();
-	} catch (UnknownHostException uhe) {
+		try {
+	    	if (debug) debugger.update(" --- Start broadcast --- ");
+	    	broadcastSocket = new DatagramSocket();
+	    	broadcastSocket.setBroadcast(true);
+	    	DatagramPacket message;
+	    	InetAddress address = InetAddress.getByName(addressTxt);
+	    	broadcastSocket.connect(address, port);
+	    	if (debug) debugger.update("Opened port");
+	    	byte[] sendBuff = ( new Long(fileDate).toString().getBytes());
+	    	message = new DatagramPacket(sendBuff, sendBuff.length);
+	    	broadcastSocket.send(message);
+	    	if (debug) 	debugger.update("Sent message");
+	    	broadcastSocket.disconnect();
+	    	broadcastSocket.close();
+		} catch (UnknownHostException uhe) {
+			
 	    /* Useless stuff here except debug trace */
-	    if (debug) {
-		debugger.update("Broadcast failure");
-		uhe.printStackTrace();
-	    }
-	} catch (SocketException se) {
-	    if (debug) {
-		debugger.update("Broadcast failure");
-		se.printStackTrace();
-	    }
-	} catch (IOException ioe) {
-	    
-	    if (debug) {
-		debugger.update("Broadcast failure");
-		if (ioe.getMessage().matches("No route to host")) debugger.update("Check cable or make sure wireless is turned on");
-		else ioe.printStackTrace();
-	    }  
-	}
-	if (debug) {
-	    debugger.update(" -- Broadcast --\n --- End broadcast --- ");
-    	}
+	    	if (debug) {
+				debugger.update("Broadcast failure");
+				uhe.printStackTrace();
+	    	}
+		} catch (SocketException se) {
+	    	if (debug) {
+				debugger.update("Broadcast failure");
+				se.printStackTrace();
+	    	}
+		} catch (IOException ioe) {	    
+	    	if (debug) {
+				debugger.update("Broadcast failure");
+				if (ioe.getMessage().matches("No route to host")) debugger.update("Check cable or make sure wireless is turned on");
+				else ioe.printStackTrace();
+	    	}  
+		}
+		if (debug) debugger.update(" -- Broadcast --\n --- End broadcast --- ");
     }
+
     public long getFileDate() {
 
-	return fileDate;
+		return fileDate;
     }	
 }

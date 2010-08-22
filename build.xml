@@ -17,7 +17,7 @@
     <mkdir dir="${build}"/>
     <mkdir dir ="${dist}"/>
 
-<!-- uncomment out the following lines for MAc users -->
+<!-- uncomment out the following lines for Mac users -->
 
     <mkdir dir ="${dist}/${napkin}"/>
     <mkdir dir ="${build}/${napkin}"/>
@@ -28,9 +28,9 @@
       </fileset>
     </copy>
 
-    <copy todir="${dist}/net">
+ <!--   <copy todir="${dist}/net">
       <fileset dir="${napkin}"/>
-    </copy>
+    </copy> -->
 
     <copy todir="${build}/net">
       <fileset dir="${napkin}"/>

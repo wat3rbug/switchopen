@@ -27,7 +27,7 @@ public class TransmitFile {
         this.frame = frame;
         this.address = address;
         // if (debug && debugger == null) debugger = new Debug();
-        if (debug) debugger.update(" --- TransmitFile constructor address " + address.toString());
+        // if (debug) debugger.update(" --- TransmitFile constructor address " + address.toString());
     }
     // methods
 

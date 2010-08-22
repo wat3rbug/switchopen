@@ -46,12 +46,6 @@ public class ReceiveFile {
         ServerSocket socket = null;
         success = true;
         try {
-            File newFile = new File(filename);
-            if (newFile.exists() ) {
-                newFile.delete();
-            } 
-            newFile.createNewFile();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
             if (debug) debugger.update(" --- opening TCP socket --- ");
             socket = new ServerSocket(port);
             socket.setSoTimeout(SEC_LENGTH * 15);
@@ -63,6 +57,17 @@ public class ReceiveFile {
             while ((inputLine = reader.readLine()) != null) {
                 fileContents.add(inputLine);
             }
+            reader.close();
+            socket.close();
+            // do file stuff after everything read from th e net
+
+            File newFile = new File(filename);
+            if (newFile.exists() ) {
+                newFile.delete();
+            } 
+            newFile.createNewFile();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
+
             for (int i = 0; i < fileContents.size() ; i++) {
                 writer.write(fileContents.get(i) + "\r\n");
                 if (debug) debugger.update(" ---- wrote " + fileContents.get(i));
@@ -70,9 +75,7 @@ public class ReceiveFile {
             if (debug) debugger.update(" --- closing file and TCP socket --- ");
             fileContents.clear();
             writer.flush();
-            writer.close();
-            reader.close();
-            socket.close();
+            writer.close();         
             if (debug) {
                 debugger.update(" --- Leaving receive file process ---");
                 JOptionPane.showMessageDialog(frame, "Successfully received and updated local file", "Success", JOptionPane.INFORMATION_MESSAGE);

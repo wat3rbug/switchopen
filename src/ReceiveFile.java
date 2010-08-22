@@ -50,6 +50,7 @@ public class ReceiveFile {
             socket = new ServerSocket(port);
             socket.setSoTimeout(SEC_LENGTH * 15);
             Socket connection = socket.accept();
+			if (debug) debugger.update(" -- heard distant end");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine = null;
             if (debug) debugger.update(" --- receiving file --- ");

@@ -48,6 +48,10 @@ public class ReceiveFile {
         try {
             if (debug) debugger.update(" --- opening TCP socket --- ");
             socket = new ServerSocket(port);
+			if (debug) {
+				if (socket.isBound()) debugger.update("bound to socket");
+				else debugger.update("Did not bind");
+			}
             socket.setSoTimeout(SEC_LENGTH * 15);
             Socket connection = socket.accept();
 			if (debug) debugger.update(" -- heard distant end");

@@ -46,8 +46,13 @@ public class ReceiveFile {
             if (debug) debugger.update(" --- opening TCP socket --- ");
             socket = new ServerSocket(port);
             socket.setSoTimeout(SEC_LENGTH * 15);
+	    if (debug) {
+		if (socket.isBound()) {
+		    debugger.update(socket.toString());
+		}
+	    }
             Socket connection = socket.accept();
-			if (debug) debugger.update(" -- heard distant end");
+	    if (debug) debugger.update(" -- heard distant end");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine = null;
             if (debug) debugger.update(" --- receiving file --- ");

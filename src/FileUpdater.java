@@ -133,6 +133,7 @@ public class FileUpdater implements Runnable {
                         debugger.update("local is older\n --- Entering receive file mode --- ");
                     }
                     ReceiveFile updateLocalFile = null;
+		    boolean testReceive = false;
                     if (debug) {
                         updateLocalFile = new ReceiveFile(frame, debugger);
                     } else {

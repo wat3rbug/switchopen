@@ -46,9 +46,12 @@ public class TransmitFile {
             reader = new BufferedReader(new FileReader(newFile));
             if (debug) debugger.update("Address - "+ address.toString() + "\tport " + port);
             socket = new Socket(address, port);
-            if (debug){
-                if (socket.isBound()) debugger.update("ouput found port " socket.getPort());
-                else debugger.update("cannot bind outgoing " socket.getPort());
+            if (debug) {
+                 if (socket.isBound()) {
+					debugger.update("ouput found port " + socket.getPort());
+                 } else {
+            		debugger.update("cannot bind outgoing " + socket.getPort());
+   				}
             }
             DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
             String inputLine = null;

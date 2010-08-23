@@ -157,7 +157,7 @@ public class FileUpdater implements Runnable {
                         updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
                     } else {
                         updateRemoteFile = new TransmitFile(frame, remoteAddress);
-					}
+                    }
                     if (!updateRemoteFile.sendFile()) {
                         if (debug) {
                             debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");

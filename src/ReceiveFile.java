@@ -48,6 +48,7 @@ public class ReceiveFile {
             if (debug) {
                 if (socket.isBound()) debugger.update("bound to socket " + socket.getLocalPort());
                 else debugger.update("Did not bind");
+                debugger.update(socket.toString());
             }
             socket.setSoTimeout(SEC_LENGTH * 15);
             Socket connection = socket.accept();

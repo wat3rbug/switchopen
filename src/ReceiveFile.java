@@ -29,9 +29,6 @@ public class ReceiveFile {
     }
     public ReceiveFile(JFrame frame) {
     
-        if (debug && debugger == null) {
-            debugger = new Debug();
-        }
         this.frame = frame;
     }
     // methods

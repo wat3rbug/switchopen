@@ -41,6 +41,7 @@ public class ReceiveFile {
         // add timeout so it can retry
         if (debug) debugger.update(" --- starting receive process --- ");
         ServerSocket socket = null;
+        Socket connection = null;
         success = true;
         try {
             if (debug) debugger.update(" --- opening TCP socket --- ");
@@ -51,7 +52,7 @@ public class ReceiveFile {
                 debugger.update(socket.toString());
             }
             socket.setSoTimeout(SEC_LENGTH * 15);
-            Socket connection = socket.accept();
+            connection = socket.accept();
             if (debug) debugger.update(" -- heard distant end");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine = null;

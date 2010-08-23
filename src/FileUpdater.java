@@ -158,12 +158,12 @@ public class FileUpdater implements Runnable {
                         updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
                     } else {
                         updateRemoteFile = new TransmitFile(frame, remoteAddress);
-                        if (!updateRemoteFile.sendFile()) {
-                            if (debug) {
-                                debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
-                            }
-                            beacon.sendMessage();   
+					}
+                    if (!updateRemoteFile.sendFile()) {
+                        if (debug) {
+                            debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
                         }
+                        beacon.sendMessage();   
                     }
                     if (debug) {
                         debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");

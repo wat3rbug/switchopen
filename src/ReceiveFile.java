@@ -51,7 +51,7 @@ public class ReceiveFile {
                 else debugger.update("Did not bind");
                 debugger.update(socket.toString());
             }
-            // socket.setSoTimeout(SEC_LENGTH * 15);
+            socket.setSoTimeout(SEC_LENGTH * 15);
             connection = socket.accept();
             if (debug) debugger.update(" -- heard distant end");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));

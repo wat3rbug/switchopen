@@ -1,11 +1,12 @@
 <?xml version="1.0" ?>
 <project name="SwitchOpen" basedir="." default="run">
   <property name="build" location="build"/>
-  <property name ="src" location="src"/>
+  <property name="src" location="src"/>
   <property name="dist" location="dist"/>
-  <property name ="lib" location="lib"/>
+  <property name="lib" location="lib"/>
   <property name="napkin" location="net"/>
   <property name="config" location="config"/>
+  <property name="org" location="org"/>
 
   <description>
     SwitchOpen build file
@@ -15,22 +16,22 @@
 
   <target name="init" description="sets up directories">
     <mkdir dir="${build}"/>
-    <mkdir dir ="${dist}"/>
+    <mkdir dir="${dist}"/>
 
 <!-- uncomment out the following lines for Mac users -->
 
-    <mkdir dir ="${dist}/${napkin}"/>
-    <mkdir dir ="${build}/${napkin}"/>
+    <mkdir dir="${dist}/${napkin}"/>
+    <mkdir dir="${build}/${napkin}"/>
 
     <copy todir="${dist}">
-      <fileset dir = "${lib}">
+      <fileset dir="${lib}">
         <include name="*.jar"/>
       </fileset>
     </copy>
 
- <!--   <copy todir="${dist}/net">
-      <fileset dir="${napkin}"/>
-    </copy> -->
+    <copy todir="${build}/org">
+      <fileset dir="${org}"/>
+    </copy>
 
     <copy todir="${build}/net">
       <fileset dir="${napkin}"/>
@@ -51,7 +52,7 @@
 
 <!-- COMPILE - all the compiler stuff is done here. -->
 
-  <target name="compile" depends="init" description ="Compile" >
+  <target name="compile" depends="init" description="Compile" >
     <echo>Compiling...</echo>
     <javac debug="on" srcdir="${src}" destdir="${build}">
       <compilerarg value="-Xlint"/> 
@@ -70,7 +71,7 @@
 
 <!-- JAR - Wraps up everything for customer delivery. -->
 
-    <target name = "jar" depends="compile" description="builds the jar file">
+    <target name="jar" depends="compile" description="builds the jar file">
        <jar destfile="${dist}/switchopen.jar" basedir="${build}">
           <manifest>
             <attribute name="Main-Class" value="SwitchOpen"/>

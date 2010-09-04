@@ -41,7 +41,6 @@ public class ReceiveFile {
         // add timeout so it can retry
         if (debug) debugger.update(" --- starting receive process --- ");
         ServerSocket socket = null;
-        Socket connection = null;
         success = true;
         try {
             if (debug) debugger.update(" --- opening TCP socket --- ");

@@ -277,39 +277,47 @@ public class SwitchOpen {
             JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
                 JOptionPane.ERROR_MESSAGE);
         }
-        for (int i = 0; i < switches.size(); i ++) {
+		Pattern ipAddress = Pattern.compile("^[0-9]*\p[0-9]*\p[0-9]*\p[0-9]*$");
+		Matcher validateIp = ipAddress.matcher(testString);
+        String validIp = null;
+		if (validateIp.matches()) validIp = testString;
+		else {
+			for (int i = 0; i < switches.size(); i ++) {
         
-            // go through array and find item that has this text in it
+            	// go through array and find item that has this text in it
         
-            if ((switches.get(i).indexOf(testString)) >= 0) {
+            	if ((switches.get(i).indexOf(testString)) >= 0) {
 
-                // run a system command to use putty using the 
-                // string from array
-                if (debug) debugger.update("Found " + switches.get(i));
-                try {
-                    String destination ="";
-                    if (password.getPassword(USER) != null) {
-                        destination = password.getPassword(USER) + "@";
-                    }
-                    destination = destination + switches.get(i);
-                    if (debug) debugger.update(commandLine + destination);
-                    Process child = Runtime.getRuntime().exec(commandLine + destination);
-                } catch (IOException e) {
-                    if (debug) {
-                        debugger.update("Something didn't work");
-                        e.printStackTrace();
-                    }
-                    JOptionPane.showMessageDialog(frame, "Either putty is in " + directory +" or you have bigger issues", 
+                	// run a system command to use putty using the 
+                	// string from array
+                	if (debug) debugger.update("Found " + switches.get(i));
+					validIp = switches.get(i);
+				}
+			}				
+        }
+    	try {
+	       	String destination ="";      
+	        if (password.getPassword(USER) != null) {
+                    destination = password.getPassword(USER) + "@";
+            }
+            destination = destination + switches.get(i);
+            if (debug) debugger.update(commandLine + destination);
+            Process child = Runtime.getRuntime().exec(commandLine + destination);
+       } catch (IOException e) {
+            if (debug) {
+                  debugger.update("Something didn't work");
+                  e.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(frame, "Either putty is in " + directory +" or you have bigger issues", 
                         "Putty?", JOptionPane.ERROR_MESSAGE);
-                    debugger.update("Make sure putty is in the " + directory + 
+            debugger.update("Make sure putty is in the " + directory + 
                         "directory");
-                } // end catch block
-                inputTag.setText("");
-                return;
-            } // end if switch found
-        } // end for loop for db
-        JOptionPane.showMessageDialog(frame, testString + " is not found", "bad tag", JOptionPane.ERROR_MESSAGE);
-        return;
+        } // end catch block
+
+        inputTag.setText("");
+ 		if (validIp.equals(""))
+        	JOptionPane.showMessageDialog(frame, testString + " is not found", "bad tag", JOptionPane.ERROR_MESSAGE);
+       return;
     }
     // inner classes
 

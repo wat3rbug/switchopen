@@ -40,7 +40,6 @@ public class UserAccountWindow {
 
     public UserAccountWindow(boolean decider) {
 
-        if (debugger == null) debugger= new Debug();
         inUse = true;
         contents.setLayout(new BoxLayout(contents, BoxLayout.X_AXIS));
         whichIsIt = decider;

@@ -12,6 +12,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import java.io.*;
+import java.util.regex.*;
 import net.sourceforge.napkinlaf.*;
 
 /* This is used to by simply adding the tag number of the switch.  It requires 
@@ -29,7 +30,7 @@ public class SwitchOpen {
 
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;
-    private static boolean debug = true;
+    private static boolean debug = false;
     static JFrame frame;
     JTextField inputTag;
     static String switchFile = "switches.csv";
@@ -40,6 +41,7 @@ public class SwitchOpen {
     static ArrayList <String> switches = new ArrayList<String>();
     String directory = null;
     static Debug debugger = null;
+	private static final boolean runNetwork = false;
 
 
     // constructors
@@ -214,7 +216,7 @@ public class SwitchOpen {
             backgroundService = new FileUpdater(frame);
         }
         Thread server = new Thread(backgroundService, "Server");
-        if (backgroundService.getRun()) {
+        if (runNetwork) {
             server.start();
             if (debug) debugger.update(" --- Starting server --- ");
         } else if (debug) debugger.update(" --- Server not started ---");
@@ -261,9 +263,14 @@ public class SwitchOpen {
 
         if (debug) debugger.update("Starting to open a switch");
         String testString = inputTag.getText();
-        String command = "putty ";
+		String command = null;
+		if (System.getProperty("os.name").startsWith("Windows")) {
+			command = "putty ";
+		} else {
+			command ="ssh ";
+		}
         String commandLine;
-        if (password.getPassword(PASSWORD) != null) {
+        if (password.getPassword(PASSWORD) != null && command.startsWith("putty")) {
             commandLine = command + "-pw " + password.getPassword(PASSWORD) + " ";
         } else {
             commandLine = command;
@@ -273,15 +280,19 @@ public class SwitchOpen {
             debugger.update("command line: "+commandLine);
             debugger.update("Looking for the switch based on " + testString);
         }
-        if (switches.size() < 1 ) {
-            JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
-                JOptionPane.ERROR_MESSAGE);
-        }
-		Pattern ipAddress = Pattern.compile("^[0-9]*\p[0-9]*\p[0-9]*\p[0-9]*$");
+        
+		Pattern ipAddress = Pattern.compile("^[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*$");
 		Matcher validateIp = ipAddress.matcher(testString);
         String validIp = null;
-		if (validateIp.matches()) validIp = testString;
+		if (validateIp.matches()) {
+			if (debug) debugger.update(testString + " is a valid IP");
+			validIp = testString;
+		}
 		else {
+			if (switches.size() < 1 ) {
+	            JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
+	                JOptionPane.ERROR_MESSAGE);
+	        }
 			for (int i = 0; i < switches.size(); i ++) {
         
             	// go through array and find item that has this text in it
@@ -290,8 +301,8 @@ public class SwitchOpen {
 
                 	// run a system command to use putty using the 
                 	// string from array
-                	if (debug) debugger.update("Found " + switches.get(i));
 					validIp = switches.get(i);
+                	if (debug) debugger.update("Found " + validIp);
 				}
 			}				
         }
@@ -300,7 +311,8 @@ public class SwitchOpen {
 	        if (password.getPassword(USER) != null) {
                     destination = password.getPassword(USER) + "@";
             }
-            destination = destination + switches.get(i);
+            destination = destination + validIp;
+			if (command.startsWith("ssh")) destination+= " &";
             if (debug) debugger.update(commandLine + destination);
             Process child = Runtime.getRuntime().exec(commandLine + destination);
        } catch (IOException e) {

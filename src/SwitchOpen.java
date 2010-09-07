@@ -339,7 +339,7 @@ public class SwitchOpen {
 
         public void actionPerformed(ActionEvent pu) {
         
-            if (debug) debugger.update("called "+pu.getActionCommand());
+            if (debug) debugger.update("called " + pu.getActionCommand());
             if (pu.getActionCommand().equals("user") && !UserAccountWindow.exists()) {
                 new UserAccountWindow(USER);
             } else if (!UserAccountWindow.exists()) {

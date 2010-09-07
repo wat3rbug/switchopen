@@ -28,7 +28,7 @@ public class UserPasswordWindow {
     BorderLayout layout = new BorderLayout();
     JPanel background = new JPanel(layout);
     JPanel contents = new JPanel();
-    static Debug debugger;
+    private Debug debugger;
 
     // constructors
 

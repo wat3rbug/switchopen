@@ -8,7 +8,7 @@ public class FileUpdater implements Runnable {
     // class variables
 
     private static boolean isRunning = true; 
-    private static final boolean debug = true;
+    private static final boolean debug = false;
     private static final int MIN = 5;
     private static final int SEC_LENGTH = 1000;
     private String fileDate = null;

@@ -41,7 +41,7 @@ public class SwitchOpen {
     static ArrayList <String> switches = new ArrayList<String>();
     String directory = null;
     static Debug debugger = null;
-	private static final boolean runNetwork = false;
+    private static final boolean runNetwork = false;
 
 
     // constructors
@@ -263,12 +263,12 @@ public class SwitchOpen {
 
         if (debug) debugger.update("Starting to open a switch");
         String testString = inputTag.getText();
-		String command = null;
-		if (System.getProperty("os.name").startsWith("Windows")) {
-			command = "putty ";
-		} else {
-			command ="ssh ";
-		}
+        String command = null;
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            command = "putty ";
+        } else {
+            command ="xterm -e ssh ";
+        }
         String commandLine;
         if (password.getPassword(PASSWORD) != null && command.startsWith("putty")) {
             commandLine = command + "-pw " + password.getPassword(PASSWORD) + " ";
@@ -281,38 +281,38 @@ public class SwitchOpen {
             debugger.update("Looking for the switch based on " + testString);
         }
         
-		Pattern ipAddress = Pattern.compile("^[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*$");
-		Matcher validateIp = ipAddress.matcher(testString);
+        Pattern ipAddress = Pattern.compile("^[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*$");
+        Matcher validateIp = ipAddress.matcher(testString);
         String validIp = null;
-		if (validateIp.matches()) {
-			if (debug) debugger.update(testString + " is a valid IP");
-			validIp = testString;
-		}
-		else {
-			if (switches.size() < 1 ) {
-	            JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
-	                JOptionPane.ERROR_MESSAGE);
-	        }
-			for (int i = 0; i < switches.size(); i ++) {
-        
-            	// go through array and find item that has this text in it
-        
-            	if ((switches.get(i).indexOf(testString)) >= 0) {
-
-                	// run a system command to use putty using the 
-                	// string from array
-					validIp = switches.get(i);
-                	if (debug) debugger.update("Found " + validIp);
-				}
-			}				
+        if (validateIp.matches()) {
+            if (debug) debugger.update(testString + " is a valid IP");
+            validIp = testString;
         }
-    	try {
-	       	String destination ="";      
-	        if (password.getPassword(USER) != null) {
+        else {
+            if (switches.size() < 1 ) {
+                JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            for (int i = 0; i < switches.size(); i ++) {
+        
+                // go through array and find item that has this text in it
+        
+                if ((switches.get(i).indexOf(testString)) >= 0) {
+
+                    // run a system command to use putty using the 
+                    // string from array
+                    validIp = switches.get(i);
+                    if (debug) debugger.update("Found " + validIp);
+                }
+            }               
+        }
+        try {
+            String destination ="";      
+            if (password.getPassword(USER) != null) {
                     destination = password.getPassword(USER) + "@";
             }
             destination = destination + validIp;
-			if (command.startsWith("ssh")) destination+= " &";
+            if (command.startsWith("xterm")) destination+= " &";
             if (debug) debugger.update(commandLine + destination);
             Process child = Runtime.getRuntime().exec(commandLine + destination);
        } catch (IOException e) {
@@ -327,8 +327,8 @@ public class SwitchOpen {
         } // end catch block
 
         inputTag.setText("");
- 		if (validIp.equals(""))
-        	JOptionPane.showMessageDialog(frame, testString + " is not found", "bad tag", JOptionPane.ERROR_MESSAGE);
+        if (validIp.equals(""))
+            JOptionPane.showMessageDialog(frame, testString + " is not found", "bad tag", JOptionPane.ERROR_MESSAGE);
        return;
     }
     // inner classes

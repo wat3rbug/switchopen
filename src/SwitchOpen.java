@@ -367,9 +367,8 @@ public class SwitchOpen {
 
         public void actionPerformed(ActionEvent ad) {
 
-            String message = "Version: 1.3\nCreation Date: 20 March 2009\n"
-                + "Author: Douglas Gardiner\n\nPlans: use excel format,"
-                + " search\nfor putty or ssh depending on\nthe OS";
+            String message = "Version: 1.5\nCreation Date: 20 March 2009\n"
+                + "Author: Douglas Gardiner\n\nPlans: Network P2P update of switch file";
             JOptionPane.showMessageDialog(frame, message, 
                 "about", JOptionPane.INFORMATION_MESSAGE);
         }

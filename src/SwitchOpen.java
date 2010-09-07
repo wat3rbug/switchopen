@@ -292,6 +292,7 @@ public class SwitchOpen {
             if (switches.size() < 1 ) {
                 JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
                     JOptionPane.ERROR_MESSAGE);
+				return;
             }
             for (int i = 0; i < switches.size(); i ++) {
         
@@ -306,6 +307,11 @@ public class SwitchOpen {
                 }
             }               
         }
+		inputTag.setText("");
+        if (validIp == null || validIp.equals("")) {
+            JOptionPane.showMessageDialog(frame, testString + " is not found", "bad tag", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
         try {
             String destination ="";      
             if (password.getPassword(USER) != null) {
@@ -325,11 +331,6 @@ public class SwitchOpen {
             debugger.update("Make sure putty is in the " + directory + 
                         "directory");
         } // end catch block
-
-        inputTag.setText("");
-        if (validIp.equals(""))
-            JOptionPane.showMessageDialog(frame, testString + " is not found", "bad tag", JOptionPane.ERROR_MESSAGE);
-       return;
     }
     // inner classes
 

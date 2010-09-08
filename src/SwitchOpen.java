@@ -306,12 +306,12 @@ public class SwitchOpen {
                     if (debug) debugger.update("Found " + validIp);
                 }
             }               
-        }
-		inputTag.setText("");
+        }	
         if (validIp == null || validIp.equals("")) {
             JOptionPane.showMessageDialog(frame, testString + " is not found", "bad tag", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		inputTag.setText("");
         try {
             String destination ="";      
             if (password.getPassword(USER) != null) {

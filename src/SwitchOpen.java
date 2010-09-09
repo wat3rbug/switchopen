@@ -41,7 +41,7 @@ public class SwitchOpen {
     static ArrayList <String> switches = new ArrayList<String>();
     String directory = null;
     static Debug debugger = null;
-    private static final boolean runNetwork = false;
+    private static final boolean runNetwork = true;
 
 
     // constructors

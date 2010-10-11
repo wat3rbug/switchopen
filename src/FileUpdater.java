@@ -120,7 +120,7 @@ public class FileUpdater implements Runnable {
             for (int i = 0 ; i < hostnames.size(); i++) {
                 if (remoteAddress.getHostName().equals(hostnames.get(i))) inTheACL = true;
             }
-            long adjustedRemoteDate = remoteDate + TIMER_LEN *24;
+            long adjustedRemoteDate = remoteDate + (TIMER_LEN *24);
             if (debug) debugger.update(" -- FileUpdater --\nlocal file date = " + beacon.getFileDate() + 
                 "\nremote file date = " + (adjustedRemoteDate));
             if (inTheACL) {
@@ -133,7 +133,7 @@ public class FileUpdater implements Runnable {
                         debugger.update("local is older\n --- Entering receive file mode --- ");
                     }
                     ReceiveFile updateLocalFile = null;
-            boolean testReceive = false;
+            		boolean testReceive = false;
                     if (debug) {
                         updateLocalFile = new ReceiveFile(frame, debugger);
                     } else {

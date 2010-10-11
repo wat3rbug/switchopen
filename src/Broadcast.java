@@ -12,6 +12,7 @@ public class Broadcast {
     // class variables
 
     private String filename = "switches.csv";
+	File switchFile;
     private static long fileDate = 0;
     public DatagramSocket broadcastSocket;
     private static int port = 10077;
@@ -35,8 +36,8 @@ public class Broadcast {
 
     private void finishConstructor() {
     
-        File switchFile = new File(filename);
-        
+        switchFile = new File(filename);
+        fileDate = switchFile.lastModified();
         if (debug) debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
     }
 

@@ -58,7 +58,7 @@ public class ReceiveFile {
             String inputLine = null;
             if (debug) debugger.update(" --- receiving file --- ");
             ArrayList <String> fileContents = new ArrayList<String>();
-            while ((inputLine = reader.readLine()) != EOF) {
+            while ((inputLine = reader.readLine()) != null) {
                 fileContents.add(inputLine);
             }
             reader.close();

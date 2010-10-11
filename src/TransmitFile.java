@@ -72,7 +72,7 @@ public class TransmitFile {
             }
             success = false;
         } catch (IOException ioe) {
-            JOptionPane.showMessageDialog(frame, "Generic failure", "Port Dead", JOptionPane.ERROR_MESSAGE);
+            // JOptionPane.showMessageDialog(frame, "Generic failure", "Port Dead", JOptionPane.ERROR_MESSAGE);
             if (debug) {
                 debugger.update("--- Transmit File failure ---");
                 ioe.printStackTrace();

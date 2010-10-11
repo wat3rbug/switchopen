@@ -19,6 +19,7 @@ public class ReceiveFile {
     private static final int SEC_LENGTH = 1000;
     private boolean success = true;
     private Debug debugger = null;
+	private static final int EOF = -1;
 
     // constructors
 
@@ -57,7 +58,7 @@ public class ReceiveFile {
             String inputLine = null;
             if (debug) debugger.update(" --- receiving file --- ");
             ArrayList <String> fileContents = new ArrayList<String>();
-            while ((inputLine = reader.readLine()) != null) {
+            while ((inputLine = reader.readLine()) != EOF) {
                 fileContents.add(inputLine);
             }
             reader.close();

@@ -30,7 +30,7 @@ public class SwitchOpen {
 
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;
-    private static boolean debug = false;
+    private static boolean debug = trues;
     static JFrame frame;
     JTextField inputTag;
     static String switchFile = "switches.csv";

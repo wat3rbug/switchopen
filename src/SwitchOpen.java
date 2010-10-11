@@ -42,7 +42,8 @@ public class SwitchOpen {
     String directory = null;
     static Debug debugger = null;
     private static final boolean runNetwork = true;
-
+	static FileUpdater backgroundService = null;
+	JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Get Updates");
 
     // constructors
 
@@ -91,7 +92,8 @@ public class SwitchOpen {
         JMenuItem aboutItem = new JMenuItem("About");
         JMenuItem helpItem = new JMenuItem("Help");
         JMenuItem passwordItem = new JMenuItem("Password");
-        JMenu about = new JMenu("About");
+		JMenu network = new JMenu("Network");
+		JMenu about = new JMenu("About");
         JMenu help = new JMenu("Help");
         BorderLayout layout = new BorderLayout();
         JPanel background = new JPanel(layout);
@@ -111,6 +113,7 @@ public class SwitchOpen {
         inputText.addKeyListener(new EnterCheck());
         aboutItem.addActionListener(new About());
         helpItem.addActionListener(new Help());
+		updating.addActionListener(new UpdaterCheck());
 
         // add components
 
@@ -121,12 +124,15 @@ public class SwitchOpen {
         contents.add(inputText);
         contents.add(outputText);
         files.add(importFileSelect);
+		network.add(updating);
+		updating.setState(runNetwork);
         about.add(aboutItem);
         help.add(helpItem);
         user.add(username);
         user.add(passwordItem);
         menuBar.add(files);
         menuBar.add(user);
+		menuBar.add(network);
         menuBar.add(about);
         menuBar.add(help);
 
@@ -208,7 +214,6 @@ public class SwitchOpen {
     public static void main(String[] args) {
 
         new SwitchOpen();
-        FileUpdater backgroundService = null;
         if (debug){
             if (debugger == null) debugger = new Debug();
             backgroundService = new FileUpdater(frame, debugger);
@@ -391,6 +396,22 @@ public class SwitchOpen {
                 readFile(importFile);
                 writeFile(switchFile);
             }
+        }
+    }
+	public class UpdaterCheck implements ActionListener {
+
+        /* This class is for toggling network updates */
+
+        public void actionPerformed(ActionEvent es) {
+        
+            // open file chooser
+			if (!backgroundService.getRun()) {
+				backgroundService.setRun(true);
+				Thread server = new Thread(backgroundService, "Server");
+		        server.start();
+		        if (debug) debugger.update(" --- Starting server --- ");
+			}
+            backgroundService.setRun(updating.getState());
         }
     }
 

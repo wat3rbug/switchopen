@@ -36,7 +36,7 @@ public class Broadcast {
     private void finishConstructor() {
     
         File switchFile = new File(filename);
-        fileDate = switchFile.lastModified();
+        
         if (debug) debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
     }
 
@@ -50,6 +50,7 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(addressTxt);
             broadcastSocket.connect(address, port);
             if (debug) debugger.update("Opened port");
+			fileDate = switchFile.lastModified();
             byte[] sendBuff = ( new Long(fileDate).toString().getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);

@@ -47,7 +47,7 @@ public class TransmitFile {
             reader = new BufferedReader(new FileReader(newFile));
             if (debug) debugger.update("Address - "+ address.toString() + "\tport " + port);
             socket = new Socket(address, port);
-			socket.setTcpNoDelay(true);
+			socket.setTcpNoDelay(false);
             if (debug) {
                  if (socket.isBound()) {
                     debugger.update("ouput found port " + socket.getPort());

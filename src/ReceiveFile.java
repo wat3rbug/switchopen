@@ -106,7 +106,6 @@ public class ReceiveFile {
             }
             success = false;
         } catch (IOException ioe) {
-            // JOptionPane.showMessageDialog(frame, "Generic failure", "Port Dead", JOptionPane.ERROR_MESSAGE);
             if (debug) {
                 debugger.update("--- Receive File failure ---");
                 ioe.printStackTrace();

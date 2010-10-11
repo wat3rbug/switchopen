@@ -14,6 +14,7 @@ public class TransmitFile {
     private JFrame frame;
     private boolean success = true;
     private Debug debugger = null;
+	private static final int EOF = -1;
 
     // constructors
 
@@ -55,7 +56,7 @@ public class TransmitFile {
             }
             DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
             String inputLine = null;
-            while ((inputLine = reader.readLine()) != null ) {
+            while ((inputLine = reader.readLine()) != EOF ) {
                 writer.writeBytes(inputLine + ",\r\n");
                 if (debug) debugger.update(" --- Sending " + inputLine);
             }

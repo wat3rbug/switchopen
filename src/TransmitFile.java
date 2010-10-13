@@ -14,7 +14,7 @@ public class TransmitFile {
     private JFrame frame;
     private boolean success = true;
     private Debug debugger = null;
-	private static final int EOF = -1;
+	private static final String EOF = "-1";
 
     // constructors
 

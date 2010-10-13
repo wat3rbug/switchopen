@@ -55,10 +55,10 @@ public class TransmitFile {
                     debugger.update("cannot bind outgoing " + socket.getPort());
                 }
             }
-            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
+            PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             String inputLine = null;
             while ((inputLine = reader.readLine()) != null ) {
-                writer.writeBytes(inputLine + "\r\n");
+                writer.println(inputLine + "\r\n");
                 if (debug) debugger.update(" --- Sending " + inputLine);
             }
             writer.flush();

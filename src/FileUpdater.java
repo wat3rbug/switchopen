@@ -61,7 +61,7 @@ public class FileUpdater implements Runnable {
             BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
             String inLine = null;
             while ((inLine = reader.readLine()) != null) {
-                hostnames.add(inLine);
+                hostnames.add(inLine.toLowerCase());
                 if (debug) debugger.update(inLine + " allowed");
             }
             if (hostnames.isEmpty()) return false;
@@ -73,13 +73,14 @@ public class FileUpdater implements Runnable {
     }
     public void run() {
 
-        if (debug) debugger.update(" -- FileUpdater --\nInitialize server");
         beacon.sendMessage();
         Calendar timer = Calendar.getInstance();
         long loopTimeStart = System.currentTimeMillis();
         InetAddress remoteAddress = null;
         while (this.getRun()) {
             
+			if (debug) debugger.update(" -- FileUpdater --\nRunning server");
+
             // if timer 5 minutes then send beacon and reset timer
         
             if (System.currentTimeMillis() > loopTimeStart + TIMER_LEN) {
@@ -118,7 +119,7 @@ public class FileUpdater implements Runnable {
             // make sure host is in ACL and time is right
             boolean inTheACL = false;
             for (int i = 0 ; i < hostnames.size(); i++) {
-                if (remoteAddress.getHostName().equals(hostnames.get(i))) inTheACL = true;
+                if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
             }
             long adjustedRemoteDate = remoteDate + (TIMER_LEN *24);
             if (debug) debugger.update(" -- FileUpdater --\nlocal file date = " + beacon.getFileDate() + 
@@ -174,7 +175,8 @@ public class FileUpdater implements Runnable {
                     debugger.update (" ---- " + remoteAddress.getHostName() +  " is NOT in the List");
                 }
             }
-        } // end while running is true           
+        } // end while running is true   
+		if (debug) debugger.update(" --- shutting down server");        
     }
 }
 

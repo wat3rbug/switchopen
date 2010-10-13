@@ -61,6 +61,7 @@ public class TransmitFile {
                 writer.println(inputLine + "\r\n");
                 if (debug) debugger.update(" --- Sending " + inputLine);
             }
+			writer.println(EOF);
             writer.flush();
             writer.close();
             reader.close();

@@ -46,6 +46,7 @@ public class ReceiveFile {
         try {
             if (debug) debugger.update(" --- opening TCP socket --- ");
             socket = new ServerSocket(port);
+			socket.setReuseAddress(true);
             if (debug) {
                 if (socket.isBound()) debugger.update("bound to socket " + socket.getLocalPort());
                 else debugger.update("Did not bind");

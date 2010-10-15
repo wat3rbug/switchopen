@@ -154,12 +154,14 @@ public class SwitchOpen {
     private void readFile(String filename) {
 
         /* just opens the file and slurps up contents */
+
+		File temp = null;
         try {
             // let local file handle this
         
             if (debug) debugger.update("Using local file\nReading "+ filename);
             String buffer = null;
-            File temp = new File(filename);
+            temp = new File(filename);
             directory = temp.getPath();
             BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
             while ((buffer = reader.readLine())!= null) {

@@ -9,7 +9,7 @@ public class FileUpdater implements Runnable {
 
     private static boolean isRunning = true; 
     private static final boolean debug = true;
-    private static final int MIN = 1s;
+    private static final int MIN = 1;
     private static final int SEC_LENGTH = 1000;
     private String fileDate = null;
     private String filename = "switches.csv";

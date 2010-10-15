@@ -131,7 +131,7 @@ public class FileUpdater implements Runnable {
             }
             long adjustedRemoteDate = remoteDate + (TIMER_LEN * HOUR * 1);
             if (debug) debugger.update(" -- FileUpdater --\nlocal file date = " + beacon.getFileDate() + 
-                "\nremote file date = " + (adjustedRemoteDate));
+                "\nremote file date = " + (adjustedRemoteDate) + "\nDifference in times" + diffInTime + "\n");
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // TS spot

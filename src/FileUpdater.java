@@ -94,6 +94,10 @@ public class FileUpdater implements Runnable {
         
             DatagramSocket receiver = null;
             ServerSocket socket = null;
+// TS spot
+			Date remoteDateObj = null;
+			Date localDateObj = null;
+//
             try {
                 receiver = new DatagramSocket(port);
                 byte[] msgBytes = new byte[100];
@@ -103,6 +107,10 @@ public class FileUpdater implements Runnable {
                 receiver.receive(message);
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
                 remoteDate = Long.parseLong(new String(message.getData()).trim());
+// TS spot
+				remoteDateObj = new Date(remoteDate);
+				localDateObj = new Date(beacon.getFileDate());
+//
                 if (debug) debugger.update(" ----- " + remoteDate);
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();
@@ -128,8 +136,11 @@ public class FileUpdater implements Runnable {
                 "\nremote file date = " + (adjustedRemoteDate));
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
-                if ((adjustedRemoteDate) > beacon.getFileDate()) {
-            
+// TS spot
+				if ((remoteDateObj.getTime() + (TIMER_LEN * HOUR)) > localDateObj.getTime()) {
+//
+            //    if ((adjustedRemoteDate) > beacon.getFileDate()) {
+	
                     // local file is older
             
                     if (debug) {
@@ -149,8 +160,10 @@ public class FileUpdater implements Runnable {
                         beacon.sendMessage();
                     }
                 }
-                if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 
-            
+				// if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 
+// TS spot
+				if ((remoteDateObj.getTime() - (TIMER_LEN * HOUR)) < localDateObj.getTime()) {
+//
                     // local file is newer
             
                     if (debug) {

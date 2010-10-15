@@ -171,6 +171,7 @@ public class SwitchOpen {
             if (debug) debugger.update("Finished reading " + filename);
         } catch (FileNotFoundException fnfe) {
             if (debug) debugger.update("File not there...trying network");
+			temp.delete();
             // JOptionPane.showMessageDialog(frame, "Are you sure " + filename + " is in " + directory +"?\ntrying for network update", 
             //                 "File problem", JOptionPane.WARNING_MESSAGE);
         } catch (IOException ex) {

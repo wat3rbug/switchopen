@@ -10,6 +10,8 @@ public class FileUpdater implements Runnable {
     private static boolean isRunning = true; 
     private static final boolean debug = true;
     private static final int MIN = 1;
+	private static final int HOUR = 60;
+	private static final int DAY = 24;
     private static final int SEC_LENGTH = 1000;
     private String fileDate = null;
     private String filename = "switches.csv";
@@ -121,7 +123,7 @@ public class FileUpdater implements Runnable {
             for (int i = 0 ; i < hostnames.size(); i++) {
                 if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
             }
-            long adjustedRemoteDate = remoteDate + (TIMER_LEN *24);
+            long adjustedRemoteDate = remoteDate + (TIMER_LEN * HOUR * 1);
             if (debug) debugger.update(" -- FileUpdater --\nlocal file date = " + beacon.getFileDate() + 
                 "\nremote file date = " + (adjustedRemoteDate));
             if (inTheACL) {

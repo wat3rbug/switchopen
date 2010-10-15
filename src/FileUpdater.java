@@ -95,8 +95,7 @@ public class FileUpdater implements Runnable {
             DatagramSocket receiver = null;
             ServerSocket socket = null;
 // TS spot
-			Date remoteDateObj = null;
-			Date localDateObj = null;
+			long diffInTime = 0; 
 //
             try {
                 receiver = new DatagramSocket(port);
@@ -108,8 +107,7 @@ public class FileUpdater implements Runnable {
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
                 remoteDate = Long.parseLong(new String(message.getData()).trim());
 // TS spot
-				remoteDateObj = new Date(remoteDate);
-				localDateObj = new Date(beacon.getFileDate());
+				diffInTime = (remoteDate - beacon.getFileDate())/ (TIMER_LEN * HOUR);
 //
                 if (debug) debugger.update(" ----- " + remoteDate);
                 beacon.sendMessage();
@@ -137,7 +135,7 @@ public class FileUpdater implements Runnable {
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // TS spot
-				if ((remoteDateObj.getTime() + (TIMER_LEN * HOUR)) > localDateObj.getTime()) {
+				if (diffInTime < -2) {
 //
             //    if ((adjustedRemoteDate) > beacon.getFileDate()) {
 	
@@ -162,7 +160,7 @@ public class FileUpdater implements Runnable {
                 }
 				// if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 
 // TS spot
-				if ((remoteDateObj.getTime() - (TIMER_LEN * HOUR)) < localDateObj.getTime()) {
+				if (diffInTime > 2) {
 //
                     // local file is newer
             

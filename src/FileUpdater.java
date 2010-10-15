@@ -10,8 +10,8 @@ public class FileUpdater implements Runnable {
     private static boolean isRunning = true; 
     private static final boolean debug = true;
     private static final int MIN = 1;
-	private static final int HOUR = 60;
-	private static final int DAY = 24;
+    private static final int HOUR = 60;
+    private static final int DAY = 24;
     private static final int SEC_LENGTH = 1000;
     private String fileDate = null;
     private String filename = "switches.csv";
@@ -81,7 +81,7 @@ public class FileUpdater implements Runnable {
         InetAddress remoteAddress = null;
         while (this.getRun()) {
             
-			if (debug) debugger.update(" -- FileUpdater --\nRunning server");
+            if (debug) debugger.update(" -- FileUpdater --\nRunning server");
 
             // if timer 5 minutes then send beacon and reset timer
         
@@ -95,7 +95,7 @@ public class FileUpdater implements Runnable {
             DatagramSocket receiver = null;
             ServerSocket socket = null;
 // TS spot
-			long diffInTime = 0; 
+            long diffInTime = 0; 
 //
             try {
                 receiver = new DatagramSocket(port);
@@ -107,7 +107,7 @@ public class FileUpdater implements Runnable {
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
                 remoteDate = Long.parseLong(new String(message.getData()).trim());
 // TS spot
-				diffInTime = (remoteDate - beacon.getFileDate())/ (TIMER_LEN * HOUR);
+                diffInTime = (remoteDate - beacon.getFileDate())/ (TIMER_LEN * HOUR);
 //
                 if (debug) debugger.update(" ----- " + remoteDate);
                 beacon.sendMessage();
@@ -135,17 +135,17 @@ public class FileUpdater implements Runnable {
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // TS spot
-				if (diffInTime < -2) {
+                if (diffInTime < -2) {
 //
             //    if ((adjustedRemoteDate) > beacon.getFileDate()) {
-	
+    
                     // local file is older
             
                     if (debug) {
                         debugger.update("local is older\n --- Entering receive file mode --- ");
                     }
                     ReceiveFile updateLocalFile = null;
-            		boolean testReceive = false;
+                    boolean testReceive = false;
                     if (debug) {
                         updateLocalFile = new ReceiveFile(frame, debugger);
                     } else {
@@ -158,9 +158,9 @@ public class FileUpdater implements Runnable {
                         beacon.sendMessage();
                     }
                 }
-				// if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 
+                // if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 
 // TS spot
-				if (diffInTime > 2) {
+                if (diffInTime > 2) {
 //
                     // local file is newer
             
@@ -189,7 +189,7 @@ public class FileUpdater implements Runnable {
                 }
             }
         } // end while running is true   
-		if (debug) debugger.update(" --- shutting down server");        
+        if (debug) debugger.update(" --- shutting down server");        
     }
 }
 

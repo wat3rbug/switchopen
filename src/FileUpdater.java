@@ -185,7 +185,11 @@ public class FileUpdater implements Runnable {
                     	if (debug) {
                         	debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
                     	}
-						Thread.sleep(SEC_LENGTH * 5);
+						try {
+							Thread.sleep(SEC_LENGTH * 5);
+						} catch (InterruptedException ie) {
+							 // do nothing because we are waiting to do things anyway
+						}
 					}
                 }   
             } else { // not in ACL

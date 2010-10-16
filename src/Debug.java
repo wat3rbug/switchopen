@@ -59,7 +59,7 @@ public class Debug {
 
 		BufferedWriter writer = null;
 		try {		
-			writer = new BufferedWriter(new FileWriter("debug.log", true));
+			writer = new BufferedWriter(new FileWriter("debug.txt", true));
 			writer.write(newMessage + "\n" );
 			writer.flush();
 		} catch (IOException ioe) {

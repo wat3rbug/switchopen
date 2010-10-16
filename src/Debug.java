@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import net.sourceforge.napkinlaf.*;
+import java.io.*;
 
 public class Debug {
 
@@ -56,6 +57,22 @@ public class Debug {
 
     public void update(String newMessage) {
 
+		BufferedWriter writer = null;
+		try {		
+			writer = new BufferedWriter(new FileWriter("debug.log", true));
+			writer.write(newMessage + "\n" );
+			writer.flush();
+		} catch (IOException ioe) {
+			 ioe.printStackTrace();
+		} finally {                       // always close the file
+			 if (writer != null) {
+				try {
+			    	writer.close();
+			 	} catch (IOException ioe2) {	
+			    	// just ignore it
+			 	}
+			}
+		}	
         output.append(newMessage + "\n");
     }
 }

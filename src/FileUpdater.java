@@ -174,6 +174,7 @@ public class FileUpdater implements Runnable {
                     } else {
                         updateRemoteFile = new TransmitFile(frame, remoteAddress);
                     }
+					testReceive = false;
 					while (!testReceive) {
                     	if ((testReceive = updateRemoteFile.sendFile())) {
                         	if (debug) {

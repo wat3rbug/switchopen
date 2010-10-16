@@ -51,8 +51,8 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(addressTxt);
             broadcastSocket.connect(address, port);
             if (debug) debugger.update("Opened port");
-			fileDate = switchFile.lastModified();
-            byte[] sendBuff = ( new Long(fileDate).toString().getBytes());
+			this.getFileDate();
+			byte[] sendBuff = ( new Long(fileDate).toString().getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
             if (debug)  debugger.update("Sent message");
@@ -82,6 +82,7 @@ public class Broadcast {
 
     public long getFileDate() {
 
+		fileDate = switchFile.lastModified();
         return fileDate;
     }   
 }

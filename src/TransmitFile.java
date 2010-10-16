@@ -66,6 +66,11 @@ public class TransmitFile {
             writer.close();
             reader.close();
             socket.close();
+		} catch (SocketException cr) { 
+			if (debug) {
+			     debugger.update("--- Transmit forced fail ---");
+				  cr.printStackTrace();
+			}
         } catch (SecurityException se) {
             JOptionPane.showMessageDialog(frame, "No permissions to read this file", "File Permissions", JOptionPane.ERROR_MESSAGE);
             if (debug) {

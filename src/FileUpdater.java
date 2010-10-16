@@ -150,11 +150,13 @@ public class FileUpdater implements Runnable {
                     } else {
                         updateLocalFile = new ReceiveFile(frame);
                     }
-                    if (!updateLocalFile.getFile()) {
-                        if (debug) {
-                            debugger.update(" ---- Receive failed...sending out another beacon to reestablish");
-                        }
-                        beacon.sendMessage();
+					while (!testReceive) {
+                    	if ((testReceive = updateLocalFile.getFile())) {
+                        	if (debug) {
+                            	debugger.update(" ---- Receive failed...sending out another beacon to reestablish");
+                        	}
+                        	beacon.sendMessage();
+						}
                     }
                 }
                 // if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 

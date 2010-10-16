@@ -92,8 +92,7 @@ public class ReceiveFile {
             }
             success = false;
         } catch (SocketTimeoutException ste) {
-            //if (debug) ste.printStackTrace();
-			if (debug) debugger.update("Timeout occurred");
+            if (debug) debugger.update("Timeout occurred");
             success = false;
         } catch (BindException be) {
             if (! socket.isClosed()) socket.isClosed();

@@ -128,6 +128,7 @@ public class FileUpdater implements Runnable {
             for (int i = 0 ; i < hostnames.size(); i++) {
                 if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
             }
+			boolean testReceive = false;
             long adjustedRemoteDate = remoteDate + (TIMER_LEN * HOUR * 1);
             if (debug) debugger.update(" -- FileUpdater --\nlocal file date = " + beacon.getFileDate() + 
                 "\nremote file date = " + (adjustedRemoteDate) + "\nDifference in times " + diffInTime + "\n");
@@ -144,7 +145,6 @@ public class FileUpdater implements Runnable {
                         debugger.update("local is older\n --- Entering receive file mode --- ");
                     }
                     ReceiveFile updateLocalFile = null;
-                    boolean testReceive = false;
                     if (debug) {
                         updateLocalFile = new ReceiveFile(frame, debugger);
                     } else {
@@ -174,15 +174,17 @@ public class FileUpdater implements Runnable {
                     } else {
                         updateRemoteFile = new TransmitFile(frame, remoteAddress);
                     }
-                    if (!updateRemoteFile.sendFile()) {
-                        if (debug) {
-                            debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
-                        }
-                        beacon.sendMessage();   
-                    }
-                    if (debug) {
-                        debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
-                    }
+					while (!testReceive) {
+                    	if ((testReceive = updateRemoteFile.sendFile())) {
+                        	if (debug) {
+                            	debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
+                        	}
+                        	beacon.sendMessage();   
+                    	}
+                    	if (debug) {
+                        	debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
+                    	}
+					}
                 }   
             } else { // not in ACL
                 if (debug) {

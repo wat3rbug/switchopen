@@ -40,7 +40,7 @@ public class TransmitFile {
 
         BufferedReader reader =null;
         Socket socket = null;
-        success = true;
+        success = false;
         try {
             if (debug) debugger.update(" -- TransmitFile --");
             File newFile = new File(filename);
@@ -66,10 +66,12 @@ public class TransmitFile {
             writer.close();
             reader.close();
             socket.close();
+			success = true;
 		} catch (SocketException cr) { 
 			if (debug) {
 			     debugger.update("--- Transmit forced fail ---");
 				  cr.printStackTrace();
+				success = false;
 			}
         } catch (SecurityException se) {
             JOptionPane.showMessageDialog(frame, "No permissions to read this file", "File Permissions", JOptionPane.ERROR_MESSAGE);

@@ -135,7 +135,7 @@ public class FileUpdater implements Runnable {
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // TS spot
-                if (beacon.getFileDate() == 0 || diffInTime > 2) {
+                if (beacon.getFileDate() == 0 || diffInTime < -2) {
 //
             //    if ((adjustedRemoteDate) > beacon.getFileDate()) {
     
@@ -161,7 +161,7 @@ public class FileUpdater implements Runnable {
                 }
                 // if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 
 // TS spot
-                if (diffInTime < -2) {
+                if (diffInTime > 2) {
 //
                     // local file is newer
             

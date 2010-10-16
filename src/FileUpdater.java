@@ -185,6 +185,7 @@ public class FileUpdater implements Runnable {
                     	if (debug) {
                         	debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
                     	}
+						Thread.sleep(SEC_LENGTH * 5);
 					}
                 }   
             } else { // not in ACL

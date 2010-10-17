@@ -16,7 +16,7 @@ public class Broadcast {
     private static long fileDate = 0;
     public DatagramSocket broadcastSocket;
     private static int port = 10077;
-    private boolean debug = false;
+    private boolean debug = true;
     private Debug debugger = null;
     private String addressTxt = "255.255.255.255"; // can restrict this to just subnet broadcast
 
@@ -51,11 +51,10 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(addressTxt);
             broadcastSocket.connect(address, port);
             if (debug) debugger.update("Opened port");
-			this.getFileDate();
-			byte[] sendBuff = ( new Long(fileDate).toString().getBytes());
+			byte[] sendBuff = ( new Long(this.getFileDate()).toString().getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
-            if (debug)  debugger.update("Sent message");
+            if (debug)  debugger.update("Sent message: " + this.getFileDate());
             broadcastSocket.disconnect();
             broadcastSocket.close();
         } catch (UnknownHostException uhe) {
@@ -82,7 +81,11 @@ public class Broadcast {
 
     public long getFileDate() {
 
-		fileDate = switchFile.lastModified();
+		if (switchFile.exists()) {
+			fileDate = switchFile.lastModified();
+		} else {
+			fileDate = 0;
+		}
         return fileDate;
     }   
 }

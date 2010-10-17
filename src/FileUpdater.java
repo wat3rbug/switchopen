@@ -96,6 +96,7 @@ public class FileUpdater implements Runnable {
             ServerSocket socket = null;
 // TS spot
             long diffInTime = 0; 
+			long limitToCheck = SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * 2;
 //
             try {
                 receiver = new DatagramSocket(port);
@@ -105,10 +106,9 @@ public class FileUpdater implements Runnable {
                 receiver.setSoTimeout(SEC_LENGTH * 15);
                 receiver.receive(message);
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
-                remoteDate = Long.parseLong(new String(message.getData()).trim());
+				remoteDate = Long.parseLong(new String(message.getData()).trim()) - limitToCheck;
 // TS spot
-				long limitToCheck = SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * 2;
-                diffInTime = (beacon.getFileDate() - limitToCheck) - (remoteDate - limitToCheck);
+				diffInTime = (beacon.getFileDate() - limitToCheck) - remoteDate;
 //
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();
@@ -130,7 +130,7 @@ public class FileUpdater implements Runnable {
                 if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
             }
 			boolean testReceive = false;
-            if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + beacon.getFileDate() + 
+            if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + (beacon.getFileDate() - limitToCheck) + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");

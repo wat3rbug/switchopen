@@ -149,7 +149,8 @@ public class FileUpdater implements Runnable {
         			updateRemoteFile = new TransmitFile(frame, remoteAddress);
     			}
 				testReceive = false;
-				while (!testReceive) {
+				int cycle = 0;
+				while (!testReceive && cycle++ < 3) {
     				if ((testReceive = updateRemoteFile.sendFile())) {
         				if (debug) {
             				debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
@@ -165,6 +166,7 @@ public class FileUpdater implements Runnable {
 			 				// do nothing because we are waiting to do things anyway
 						}
 					}
+
 				}
 // TS spot
                 if (beacon.getFileDate() == 0 || diffInTime < -2) {
@@ -180,7 +182,8 @@ public class FileUpdater implements Runnable {
                     } else {
                         updateLocalFile = new ReceiveFile(frame);
                     }
-					while (!testReceive) {
+					int cycle = 0;
+					while (!testReceive && cycle++ < 2) {
                     	if ((testReceive = updateLocalFile.getFile())) {
                         	if (debug) {
                             	debugger.update(" ---- Receive failed...sending out another beacon to reestablish");

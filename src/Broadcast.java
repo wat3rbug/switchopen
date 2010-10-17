@@ -80,11 +80,13 @@ public class Broadcast {
     }
 
     public long getFileDate() {
+	
+	// method used to get the timestamp for a file, if it exists
 
 		if (switchFile.exists()) {
 			fileDate = switchFile.lastModified();
 		} else {
-			fileDate = 0;
+			fileDate = -1;
 		}
         return fileDate;
     }   

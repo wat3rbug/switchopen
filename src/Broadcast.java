@@ -86,7 +86,7 @@ public class Broadcast {
 		if (switchFile.exists()) {
 			fileDate = switchFile.lastModified();
 		} else {
-			fileDate = -1;
+			fileDate = 0;
 		}
         return fileDate;
     }   

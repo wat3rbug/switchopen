@@ -135,10 +135,40 @@ public class FileUpdater implements Runnable {
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // TS spot
+			if (remoteDate == 0 || diffInTime > 2) {
+//
+    		// local file is newer
+
+    			if (debug) {
+        			debugger.update("local is newer\n --- Entering transmit file mode --- ");
+    			}
+    			TransmitFile updateRemoteFile = null;
+    			if (debug) {
+        			updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
+    			} else {
+        			updateRemoteFile = new TransmitFile(frame, remoteAddress);
+    			}
+				testReceive = false;
+				while (!testReceive) {
+    				if ((testReceive = updateRemoteFile.sendFile())) {
+        				if (debug) {
+            				debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
+        				}
+        				beacon.sendMessage();   
+    				}
+    					if (debug) {
+        					debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
+    					}
+						try {
+							Thread.sleep(SEC_LENGTH * 5);
+						} catch (InterruptedException ie) {
+			 				// do nothing because we are waiting to do things anyway
+						}
+					}
+				}
+// TS spot
                 if (beacon.getFileDate() == 0 || diffInTime < -2) {
 //
-            //    if ((adjustedRemoteDate) > beacon.getFileDate()) {
-    
                     // local file is older
             
                     if (debug) {
@@ -159,39 +189,6 @@ public class FileUpdater implements Runnable {
 						}
                     }
                 }
-                // if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 
-// TS spot
-                if (remoteDate == -1 || diffInTime > 2) {
-//
-                    // local file is newer
-            
-                    if (debug) {
-                        debugger.update("local is newer\n --- Entering transmit file mode --- ");
-                    }
-                    TransmitFile updateRemoteFile = null;
-                    if (debug) {
-                        updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
-                    } else {
-                        updateRemoteFile = new TransmitFile(frame, remoteAddress);
-                    }
-					testReceive = false;
-					while (!testReceive) {
-                    	if ((testReceive = updateRemoteFile.sendFile())) {
-                        	if (debug) {
-                            	debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
-                        	}
-                        	beacon.sendMessage();   
-                    	}
-                    	if (debug) {
-                        	debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
-                    	}
-						try {
-							Thread.sleep(SEC_LENGTH * 5);
-						} catch (InterruptedException ie) {
-							 // do nothing because we are waiting to do things anyway
-						}
-					}
-                }   
             } else { // not in ACL
                 if (debug) {
                     debugger.update (" ---- " + remoteAddress.getHostName() +  " is NOT in the List");

@@ -135,7 +135,7 @@ public class FileUpdater implements Runnable {
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // TS spot
-                if (beacon.getFileDate() == 0 || diffInTime < -2) {
+                if (beacon.getFileDate() == -1 || diffInTime < -2) {
 //
             //    if ((adjustedRemoteDate) > beacon.getFileDate()) {
     

@@ -9,14 +9,14 @@ public class FileUpdater implements Runnable {
 
     private static boolean isRunning = true; 
     private static final boolean debug = true;
-    private static final int MIN = 1;
-    private static final int HOUR = 60;
+    private static final int SEC_PER_MIN = 60;
+    private static final int MIN_PER_HOUR = 60;
     private static final int DAY = 24;
     private static final int SEC_LENGTH = 1000;
     private String fileDate = null;
     private String filename = "switches.csv";
     private int port = 10077;
-    private static final long TIMER_LEN = (long)MIN * 60  * SEC_LENGTH;
+    private static final long TIMER_LEN = (long)SEC_PER_MIN  * SEC_LENGTH;
     private JFrame frame;
     private long remoteDate = 0;
     private Broadcast beacon = null;
@@ -107,7 +107,7 @@ public class FileUpdater implements Runnable {
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
                 remoteDate = Long.parseLong(new String(message.getData()).trim());
 // TS spot
-                diffInTime = remoteDate - beacon.getFileDate();
+                diffInTime = (beacon.getFileDate() - remoteDate) / (SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * 2);
 //
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();
@@ -129,7 +129,7 @@ public class FileUpdater implements Runnable {
                 if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
             }
 			boolean testReceive = false;
-            long adjustedRemoteDate = remoteDate + (TIMER_LEN * HOUR * 1);
+            // long adjustedRemoteDate = remoteDate + (TIMER_LEN * HOUR * 1);
             if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + beacon.getFileDate() + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
             if (inTheACL) {
@@ -137,7 +137,7 @@ public class FileUpdater implements Runnable {
 // TS spot
 			if (remoteDate == 0 || diffInTime > 2) {
 //
-    		// local file is newer
+    		// local file is newer or doesnt exist so transmit this one
 
     			if (debug) {
         			debugger.update("local is newer\n --- Entering transmit file mode --- ");

@@ -107,7 +107,7 @@ public class FileUpdater implements Runnable {
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
                 remoteDate = Long.parseLong(new String(message.getData()).trim());
 // TS spot
-                diffInTime = remoteDate - beacon.getFileDate();
+                diffInTime = (remoteDate - beacon.getFileDate()) - 3600000;
 //
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();

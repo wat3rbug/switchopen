@@ -14,7 +14,7 @@ public class Debug {
     public Debug() {
 
         frame = new JFrame("Debug output");
-        output = new JTextArea(10,30);
+        output = new JTextArea(15,45);
         JPanel outputPanel = new JPanel();
         JScrollPane messageScroller = new JScrollPane(output);
         String destination = "net.sourceforge.napkinlaf.NapkinLookAndFeel";

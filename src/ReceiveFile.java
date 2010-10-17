@@ -82,7 +82,7 @@ public class ReceiveFile {
             writer.flush();
             writer.close();         
             if (debug) {
-                debugger.update(" --- Leaving receive file process ---");
+                debugger.update(Calendar.getInstance().getTime() + "\n --- Leaving receive file process ---");
                 JOptionPane.showMessageDialog(frame, "Successfully received and updated local file", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (FileNotFoundException fnfe) {

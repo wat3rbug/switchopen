@@ -161,7 +161,7 @@ public class FileUpdater implements Runnable {
                 }
                 // if ((remoteDate - (TIMER_LEN * HOUR * 1)) < beacon.getFileDate()) { 
 // TS spot
-                if (diffInTime > 2) {
+                if (remoteDate == -1 || diffInTime > 2) {
 //
                     // local file is newer
             

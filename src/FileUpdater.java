@@ -11,7 +11,7 @@ public class FileUpdater implements Runnable {
     private static final boolean debug = true;
     private static final int SEC_PER_MIN = 60;
     private static final int MIN_PER_HOUR = 60;
-    private static final int DAY = 24;
+    private static final int HOUR_PER_DAY = 24;
     private static final int SEC_LENGTH = 1000;
     private String fileDate = null;
     private String filename = "switches.csv";
@@ -107,7 +107,7 @@ public class FileUpdater implements Runnable {
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
                 remoteDate = Long.parseLong(new String(message.getData()).trim());
 // TS spot
-                diffInTime = (beacon.getFileDate() - remoteDate) / (SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * 2);
+                diffInTime = (beacon.getFileDate() - remoteDate) / SEC_LENGTH;
 //
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();

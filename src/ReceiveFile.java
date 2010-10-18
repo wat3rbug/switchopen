@@ -83,8 +83,8 @@ public class ReceiveFile {
             writer.close();         
             if (debug) {
                 debugger.update(Calendar.getInstance().getTime() + "\n --- Leaving receive file process ---");
-                JOptionPane.showMessageDialog(frame, "Successfully received and updated local file", "Success", JOptionPane.INFORMATION_MESSAGE);
-            }
+			}
+            JOptionPane.showMessageDialog(frame, "Successfully received and updated local file", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (FileNotFoundException fnfe) {
             JOptionPane.showMessageDialog(frame, "Something is blocking\nwrite permissions to " + filename, "File in Use", JOptionPane.ERROR_MESSAGE);
             if (debug) {

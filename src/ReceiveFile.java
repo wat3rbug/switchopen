@@ -12,7 +12,7 @@ public class ReceiveFile {
     // class variables
 
     private String filename = "switches.csv";
-    private static final boolean debug = true;
+    private static final boolean debug = false;
     private boolean runTest = true;
     private int port = 10079;
     private JFrame frame;

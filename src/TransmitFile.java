@@ -9,7 +9,7 @@ public class TransmitFile {
     private String filename = "switches.csv";
     private int port = 10079;
     private InetAddress address;
-    private boolean debug = true;
+    private boolean debug = false;
     private boolean runTest = true;
     private JFrame frame;
     private boolean success = true;

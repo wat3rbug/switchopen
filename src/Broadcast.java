@@ -16,7 +16,7 @@ public class Broadcast {
     private static long fileDate = 0;
     public DatagramSocket broadcastSocket;
     private static int port = 10077;
-    private boolean debug = true;
+    private boolean debug = false;
     private Debug debugger = null;
     private String addressTxt = "255.255.255.255"; // can restrict this to just subnet broadcast
 

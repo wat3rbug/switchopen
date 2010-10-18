@@ -108,7 +108,7 @@ public class FileUpdater implements Runnable {
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
 				remoteDate = Long.parseLong(new String(message.getData()).trim()) - limitToCheck;
 // TS spot
-				diffInTime = (beacon.getFileDate() - limitToCheck) - remoteDate;
+				diffInTime = (beacon.getFileDate() - remoteDate) / limitToCheck;
 //
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();
@@ -135,7 +135,7 @@ public class FileUpdater implements Runnable {
             if (inTheACL) {
                 debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // TS spot
-			if (remoteDate == 0 || diffInTime < 0) {
+			if (remoteDate == 0 || diffInTime > 0) {
 //
     		// local file is newer or doesnt exist so transmit this one
 
@@ -169,7 +169,7 @@ public class FileUpdater implements Runnable {
 
 				}
 // TS spot
-                if (beacon.getFileDate() == 0 || diffInTime > 0) {
+                if (beacon.getFileDate() == 0 || diffInTime < 0) {
 //
                     // local file is older
             

@@ -58,7 +58,7 @@ public class TransmitFile {
             PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             String inputLine = null;
             while ((inputLine = reader.readLine()) != null ) {
-                writer.println(inputLine + "\r\n");
+                writer.println(inputLine);
                 if (debug) debugger.update(" --- Sending " + inputLine);
             }
 			writer.println(EOF);

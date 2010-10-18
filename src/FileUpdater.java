@@ -97,6 +97,9 @@ public class FileUpdater implements Runnable {
 // TS spot
             long diffInTime = 0; 
 			long limitToCheck = SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * 2;
+			Calendar localTime = Calendar.getInstance();
+			Calendar remoteTime = Calendar.getInstance();
+			localTime.setTimeInMillis(beacon.getFileDate());
 //
             try {
                 receiver = new DatagramSocket(port);
@@ -106,9 +109,11 @@ public class FileUpdater implements Runnable {
                 receiver.setSoTimeout(SEC_LENGTH * 15);
                 receiver.receive(message);
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
-				remoteDate = Long.parseLong(new String(message.getData()).trim()) - limitToCheck;
+				remoteDate = Long.parseLong(new String(message.getData()).trim());
+				remoteTime.setTimeInMillis(remoteDate);
 // TS spot
-				diffInTime = (beacon.getFileDate() - remoteDate) / limitToCheck;
+
+				diffInTime = (remoteTime.getTimeInMillis() - localTime.getTimeInMillis()) / limitToCheck;
 //
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();

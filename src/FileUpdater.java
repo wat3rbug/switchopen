@@ -138,7 +138,7 @@ public class FileUpdater implements Runnable {
             if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + (beacon.getFileDate() - limitToCheck) + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
             if (inTheACL) {
-                debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
+                if (debug) debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // TS spot
 			if (remoteDate == 0 || diffInTime < 0) {
 //

@@ -43,7 +43,7 @@ public class SwitchOpen {
     static Debug debugger = null;
     private static final boolean runNetwork = true;
 	static FileUpdater backgroundService = null;
-	JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Get Updates");
+	JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Automatic");
 
     // constructors
 
@@ -92,7 +92,7 @@ public class SwitchOpen {
         JMenuItem aboutItem = new JMenuItem("About");
         JMenuItem helpItem = new JMenuItem("Help");
         JMenuItem passwordItem = new JMenuItem("Password");
-		JMenu network = new JMenu("Network");
+		JMenu network = new JMenu("Updates");
 		JMenu about = new JMenu("About");
         JMenu help = new JMenu("Help");
         BorderLayout layout = new BorderLayout();

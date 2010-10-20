@@ -84,7 +84,7 @@ public class ReceiveFile {
             if (debug) {
                 debugger.update(Calendar.getInstance().getTime() + "\n --- Leaving receive file process ---");
 			}
-            JOptionPane.showMessageDialog(frame, "Successfully received and updated local file", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Update successful", "SwitchFinder Update", JOptionPane.INFORMATION_MESSAGE);
         } catch (FileNotFoundException fnfe) {
             JOptionPane.showMessageDialog(frame, "Something is blocking\nwrite permissions to " + filename, "File in Use", JOptionPane.ERROR_MESSAGE);
             if (debug) {

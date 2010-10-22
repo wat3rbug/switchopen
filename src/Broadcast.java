@@ -95,7 +95,6 @@ public class Broadcast {
     }   
 	public String getFileCRC() {
 		
-		CheckSum crc = new CheckSum(filename);
-		return crc.update();
+		return new CheckSum(filename);;
 	}
 }

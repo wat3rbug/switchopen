@@ -1,4 +1,4 @@
-import java.io.*;
+import java.io.FileInputStream;
 import java.security.MessageDigest;
  
 public class CheckSum {
@@ -11,17 +11,18 @@ public class CheckSum {
 	
 	public CheckSum(String filename) {
 		
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA1");
+		MessageDigest md = null;
+		try {	
+			md = MessageDigest.getInstance("SHA1");
 	    	FileInputStream fis = new FileInputStream(filename);
 			byte[] dataBytes = new byte[1024];
 			int nread = 0;
 			while ((nread = fis.read(dataBytes)) != -1) {
-				md.update(dataBytes, 0, read);
+				md.update(dataBytes, 0, nread);
 			}
 			mdbytes = md.digest();
-		} catch (Exception e) {
-			// ignore til I figure out what to do
+		} catch (Exception ioe) {
+			
 		}
 	}
 	// methods
@@ -31,9 +32,9 @@ public class CheckSum {
 		// convert byte to hex and return
 		
 		StringBuffer buffer = new StringBuffer("");
-		for (int i = 0; i <mdbytes.length; i++) {
-			sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).subString(1));
+		for (int i = 0; i < mdbytes.length; i++) {
+			buffer.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
 		}
+		return buffer.toString();
 	} 
-	return sb.toString();
 }

@@ -96,7 +96,7 @@ public class FileUpdater implements Runnable {
             ServerSocket socket = null;
 // TS spot
             long diffInTime = 0; 
-			long limitToCheck = SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * HOUR_PER_DAY;
+			long limitToCheck = SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * 2;
 			Calendar localTime = Calendar.getInstance();
 			Calendar remoteTime = Calendar.getInstance();
 			localTime.setTimeInMillis(beacon.getFileDate());

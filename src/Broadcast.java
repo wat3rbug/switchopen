@@ -51,7 +51,10 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(addressTxt);
             broadcastSocket.connect(address, port);
             if (debug) debugger.update("Opened port");
-			byte[] sendBuff = ( new Long(this.getFileDate()).toString().getBytes());
+// ts
+			String rawMessage = (new Long(this.getFileDate()).toString()) + "," + this.getFileCRC();
+//
+			byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
             if (debug)  debugger.update("Sent message: " + this.getFileDate());
@@ -90,4 +93,9 @@ public class Broadcast {
 		}
         return fileDate;
     }   
+	public String getFileCRC() {
+		
+		CheckSum crc = new CheckSum(filename);
+		return crc.update();
+	}
 }

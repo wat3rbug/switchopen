@@ -23,7 +23,7 @@ public class FileUpdater implements Runnable {
     private Debug debugger = null;
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
-	private String localCRC = new CheckSum().update(filename);
+	private String localCRC = new CheckSum().update(filename).trim();
     
     // constructors
 
@@ -114,7 +114,7 @@ public class FileUpdater implements Runnable {
 				rawMessage = new String(message.getData());
 				remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",")));
 				if (rawMessage.indexOf(",") > 0) {
-					remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1);	
+					remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1).trim();	
 				} else {
 					remoteCRC = "";
 				}

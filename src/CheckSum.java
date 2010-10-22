@@ -8,7 +8,7 @@ public class CheckSum {
 	
 	// methods
 	
-	public static String CheckSum(String filename) {
+	public static String update(String filename) {
 		
 		StringBuffer buffer = new StringBuffer("");
 		try {	

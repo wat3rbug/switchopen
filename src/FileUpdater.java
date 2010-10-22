@@ -8,7 +8,7 @@ public class FileUpdater implements Runnable {
     // class variables
 
     private static boolean isRunning = true; 
-    private static final boolean debug = false;
+    private static final boolean debug = true;
     private static final int SEC_PER_MIN = 60;
     private static final int MIN_PER_HOUR = 60;
     private static final int HOUR_PER_DAY = 24;
@@ -113,6 +113,7 @@ public class FileUpdater implements Runnable {
 // ts
 				rawMessage =new String(message.getData());
 				remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",") - 1));
+				// fix this possible fail , not found
 				remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1);
 				if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
 				// remoteDate = Long.parseLong(new String(message.getData()).trim());

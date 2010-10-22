@@ -148,7 +148,7 @@ public class FileUpdater implements Runnable {
             if (inTheACL) {
                 if (debug) debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // ts
-				if (remoteDate == 0 || diffInTime < 0 && ! remoteCRC.equals(localCRC)) {
+				if (remoteDate == 0 || (diffInTime < 0 && !remoteCRC.equals(localCRC))) {
 //
     				// local file is newer or doesnt exist so transmit this one
 
@@ -181,7 +181,7 @@ public class FileUpdater implements Runnable {
 						}
 					}
 // ts
-                if (beacon.getFileDate() == 0 || diffInTime > 0&& ! remoteCRC.equals(localCRC)) {
+                if (beacon.getFileDate() == 0 || (diffInTime > 0 && !remoteCRC.equals(localCRC))) {
 //
                     // local file is older
             

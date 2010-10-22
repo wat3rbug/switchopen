@@ -5,7 +5,7 @@ public class CheckSum {
  
 	// class variables
 
-	byte [] mdbytes = null;
+	static byte [] mdbytes = null;
 	
 	// constructors
 	

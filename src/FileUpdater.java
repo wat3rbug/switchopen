@@ -96,7 +96,7 @@ public class FileUpdater implements Runnable {
             DatagramSocket receiver = null;
             ServerSocket socket = null;
             long diffInTime = 0; 
-			long limitToCheck = SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * 2;
+			long limitToCheck = SEC_LENGTH * SEC_PER_MIN;
 			Calendar localTime = Calendar.getInstance();
 			Calendar remoteTime = Calendar.getInstance();
 			localTime.setTimeInMillis(beacon.getFileDate());
@@ -120,7 +120,6 @@ public class FileUpdater implements Runnable {
 				}
 				if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
 //
-				// remoteDate = Long.parseLong(new String(message.getData()).trim());
 				remoteTime.setTimeInMillis(remoteDate);
 				diffInTime = (remoteTime.getTimeInMillis() - localTime.getTimeInMillis()) / limitToCheck;
                 beacon.sendMessage();

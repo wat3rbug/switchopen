@@ -111,8 +111,8 @@ public class FileUpdater implements Runnable {
                 receiver.receive(message);
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
 // ts
-				rawMessage =new String(message.getData());
-				remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",") - 1));
+				rawMessage = new String(message.getData());
+				remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",")));
 				if (rawMessage.indexOf(",") > 0) {
 					remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1);	
 				} else {

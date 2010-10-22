@@ -145,7 +145,10 @@ public class FileUpdater implements Runnable {
             if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + (beacon.getFileDate() - limitToCheck) + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
             if (inTheACL && remoteCRC.compareTo(localCRC) != 0) {
-                if (debug) debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
+                if (debug) {
+					debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
+					debugger.update(" -- CRC check result is " + remoteCRC.compareTo(localCRC));
+				}
 // ts
 				if (remoteDate == 0 || diffInTime < 0 ) {
 //

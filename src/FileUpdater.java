@@ -144,7 +144,8 @@ public class FileUpdater implements Runnable {
 			boolean testReceive = false;
             if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + (beacon.getFileDate() - limitToCheck) + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
-            if (inTheACL && remoteCRC.compareTo(localCRC) != 0) {
+            if (inTheACL ) {
+				if (remoteCRC.compareTo(localCRC) != 0) {
                 if (debug) {
 					debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 					debugger.update(" -- CRC check result is " + remoteCRC.compareTo(localCRC));
@@ -206,6 +207,8 @@ public class FileUpdater implements Runnable {
 						}
                     }
                 }
+			}
+			if (debug) debugger.update(" in ACL but CRC is different");
             } else { // not in ACL
                 if (debug) {
                     debugger.update (" ---- " + remoteAddress.getHostName() +  " is NOT in the List");

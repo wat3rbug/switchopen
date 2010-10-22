@@ -113,9 +113,12 @@ public class FileUpdater implements Runnable {
 // ts
 				rawMessage =new String(message.getData());
 				remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",") - 1));
-				// fix this possible fail , not found
-				remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1);
-				if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
+				if (rawMessage.indexOf(",") > 0) {
+					remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1);
+					if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
+				} else {
+					remoteCRC = "";
+				}
 //
 				// remoteDate = Long.parseLong(new String(message.getData()).trim());
 				remoteTime.setTimeInMillis(remoteDate);

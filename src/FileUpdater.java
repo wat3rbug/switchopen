@@ -145,10 +145,10 @@ public class FileUpdater implements Runnable {
 			boolean testReceive = false;
             if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + (beacon.getFileDate() - limitToCheck) + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
-            if (inTheACL) {
+            if (inTheACL && remoteCRC.compareTo(localCRC) != 0) {
                 if (debug) debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
 // ts
-				if (remoteDate == 0 || (diffInTime < 0 && remoteCRC.compareTo(localCRC) != 0 )) {
+				if (remoteDate == 0 || diffInTime < 0 ) {
 //
     				// local file is newer or doesnt exist so transmit this one
 
@@ -181,7 +181,7 @@ public class FileUpdater implements Runnable {
 						}
 					}
 // ts
-                if (beacon.getFileDate() == 0 || (diffInTime > 0 && remoteCRC.compareTo(localCRC) != 0)) {
+                if (beacon.getFileDate() == 0 || diffInTime > 0  ) {
 //
                     // local file is older
             

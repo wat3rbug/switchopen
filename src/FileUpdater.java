@@ -23,6 +23,7 @@ public class FileUpdater implements Runnable {
     private Debug debugger = null;
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
+	private String localCRC = (new CheckSum(filename).update());
     
     // constructors
 
@@ -94,13 +95,13 @@ public class FileUpdater implements Runnable {
         
             DatagramSocket receiver = null;
             ServerSocket socket = null;
-// TS spot
             long diffInTime = 0; 
 			long limitToCheck = SEC_LENGTH * SEC_PER_MIN * MIN_PER_HOUR * 2;
 			Calendar localTime = Calendar.getInstance();
 			Calendar remoteTime = Calendar.getInstance();
 			localTime.setTimeInMillis(beacon.getFileDate());
-//
+			String remoteCRC = null;
+			String rawMessage = null;
             try {
                 receiver = new DatagramSocket(port);
                 byte[] msgBytes = new byte[100];
@@ -109,12 +110,14 @@ public class FileUpdater implements Runnable {
                 receiver.setSoTimeout(SEC_LENGTH * 15);
                 receiver.receive(message);
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
-				remoteDate = Long.parseLong(new String(message.getData()).trim());
+// ts
+				rawMessage =new String(message.getData());
+				remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",") - 1));
+				remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1);
+				if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
+				// remoteDate = Long.parseLong(new String(message.getData()).trim());
 				remoteTime.setTimeInMillis(remoteDate);
-// TS spot
-
 				diffInTime = (remoteTime.getTimeInMillis() - localTime.getTimeInMillis()) / limitToCheck;
-//
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();
                 receiver.close();
@@ -139,42 +142,41 @@ public class FileUpdater implements Runnable {
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
             if (inTheACL) {
                 if (debug) debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
-// TS spot
-			if (remoteDate == 0 || diffInTime < 0) {
+// ts
+				if (remoteDate == 0 || diffInTime < 0 && ! remoteCRC.equals(localCRC)) {
 //
-    		// local file is newer or doesnt exist so transmit this one
+    				// local file is newer or doesnt exist so transmit this one
 
-    			if (debug) {
-        			debugger.update("local is newer\n --- Entering transmit file mode --- ");
-    			}
-    			TransmitFile updateRemoteFile = null;
-    			if (debug) {
-        			updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
-    			} else {
-        			updateRemoteFile = new TransmitFile(frame, remoteAddress);
-    			}
-				testReceive = false;
-				int cycle = 0;
-				while (!testReceive && cycle++ < 3) {
-    				if ((testReceive = updateRemoteFile.sendFile())) {
-        				if (debug) {
-            				debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
-        				}
-        				beacon.sendMessage();   
+    				if (debug) {
+        				debugger.update("local is newer\n --- Entering transmit file mode --- ");
     				}
-    					if (debug) {
-        					debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
+    				TransmitFile updateRemoteFile = null;
+    				if (debug) {
+        				updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
+    				} else {
+        				updateRemoteFile = new TransmitFile(frame, remoteAddress);
+    				}
+					testReceive = false;
+					int cycle = 0;
+					while (!testReceive && cycle++ < 3) {
+    					if ((testReceive = updateRemoteFile.sendFile())) {
+        					if (debug) {
+            					debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
+        					}
+        					beacon.sendMessage();   
     					}
-						try {
-							Thread.sleep(SEC_LENGTH * 5);
-						} catch (InterruptedException ie) {
-			 				// do nothing because we are waiting to do things anyway
+    						if (debug) {
+        						debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
+    						}
+							try {
+								Thread.sleep(SEC_LENGTH * 5);
+							} catch (InterruptedException ie) {
+			 					// do nothing because we are waiting to do things anyway
+							}
 						}
 					}
-
-				}
-// TS spot
-                if (beacon.getFileDate() == 0 || diffInTime > 0) {
+// ts
+                if (beacon.getFileDate() == 0 || diffInTime > 0&& ! remoteCRC.equals(localCRC)) {
 //
                     // local file is older
             

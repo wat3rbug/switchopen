@@ -23,7 +23,7 @@ public class FileUpdater implements Runnable {
     private Debug debugger = null;
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
-	private String localCRC = (new CheckSum(filename).update());
+	private String localCRC = new CheckSum().update(filename);
     
     // constructors
 
@@ -116,6 +116,7 @@ public class FileUpdater implements Runnable {
 				// fix this possible fail , not found
 				remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1);
 				if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
+//
 				// remoteDate = Long.parseLong(new String(message.getData()).trim());
 				remoteTime.setTimeInMillis(remoteDate);
 				diffInTime = (remoteTime.getTimeInMillis() - localTime.getTimeInMillis()) / limitToCheck;

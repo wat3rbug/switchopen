@@ -23,7 +23,7 @@ public class FileUpdater implements Runnable {
     private Debug debugger = null;
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
-	private String localCRC = new CheckSum().update(filename).trim();
+	private String localCRC = null; 
     
     // constructors
 
@@ -92,7 +92,8 @@ public class FileUpdater implements Runnable {
                 if (debug) debugger.update("timer up, do broadcast");
             } 
             // listen for message
-        
+
+        	localCRC = new CheckSum().update(filename).trim();
             DatagramSocket receiver = null;
             ServerSocket socket = null;
             long diffInTime = 0; 

@@ -1,3 +1,15 @@
+// Created by: Douglas Gardiner
+// Creation Date: Sat Oct 23 07:57:08 CDT 2010
+// Update Date: Sat Oct 23 08:09:22 CDT 2010
+//
+
+/* This the the network server file.  It handles doing the
+	broadcast every minute, comparing the result with the local
+	file and deciding whether to ignore by ACL, invalid
+	checksums, or to transmit file or get ready to receive a
+	file.
+*/
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -56,9 +68,15 @@ public class FileUpdater implements Runnable {
 
         return isRunning;
     } 
+	// NON threadsafe methods
+	
+	/* This method loads up the access list of hosts that this application will respond to.  It returns false if there is none.
+		It is a security check with default deny.
+	*/
+		
     private boolean getHosts() {
     
-        /* this returns false if it cannot load the names.  The intent is to shut down the server if it doesn't have a config file */
+        /* this returns false if it cannot load the names.  The intent is to shut down the server if it doesn't have a ACL file */
         try{
             File hostFileHandle = new File(hostFile);
             BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
@@ -74,17 +92,22 @@ public class FileUpdater implements Runnable {
         }
         return true;
     }
+	/* This is the scheduler.  It keeps track of broadcasting, when to receive and when to transmit the file. */
+	
     public void run() {
 
         beacon.sendMessage();
         Calendar timer = Calendar.getInstance();
         long loopTimeStart = System.currentTimeMillis();
         InetAddress remoteAddress = null;
+
+		// check to make sure we still want to run network updates
+		
         while (this.getRun()) {
             
             if (debug) debugger.update(" -- FileUpdater --\nRunning server");
 
-            // if timer 5 minutes then send beacon and reset timer
+            // if timer 1 minutes then send beacon and reset timer
         
             if (System.currentTimeMillis() > loopTimeStart + TIMER_LEN) {
                 beacon.sendMessage();
@@ -111,7 +134,9 @@ public class FileUpdater implements Runnable {
                 receiver.setSoTimeout(SEC_LENGTH * 15);
                 receiver.receive(message);
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
-// ts
+
+				// convert message to CRC and time stamp and who did it.
+
 				rawMessage = new String(message.getData());
 				remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",")));
 				if (rawMessage.indexOf(",") > 0) {
@@ -120,7 +145,6 @@ public class FileUpdater implements Runnable {
 					remoteCRC = "";
 				}
 				if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
-//
 				remoteTime.setTimeInMillis(remoteDate);
 				diffInTime = (remoteTime.getTimeInMillis() - localTime.getTimeInMillis()) / limitToCheck;
                 beacon.sendMessage();
@@ -138,6 +162,7 @@ public class FileUpdater implements Runnable {
             }   // end listen for response from broadcast
         
             // make sure host is in ACL and time is right
+
             boolean inTheACL = false;
             for (int i = 0 ; i < hostnames.size(); i++) {
                 if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
@@ -145,15 +170,14 @@ public class FileUpdater implements Runnable {
 			boolean testReceive = false;
             if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + (beacon.getFileDate() - limitToCheck) + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
-            if (inTheACL ) {
-				if (remoteCRC.compareTo(localCRC) != 0) {
+            if (inTheACL ) { // are they in ACL?
+				if (remoteCRC.compareTo(localCRC) != 0) { // are the files different?
 					if (debug) {
 						debugger.update(" -- CRC is different\n ---- " + remoteAddress.getHostName() +  " is in the List");
 						debugger.update(" -- CRC check result is " + remoteCRC.compareTo(localCRC));
 					}
-// ts
 					if (remoteDate == 0 || diffInTime < 0 ) {
-//
+
     				// local file is newer or doesnt exist so transmit this one
 
     					if (debug) {
@@ -167,6 +191,9 @@ public class FileUpdater implements Runnable {
     					}
 						testReceive = false;
 						int cycle = 0;
+						
+						// make 3 attempts and bail if it doesn't work
+						
 						while (!testReceive && cycle++ < 3) {
     						if ((testReceive = updateRemoteFile.sendFile())) {
         						if (debug) {
@@ -184,10 +211,9 @@ public class FileUpdater implements Runnable {
 								}
 							}
 						}
-// ts
                 	if (beacon.getFileDate() == 0 || diffInTime > 0  ) {
-//
-                    // local file is older
+
+                    // local file is older so get ready and receive file.
             
                     	if (debug) {
                         	debugger.update("local is older\n --- Entering receive file mode --- ");

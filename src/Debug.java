@@ -1,3 +1,13 @@
+// Created by: Douglas Gardiner
+// Creation Date: Sun Oct 17 09:15:33 CDT 2010
+// Update Date: Sat Oct 23 08:04:29 CDT 2010
+//
+
+/* The File takes care of all debug functions.  It logs debug
+	output to a file in append mode.  It also opens a debug
+	window for output so that you can see what is happening.
+*/
+
 import javax.swing.*;
 import java.awt.*;
 import net.sourceforge.napkinlaf.*;
@@ -52,6 +62,7 @@ public class Debug {
         frame.setLocation(0,130);
         frame.pack();
         frame.setVisible(true);
+		this.update(" ########################\n ### start of new log ###\n ########################\n");
     }
     // methods
 

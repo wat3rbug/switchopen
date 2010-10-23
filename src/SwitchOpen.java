@@ -3,6 +3,14 @@
 // Update Date: Sat Nov 22 18:05:23 CST 2008
 //
 
+
+/* The File is the Heart of the application.  It does mac
+	address conversion, switch location, change of GUI for debug
+	mode and starts a new thread.  The thread is for background
+	updates.
+*/
+
+
 /* This simple little application just expedites opening
 switches.  It assumes you're using putty and on a windows
 box.
@@ -18,10 +26,6 @@ import net.sourceforge.napkinlaf.*;
 /* This is used to by simply adding the tag number of the switch.  It requires 
    a few things.  The default file is switches.cvs.  The file must also be 
    in the same directory as the program. putty must also be the ssh to use.
-*/
-
-/* TODO: See about searching for the putty file or ssh depending on the 
-   OS 
 */
 
 public class SwitchOpen {
@@ -174,8 +178,6 @@ public class SwitchOpen {
         } catch (FileNotFoundException fnfe) {
             if (debug) debugger.update("File not there...trying network");
 			temp.delete();
-            // JOptionPane.showMessageDialog(frame, "Are you sure " + filename + " is in " + directory +"?\ntrying for network update", 
-            //                 "File problem", JOptionPane.WARNING_MESSAGE);
         } catch (IOException ex) {
             if (debug) ex.printStackTrace();
             JOptionPane.showMessageDialog(frame, "Are you sure " + filename + " is in " + directory + "?", "File problem", 
@@ -208,12 +210,15 @@ public class SwitchOpen {
         }
     }
     
+	/* a wrapper for the other method.  It is part of version 1 and I'm unsure if it is needed. */
+
     public static void writeToFile(String filename, ArrayList<String> listing) {
-    
+	
         switches = listing;
         writeFile(filename);
     }
-
+	/* The start of everything */
+	
     public static void main(String[] args) {
 
         new SwitchOpen();
@@ -229,7 +234,10 @@ public class SwitchOpen {
             if (debug) debugger.update(" --- Starting server --- ");
         } else if (debug) debugger.update(" --- Server not started ---");
     }
-
+	/* This converts the MAC address from one setup to something that will work in
+		Cisco's user tracker toolbar.
+	*/
+	
     private void figureIt() {
 
         StringBuffer buffer = new StringBuffer(inputText.getText());
@@ -264,7 +272,10 @@ public class SwitchOpen {
         System.out.println(buffer.toString());
         inputText.setText(buffer.toString());
     }
-
+	/* Activates the search.  It ties the username, password, system type to figure out
+		whether to use putty, or ssh, looks for the DNS name and opens a session.
+	*/
+		
     private void runIt() {
 
         // if array is empty open dialog box saying import a file
@@ -344,7 +355,7 @@ public class SwitchOpen {
 
     public class PasswordUpdater implements ActionListener {
 
-        /* used to reading when password is ready to be read */
+        /* used for reading when password is ready to be read */
 
         public void actionPerformed(ActionEvent pu) {
         
@@ -407,7 +418,6 @@ public class SwitchOpen {
 
         public void actionPerformed(ActionEvent es) {
         
-            // open file chooser
 			if (!backgroundService.getRun()) {
 				backgroundService.setRun(true);
 				Thread server = new Thread(backgroundService, "Server");

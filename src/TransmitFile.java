@@ -1,3 +1,10 @@
+// Created by: Douglas Gardiner
+// Creation Date: Sat Oct 23 08:26:48 CDT 2010
+// Update Date: Sat Oct 23 08:27:33 CDT 2010
+//
+
+/* This File does the transmit of the switch file. */
+
 import java.net.*;
 import javax.swing.*;
 import java.io.*;
@@ -27,16 +34,12 @@ public class TransmitFile {
 
         this.frame = frame;
         this.address = address;
-        // if (debug && debugger == null) debugger = new Debug();
-        // if (debug) debugger.update(" --- TransmitFile constructor address " + address.toString());
     }
     // methods
 
+	/* This sends the file out.  Who was determined in the constructor.  The boolean is whether it was successful. */
+	
     public boolean sendFile() {
-
-        /* What am I supposed to return */
-        
-        /* This does the heavy lifting */
 
         BufferedReader reader =null;
         Socket socket = null;
@@ -47,7 +50,7 @@ public class TransmitFile {
             reader = new BufferedReader(new FileReader(newFile));
             if (debug) debugger.update("Address - "+ address.toString() + "\tport " + port);
             socket = new Socket(address, port);
-			socket.setTcpNoDelay(false);
+			socket.setTcpNoDelay(false);	// turns off nagles
             if (debug) {
                  if (socket.isBound()) {
                     debugger.update("ouput found port " + socket.getPort());
@@ -81,15 +84,12 @@ public class TransmitFile {
             }
             success = false;
         } catch (IOException ioe) {
-            // JOptionPane.showMessageDialog(frame, "Generic failure", "Port Dead", JOptionPane.ERROR_MESSAGE);
             if (debug) {
                 debugger.update("--- Transmit File failure ---");
                 ioe.printStackTrace();
             }
             success = false;
-        } finally {
-            // return success;
-        }
+        } 
         return success;
     }
 }

@@ -1,3 +1,10 @@
+// Created by: Douglas Gardiner
+// Creation Date: Fri Oct 22 13:21:14 CDT 2010
+// Update Date: Sat Oct 23 08:07:26 CDT 2010
+//
+
+/* The File gets the CRC for the switch file. */
+
 import java.io.FileInputStream;
 import java.security.MessageDigest;
  

@@ -1,3 +1,11 @@
+// Created by: Douglas Gardiner
+// Creation Date: Sat Oct 23 08:30:35 CDT 2010
+// Update Date: Sat Oct 23 08:31:01 CDT 2010
+//
+
+/* This File does the receive of the switch file.
+*/
+
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
@@ -52,27 +60,30 @@ public class ReceiveFile {
                 else debugger.update("Did not bind");
                 debugger.update(socket.toString());
             }
-            socket.setSoTimeout(SEC_LENGTH * 15);
+            socket.setSoTimeout(SEC_LENGTH * 15); // 15 sec retry for listen so the rest of the app isn't hung
             Socket connection = socket.accept();
             if (debug) debugger.update(" -- heard distant end");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String inputLine = null;
             if (debug) debugger.update(" --- receiving file --- ");
+
+			// stream accepted and now reading contents to file
+			
             ArrayList <String> fileContents = new ArrayList<String>();
             while (!(inputLine = reader.readLine()).equals(EOF)) {
                 fileContents.add(inputLine);
             }
             reader.close();
             socket.close();
-            // do file stuff after everything read from th e net
-
+   
+			// make sure not to create an empty file
+			
             File newFile = new File(filename);
             if (newFile.exists() ) {
                 newFile.delete();
             } 
             newFile.createNewFile();
             BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
-
             for (int i = 0; i < fileContents.size() ; i++) {
                 writer.write(fileContents.get(i) + "\r\n");
                 if (debug) debugger.update(" ---- wrote " + fileContents.get(i));

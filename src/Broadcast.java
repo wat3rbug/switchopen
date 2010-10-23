@@ -1,3 +1,14 @@
+// Created by: Douglas Gardiner
+// Creation Date: Sat Oct 23 07:55:04 CDT 2010
+// Update Date: Sat Oct 23 08:02:14 CDT 2010
+//
+
+/* The File takes care of broadcast task.  It calls the
+	checksum object to get the CRC of the switch file.  It also
+	gets the time stamp and then broadcasts in in UDP on port
+	10077.
+*/
+
 import java.io.*;
 import java.net.*;
 

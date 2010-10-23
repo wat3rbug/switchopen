@@ -209,7 +209,7 @@ public class FileUpdater implements Runnable {
                     	}
                 	}
 				} else {
-					debugger.update(" -- in ACL but CRC is the same");
+					if (debug) debugger.update(" -- in ACL but CRC is the same");
 				}
             } else { // not in ACL
                 if (debug) {

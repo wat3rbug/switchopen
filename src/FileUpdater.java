@@ -146,69 +146,69 @@ public class FileUpdater implements Runnable {
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
             if (inTheACL ) {
 				if (remoteCRC.compareTo(localCRC) != 0) {
-                if (debug) {
-					debugger.update (" ---- " + remoteAddress.getHostName() +  " is in the List");
-					debugger.update(" -- CRC check result is " + remoteCRC.compareTo(localCRC));
-				}
+					if (debug) {
+						debugger.update(" -- CRC is different\n ---- " + remoteAddress.getHostName() +  " is in the List");
+						debugger.update(" -- CRC check result is " + remoteCRC.compareTo(localCRC));
+					}
 // ts
-				if (remoteDate == 0 || diffInTime < 0 ) {
+					if (remoteDate == 0 || diffInTime < 0 ) {
 //
     				// local file is newer or doesnt exist so transmit this one
 
-    				if (debug) {
-        				debugger.update("local is newer\n --- Entering transmit file mode --- ");
-    				}
-    				TransmitFile updateRemoteFile = null;
-    				if (debug) {
-        				updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
-    				} else {
-        				updateRemoteFile = new TransmitFile(frame, remoteAddress);
-    				}
-					testReceive = false;
-					int cycle = 0;
-					while (!testReceive && cycle++ < 3) {
-    					if ((testReceive = updateRemoteFile.sendFile())) {
-        					if (debug) {
-            					debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
-        					}
-        					beacon.sendMessage();   
+    					if (debug) {
+        					debugger.update("local is newer\n --- Entering transmit file mode --- ");
     					}
-    						if (debug) {
-        						debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
+    					TransmitFile updateRemoteFile = null;
+    					if (debug) {
+        					updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
+    					} else {
+        					updateRemoteFile = new TransmitFile(frame, remoteAddress);
+    					}
+						testReceive = false;
+						int cycle = 0;
+						while (!testReceive && cycle++ < 3) {
+    						if ((testReceive = updateRemoteFile.sendFile())) {
+        						if (debug) {
+            						debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
+        						}
+        						beacon.sendMessage();   
     						}
-							try {
-								Thread.sleep(SEC_LENGTH * 5);
-							} catch (InterruptedException ie) {
+    							if (debug) {
+        							debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
+    							}
+								try {
+									Thread.sleep(SEC_LENGTH * 5);
+								} catch (InterruptedException ie) {
 			 					// do nothing because we are waiting to do things anyway
+								}
 							}
 						}
-					}
 // ts
-                if (beacon.getFileDate() == 0 || diffInTime > 0  ) {
+                	if (beacon.getFileDate() == 0 || diffInTime > 0  ) {
 //
                     // local file is older
             
-                    if (debug) {
-                        debugger.update("local is older\n --- Entering receive file mode --- ");
-                    }
-                    ReceiveFile updateLocalFile = null;
-                    if (debug) {
-                        updateLocalFile = new ReceiveFile(frame, debugger);
-                    } else {
-                        updateLocalFile = new ReceiveFile(frame);
-                    }
-					int cycle = 0;
-					while (!testReceive && cycle++ < 2) {
-                    	if ((testReceive = updateLocalFile.getFile())) {
-                        	if (debug) {
-                            	debugger.update(" ---- Receive failed...sending out another beacon to reestablish");
-                        	}
-                        	beacon.sendMessage();
-						}
-                    }
-                }
-			}
-			if (debug) debugger.update(" in ACL but CRC is the same");
+                    	if (debug) {
+                        	debugger.update("local is older\n --- Entering receive file mode --- ");
+                    	}
+                    	ReceiveFile updateLocalFile = null;
+                    	if (debug) {
+                        	updateLocalFile = new ReceiveFile(frame, debugger);
+                    	} else {
+                        	updateLocalFile = new ReceiveFile(frame);
+                    	}
+						int cycle = 0;
+						while (!testReceive && cycle++ < 2) {
+                    		if ((testReceive = updateLocalFile.getFile())) {
+                        		if (debug) {
+                            		debugger.update(" ---- Receive failed...sending out another beacon to reestablish");
+                        		}
+                        		beacon.sendMessage();
+							}
+                    	}
+                	}
+				}
+				if (debug) debugger.update(" in ACL but CRC is the same");
             } else { // not in ACL
                 if (debug) {
                     debugger.update (" ---- " + remoteAddress.getHostName() +  " is NOT in the List");

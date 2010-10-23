@@ -208,8 +208,9 @@ public class FileUpdater implements Runnable {
 							}
                     	}
                 	}
+				} else {
+					debugger.update(" -- in ACL but CRC is different");
 				}
-				if (debug) debugger.update(" in ACL but CRC is the same");
             } else { // not in ACL
                 if (debug) {
                     debugger.update (" ---- " + remoteAddress.getHostName() +  " is NOT in the List");

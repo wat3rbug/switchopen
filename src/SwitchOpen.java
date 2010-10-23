@@ -374,9 +374,9 @@ public class SwitchOpen {
 
         public void actionPerformed(ActionEvent as) {
 
-            String message = "Requirements\n\nPutty must be in the same directory as\n" +
-                "this program.  A switch.csv file must \nalso be in the same directory. It can \n" +
-                "be created by the import menu item";
+            String message = "Requirements\n\nPutty must be in the same directory \n" +
+                "as this program.  A switch.csv file \nmust also be in the same directory. It \ncan " +
+                "be created by the import menu \nitem or from a network of others";
             JOptionPane.showMessageDialog(frame, message, "Help", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -387,7 +387,7 @@ public class SwitchOpen {
 
         public void actionPerformed(ActionEvent ad) {
 
-            String message = "Version: 1.98\nCreation Date: 20 March 2009\n"
+            String message = "Version: 2.0\nCreation Date: 20 March 2009\n"
                 + "Author: Douglas Gardiner";
             JOptionPane.showMessageDialog(frame, message, 
                 "about", JOptionPane.INFORMATION_MESSAGE);

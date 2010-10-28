@@ -3,13 +3,13 @@
 // Update Date: Sat Oct 23 08:09:22 CDT 2010
 //
 
-/** This the the network server file.  It handles doing the
-	broadcast every minute, comparing the result with the local
-	file and deciding whether to ignore by ACL, invalid
-	checksums, or to transmit file or get ready to receive a
-	file.
-	@author Douglas Gardiner
-**/
+/** Handles scheduling for the network operations.  It performs a broadcast every minute.
+ * It handles receiving UDP broadcasts and decides whether to respond to them or how.  If the host
+ * matches the access control list file, local to the machine, then it determines whether to receive the newer
+ * file or transmit its file because it is the latest.
+ * @author Douglas Gardiner
+ * @implements Runnable
+ */
 
 import java.io.*;
 import java.net.*;
@@ -40,12 +40,21 @@ public class FileUpdater implements Runnable {
     
     // constructors
 
+	/**
+	 * Creates a scheduler with a reference to the GUI frame and a debug windowing object.  
+	 * Used for updating the GUI and the debug window.
+	 */
+	
     public FileUpdater(JFrame frame, Debug passedframe) {
 
         debugger = passedframe;
         setRun(getHosts());
         beacon = new Broadcast(passedframe);
     }
+	/**
+ 	* Creates a scheduler with a reference to the GUI frame.  Used for updating the GUI.
+ 	*/
+
     public FileUpdater(JFrame frame) {
 
         this.frame = frame;
@@ -61,19 +70,21 @@ public class FileUpdater implements Runnable {
 
     // threadsafe methods here
 
+	/**
+ 	*  Sets the running state of the scheduler.  Used to start and stop the service.
+	*  Designed to be threadsafe.
+ 	*/
+
     public synchronized void setRun(boolean state) {
-	
-	/** 
-	Used to stop or start scheduler. @param boolean used to start/stop server 
-	*/
     
         isRunning = state;
     }
+	/**
+ 	* retrieves the running state of the scheduler.  Designed to be threadsafe.
+	* @return boolean current state of scheduler.
+ 	*/
+
     public synchronized boolean getRun() {
-	
-	/** 
-		Retrieves the current running state of the scheduler 
-		*/
 
         return isRunning;
     } 
@@ -82,7 +93,10 @@ public class FileUpdater implements Runnable {
 	/* This method loads up the access list of hosts that this application will respond to.  It returns false if there is none.
 		It is a security check with default deny.
 	*/
-		
+	/**
+	 *  updates the access control list based on the local machine file.  Returns the state of operations
+	 * @return boolean for the success of the file read.  Default deny is used.
+	 */	
     private boolean getHosts() {
     
         /* this returns false if it cannot load the names.  The intent is to shut down the server if it doesn't have a ACL file */
@@ -103,6 +117,9 @@ public class FileUpdater implements Runnable {
     }
 	/* This is the scheduler.  It keeps track of broadcasting, when to receive and when to transmit the file. */
 	
+	/**
+	 * The scheduling thread run method. Stopped by using the setRun() method.
+	 */
     public void run() {
 
         beacon.sendMessage();

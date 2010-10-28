@@ -13,8 +13,6 @@
 			<string>src</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>selected</key>
-			<true/>
 			<key>sourceDirectory</key>
 			<string></string>
 		</dict>
@@ -22,7 +20,7 @@
 			<key>filename</key>
 			<string>../things.todo</string>
 			<key>lastUsed</key>
-			<date>2010-08-06T01:51:29Z</date>
+			<date>2010-10-23T12:55:55Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -54,98 +52,70 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>29</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>2</integer>
+				<integer>3</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>Broadcast.java</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>38</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>15</integer>
 		</dict>
 		<key>FileUpdater.java</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>61</integer>
+				<integer>16</integer>
 				<key>line</key>
-				<integer>121</integer>
+				<integer>149</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>97</integer>
+			<integer>164</integer>
 		</dict>
 		<key>ReceiveFile.java</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>12</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>108</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>91</integer>
+			<integer>0</integer>
 		</dict>
 		<key>SwitchOpen.java</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>35</integer>
+				<integer>42</integer>
 				<key>line</key>
-				<integer>408</integer>
+				<integer>389</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>381</integer>
+			<integer>370</integer>
 		</dict>
 		<key>TransmitFile.java</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>47</integer>
+				<integer>51</integer>
 				<key>line</key>
-				<integer>60</integer>
+				<integer>5</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>32</integer>
-		</dict>
-		<key>UserAccountWindow.java</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>22</integer>
-				<key>line</key>
-				<integer>40</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
 			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>22</integer>
 		</dict>
 		<key>hosts.txt</key>
 		<dict>
@@ -165,14 +135,10 @@
 	<key>openDocuments</key>
 	<array>
 		<string>ReceiveFile.java</string>
-		<string>hosts.txt</string>
+		<string>SwitchOpen.java</string>
 		<string>../things.todo</string>
 		<string>TransmitFile.java</string>
-		<string>../build.xml</string>
 		<string>FileUpdater.java</string>
-		<string>Broadcast.java</string>
-		<string>SwitchOpen.java</string>
-		<string>UserAccountWindow.java</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

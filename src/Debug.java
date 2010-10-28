@@ -2,11 +2,11 @@
 // Creation Date: Sun Oct 17 09:15:33 CDT 2010
 // Update Date: Sat Oct 23 08:04:29 CDT 2010
 //
-
-/* The File takes care of all debug functions.  It logs debug
-	output to a file in append mode.  It also opens a debug
-	window for output so that you can see what is happening.
-*/
+/** The File takes care of all debug functions.  It logs debug
+ *	output to a file in append mode.  It also opens a debug
+ *	window for output so that you can see what is happening.
+ * @author Douglas Gardiner
+ */
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,13 +14,18 @@ import net.sourceforge.napkinlaf.*;
 import java.io.*;
 
 public class Debug {
+	
+	
 
     // class variables
 
     JTextArea output = null;
     JFrame frame;
     // constructors
-
+/**
+ *  creates a debug object complete with debug window.  Uses Napkin Look and Feel
+ * to give the 'underdevelopment' look. It also logs information to a debug log file.
+ */
     public Debug() {
 
         frame = new JFrame("Debug output");
@@ -65,7 +70,10 @@ public class Debug {
 		this.update(" ########################\n ### start of new log ###\n ########################\n");
     }
     // methods
-
+/**
+ *  adds new message to the debug log and the debugging window.
+ * @param newMessage String of the message that you want to output to the debug window and the logging file.
+ */
     public void update(String newMessage) {
 
 		BufferedWriter writer = null;

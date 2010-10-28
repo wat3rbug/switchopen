@@ -12,14 +12,18 @@
 import java.io.*;
 import java.net.*;
 
-/* This object is for sending broadcast beacons only.  This
-   will need to be modified so that it will work with the non-blocking IO
-   libraries */
+
+/**
+ * This object is for sending broadcast beacons only.  Beacons are are UDP packets on port 10077.  
+ * They incorporate a SHA1 hash of the file and the timestamp for the last time it was modified.
+ * A future version will be done to use non-blocking I/O.  Note: This will be refactored because during initial
+ * development other operations were being performed for the file information, which have since been removed.
+ * @author Douglas Gardiner
+ */
 
 public class Broadcast {
 
-    /* This is to automatically send out a broadcast of the file date */
-
+    
     // class variables
 
     private String filename = "switches.csv";
@@ -32,12 +36,17 @@ public class Broadcast {
     private String addressTxt = "255.255.255.255"; // can restrict this to just subnet broadcast
 
     // constructors
-
+/**
+ * Creates a Broadcast object with references to the debug windowing object.
+ */
     public Broadcast(Debug passedframe) {
 
         debugger = passedframe;
         finishConstructor();
     }
+/**
+ * Creates a standard Broadcast object with debugging not available.
+ */
     public Broadcast() {
     
         if (debug && debugger == null) debugger = new Debug();
@@ -46,12 +55,18 @@ public class Broadcast {
     // methods 
 
     private void finishConstructor() {
+	/**
+	 *  common method for the two constructors to used for common tasks during the creation of the
+	 *  broadcast object.
+	 */
     
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
         if (debug) debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
     }
-
+	/**
+	 *  Create the UDP datagram packet with the hash and timestamp of the file.  Then it broadcasts the message out.
+	 */
     public void sendMessage() {
 
         try {
@@ -62,9 +77,7 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(addressTxt);
             broadcastSocket.connect(address, port);
             if (debug) debugger.update("Opened port");
-// ts
 			String rawMessage = (new Long(this.getFileDate()).toString()) + "," + this.getFileCRC();
-//
 			byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
@@ -92,9 +105,12 @@ public class Broadcast {
         }
         if (debug) debugger.update(" -- Broadcast --\n --- End broadcast --- ");
     }
-
+	/**
+	 * gets the last modified date for a file.
+	 * @return long time in milliseconds for the last modified for the file.
+	 */
     public long getFileDate() {
-	
+
 	// method used to get the timestamp for a file, if it exists
 
 		if (switchFile.exists()) {
@@ -104,6 +120,10 @@ public class Broadcast {
 		}
         return fileDate;
     }   
+/**
+ * Gets the SHA1 hash of the file.
+ * @return String hex form of file hash
+ */
 	public String getFileCRC() {
 		
 		return new CheckSum().update(filename);

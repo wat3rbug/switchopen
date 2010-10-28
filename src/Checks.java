@@ -8,22 +8,95 @@
  * @author Douglas Gardiner
  */
 
-import java.io.FileInputStream;
+import java.io.*;
 import java.security.MessageDigest;
-import java.lang.String;
+import java.util.*;
+import java.net.*;
 
  
 public class Checks {
  
 	// class variables
 	
+	private boolean debug = false;
+	private boolean aclPresent = true;
+	private String hostFile = "hosts.txt";
+    private ArrayList<String> hostnames = new ArrayList<String>();
+	private Debug debugger = null;
+	
+	/* This method loads up the access list of hosts that this application will respond to.  It returns false if there is none.
+		It is a security check with default deny.
+	*/
+	
+	// constructors
+	
+	/**
+	 *  Creates an object with a reference to the debugging window.
+	 * @param passedframe Reference to the debugging window.
+	 */
+	public Checks(Debug passedframe) {
+		
+		debug = true;
+		debugger = passedframe;
+		new Checks();
+	}
+	/**
+	 *  Creates an object to store the allowable hosts
+	 */	
+	
+    public Checks() {
+    
+        /* this returns false if it cannot load the names.  
+		 * The intent is to shut down the server if it doesn't have a ACL file 
+		 */
+		
+        try{
+            File hostFileHandle = new File(hostFile);
+            BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
+            String inLine = null;
+            while ((inLine = reader.readLine()) != null) {
+                hostnames.add(inLine.toLowerCase());
+                if (debug) debugger.update(inLine + " allowed");
+            }
+            if (hostnames.isEmpty()) aclPresent = false;
+        } catch (IOException ioe) {
+            if (debug) debugger.update(" --- ACL not updated, shutting down server");
+            aclPresent = false;
+        }
+    }
+	
 	// methods
+	
+	/**
+	 * checks to see if the the ACL file exists and was read.
+	 * @return aclPresent true if things worked out / false if the process failed for any reason
+	 */
+	
+	public boolean exists() {
+	
+		return aclPresent;
+	}
+	/**
+	 * Checks to see if the address given, is in the access control list.
+	 * @param remoteAddress Address of the machine that performed the broadcast or request.
+	 * @return boolean result of the test, false if the host doesn't exist in the ACLand true if they are in the ACL. 
+	 */
+	
+	public boolean inACL(InetAddress remoteAddress) {
+		
+		boolean inTheACL = false;
+        for (int i = 0 ; i < hostnames.size(); i++) {
+            if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
+        }
+		return inTheACL;
+	}
 	
 /**
  * returns the String representation of the SHA1 hash of the filename as a String
  * @return buffer - String representation of the SHA1 hash in hexidecial form.
  * @param filename String representation of the filename to be used.
  */
+
 	public static String update(String filename) {
 		
 		StringBuffer buffer = new StringBuffer("");

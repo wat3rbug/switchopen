@@ -3,7 +3,10 @@
 // Update Date: Sat Oct 23 08:27:33 CDT 2010
 //
 
-/* This File does the transmit of the switch file. */
+/**
+ * Performs transmit of file contents to host with the latest file.
+ * @author Douglas Gardiner
+ */
 
 import java.net.*;
 import javax.swing.*;
@@ -25,11 +28,24 @@ public class TransmitFile {
 
     // constructors
 
+	/**
+	 * Creates TransmitFile object with reference to main GUI frame and the IP address of the host requesting.
+	 * @param frame The reference for main GUI.
+	 * @param address The IP address of the host receiving the file transmission.
+	 * @param passedframe The reference the to debugging window for updates.
+	 */
     public TransmitFile(JFrame frame, InetAddress address, Debug passedframe) {
 
         this(frame, address);
+		debug = true;
         debugger = passedframe;
     }
+	/**
+ 	 * Creates TransmitFile object with reference to main GUI frame and the IP address of the host requesting.
+ 	 * @param frame The reference for main GUI.
+ 	 * @param address The IP address of the host receiving the file transmission.
+ 	 */
+
     public TransmitFile(JFrame frame, InetAddress address) {
 
         this.frame = frame;
@@ -37,7 +53,10 @@ public class TransmitFile {
     }
     // methods
 
-	/* This sends the file out.  Who was determined in the constructor.  The boolean is whether it was successful. */
+	/**
+	 * Send the file out to the receiving host on port TCP 10079.
+	 * @return boolean the success or failure of the method to transmit the file.
+	 */
 	
     public boolean sendFile() {
 

@@ -3,9 +3,10 @@
 // Update Date: Sat Oct 23 08:31:01 CDT 2010
 //
 
-/* This File does the receive of the switch file.
-*/
-
+/**
+ * Opens a serversocket for receipt of the file for an update.  File operations are contained within.
+ * @author Douglas Gardiner
+ */
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class ReceiveFile {
     // class variables
 
     private String filename = "switches.csv";
-    private static final boolean debug = false;
+    private static boolean debug = false;
     private boolean runTest = true;
     private int port = 10079;
     private JFrame frame;
@@ -31,23 +32,34 @@ public class ReceiveFile {
 
     // constructors
 
+	/**
+ 	 * Creates a ReceiveFile object with a reference to the frame for the main GUI and debug window for updates.
+ 	 */
+
     public ReceiveFile(JFrame frame, Debug passedframe) {
 
+		debug = true;
         debugger = passedframe;
         this.frame = frame;
     }
+	/**
+ 	 * Creates a ReceiveFile object with a reference to the frame for main GUI updates. 
+ 	 */
+
     public ReceiveFile(JFrame frame) {
     
         this.frame = frame;
     }
     // methods
 
+	/**
+ 	 * Opens serversocket and copies contents from port 10079 to the file. 
+	 * @return boolean for success or failure to capture the information.
+ 	 */
     public boolean getFile() {
+	
+		// needs another ACL check to verify receive file is from ACL
 
-        /* What am I supposed to return */
-        
-        /* This does the heavy lifting */
-        // add timeout so it can retry
         if (debug) debugger.update(" --- starting receive process --- ");
         ServerSocket socket = null;
         success = true;

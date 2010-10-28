@@ -4,17 +4,16 @@
 //
 
 
-/* The File is the Heart of the application.  It does mac
-	address conversion, switch location, change of GUI for debug
-	mode and starts a new thread.  The thread is for background
-	updates.
-*/
+/** The Class  is the heart of the application.  It does mac
+ * address conversion, switch location, change of GUI for debug
+ * mode and starts a new thread.  The thread is for background network
+ * updates. This is used to by simply adding the tag number of the switch.  It requires 
+ * a few things.  The default file is switches.csv.  The file must also be 
+ * in the same directory as the program. putty must also be in the directory if
+ * using windows otherwise ssh is used.
+ * @author Douglas Gardiner
+ */
 
-
-/* This simple little application just expedites opening
-switches.  It assumes you're using putty and on a windows
-box.
-*/
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -23,23 +22,18 @@ import java.io.*;
 import java.util.regex.*;
 import net.sourceforge.napkinlaf.*;
 
-/* This is used to by simply adding the tag number of the switch.  It requires 
-   a few things.  The default file is switches.cvs.  The file must also be 
-   in the same directory as the program. putty must also be the ssh to use.
-*/
-
 public class SwitchOpen {
 
     // variables
 
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;
-    private static boolean debug = false;
+    private static boolean debug = true;
     static JFrame frame;
     JTextField inputTag;
     static String switchFile = "switches.csv";
     String importFile = null;
-    Pass password = new Pass();
+    Pass userInfo = new Pass();
     JTextField inputText = new JTextField("",12); 
     JLabel outputText = new JLabel("");
     static ArrayList <String> switches = new ArrayList<String>();
@@ -50,6 +44,11 @@ public class SwitchOpen {
 	JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Automatic");
 
     // constructors
+
+	/**
+ 	 * Creates the main GUI for the application, starts the network thread, if enabled and
+ 	 * starts listening for input.
+ 	 */
 
     public SwitchOpen() {
 
@@ -73,8 +72,6 @@ public class SwitchOpen {
                 System.out.println("cannot do " + destination);
                 ev.printStackTrace();
             }
-            // move debugger window below
-
         } else {
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -155,6 +152,11 @@ public class SwitchOpen {
     }
     // methods
 
+	/**
+ 	 * Opens up the switch file for reading.
+	 * @param filename the String representation of the filename.
+ 	 */
+
     private void readFile(String filename) {
 
         /* just opens the file and slurps up contents */
@@ -184,6 +186,11 @@ public class SwitchOpen {
                 JOptionPane.WARNING_MESSAGE);
         }
     }
+	/**
+ 	 * Opens up the file for writing.  Used for imports.
+  	 * @param filename String representation of the filename to write.
+ 	 */
+
     private static void writeFile(String filename) {
 
         /* writes a new switches file, used for imports of other files */
@@ -209,16 +216,11 @@ public class SwitchOpen {
             JOptionPane.showMessageDialog(frame, filename + " is a bad boy", "File problem", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-	/* a wrapper for the other method.  It is part of version 1 and I'm unsure if it is needed. */
-
-    public static void writeToFile(String filename, ArrayList<String> listing) {
+   	/* The start of everything */
 	
-        switches = listing;
-        writeFile(filename);
-    }
-	/* The start of everything */
-	
+	/**
+	 * Main() method no command line arguments are used
+	 */
     public static void main(String[] args) {
 
         new SwitchOpen();
@@ -234,9 +236,9 @@ public class SwitchOpen {
             if (debug) debugger.update(" --- Starting server --- ");
         } else if (debug) debugger.update(" --- Server not started ---");
     }
-	/* This converts the MAC address from one setup to something that will work in
-		Cisco's user tracker toolbar.
-	*/
+	/** Converts the MAC address from one setup to something that will work in
+	 *	Cisco's user tracker toolbar. Results on changed on the GUI.
+	 */
 	
     private void figureIt() {
 
@@ -272,9 +274,9 @@ public class SwitchOpen {
         System.out.println(buffer.toString());
         inputText.setText(buffer.toString());
     }
-	/* Activates the search.  It ties the username, password, system type to figure out
-		whether to use putty, or ssh, looks for the DNS name and opens a session.
-	*/
+	/** Activates the search.  It ties the username, password, system type to figure out
+	 *	whether to use putty, or ssh, looks for the DNS name and opens a session.
+	 */
 		
     private void runIt() {
 
@@ -289,8 +291,8 @@ public class SwitchOpen {
             command ="xterm -e ssh ";
         }
         String commandLine;
-        if (password.getPassword(PASSWORD) != null && command.startsWith("putty")) {
-            commandLine = command + "-pw " + password.getPassword(PASSWORD) + " ";
+        if (userInfo.getInfo(PASSWORD) != null && command.startsWith("putty")) {
+            commandLine = command + "-pw " + userInfo.getInfo(PASSWORD) + " ";
         } else {
             commandLine = command;
         }
@@ -333,8 +335,8 @@ public class SwitchOpen {
 		inputTag.setText("");
         try {
             String destination ="";      
-            if (password.getPassword(USER) != null) {
-                    destination = password.getPassword(USER) + "@";
+            if (userInfo.getInfo(USER) != null) {
+                    destination = userInfo.getInfo(USER) + "@";
             }
             destination = destination + validIp;
             if (command.startsWith("xterm")) destination+= " &";
@@ -353,10 +355,16 @@ public class SwitchOpen {
     }
     // inner classes
 
+	/**
+ 	 * Listening class designed for password and username updates. 
+ 	 */
     public class PasswordUpdater implements ActionListener {
 
         /* used for reading when password is ready to be read */
 
+		/**
+ 		 * Updates UserAccountWindow based on the command associated with the menu Item in the GUI.
+ 		 */
         public void actionPerformed(ActionEvent pu) {
         
             if (debug) debugger.update("called " + pu.getActionCommand());
@@ -367,10 +375,15 @@ public class SwitchOpen {
             }
         }
     }
+	/**
+ 	 * Listening class designed to bring up the help dialog box. 
+ 	 */
 
     public class Help implements ActionListener {
 
-        /* brings up the help dialog box */
+        /** 
+		 * Brings up the help dialog box 
+		 */
 
         public void actionPerformed(ActionEvent as) {
 
@@ -380,10 +393,15 @@ public class SwitchOpen {
             JOptionPane.showMessageDialog(frame, message, "Help", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+	/**
+ 	 * Listening class designed to bring up the about dialog box. 
+ 	 */
 
     public class About implements ActionListener {
 
-        /* Displays the version number and author */
+        /**
+ 		 * Displays the version number and author 
+		 */
 
         public void actionPerformed(ActionEvent ad) {
 
@@ -393,10 +411,16 @@ public class SwitchOpen {
                 "about", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+	/**
+ 	 * Listening class designed to bring up the import file dialog box. 
+ 	 */
 
     public class ImportListener implements ActionListener {
 
-        /* This class is for import contents from a new file */
+        /**
+         * Used for select the file to import and then makes a call to read the file contents 
+		 * and then write to the default file.
+         */
 
         public void actionPerformed(ActionEvent es) {
         
@@ -412,9 +436,14 @@ public class SwitchOpen {
             }
         }
     }
+	/**
+ 	 * Listening class to toggle network updates on or off. 
+ 	 */
 	public class UpdaterCheck implements ActionListener {
 
-        /* This class is for toggling network updates */
+        /**
+ 		 * Toggles network updates on or off.
+		 */
 
         public void actionPerformed(ActionEvent es) {
         
@@ -427,10 +456,14 @@ public class SwitchOpen {
             backgroundService.setRun(updating.getState());
         }
     }
-
+	/**
+ 	 * Allows enter key to activate mac address conversions or switch login attempts 
+ 	 */
     public class EnterCheck extends KeyAdapter {
 
-        /* Used to run the runit function based on hitting enter */
+        /**
+ 		 * Runs the runit and figureit function based on hitting enter. 
+		 */
 
         public void keyPressed(KeyEvent e) {
 
@@ -440,13 +473,19 @@ public class SwitchOpen {
             }
         }
     }
+	/**
+ 	 * Allows clicking enter key with the mouse to activate mac address conversions or switch login attempts 
+ 	 */
 
     public class RunTag implements ActionListener {
 
-        /* Used for starting the database poll and run */
+        /**
+ 		 * Runs the runit and figureit function based on hitting enter. 
+		 */
 
         public void actionPerformed(ActionEvent ev) {
 
+			figureIt();
             runIt();
         }
     }   

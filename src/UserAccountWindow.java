@@ -3,10 +3,11 @@
 // Update Date: Sat Nov 22 18:05:23 CST 2008
 //
 
-/* This class just opens a dialog window for entry either
-   password or username.
-*/
-// import debug.Debug;
+/** This class just opens a dialog window for entry either
+ * password or username.
+ * @author Douglas Gardiner
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,11 +15,12 @@ import java.awt.event.*;
 public class UserAccountWindow {
 
     // variables
+
     private static boolean inUse = false;
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;
     private static boolean whichIsIt = PASSWORD; 
-    private static final boolean debug = false;
+    private static boolean debug = false;
     JFrame frame = new JFrame();
     JLabel passwordLabel = new JLabel("Password");
     JLabel userNameLabel = new JLabel("Username");
@@ -32,11 +34,22 @@ public class UserAccountWindow {
 
     // constructors
 
-    public UserAccountWindow(boolean decider, Debug passedframe) {
+	/**
+ 	 * Creates the user account window with a reference to the debug window.
+     * @param decider boolean for which window: true for user / false for password.
+	 * @param passedframe the reference to the debug window for output.
+ 	 */
 
-        this(decider);
+    public UserAccountWindow(boolean decider, Debug passedframe) {
+	
+		debug = true;
+		new UserAccountWindow(decider);
         debugger = passedframe;
     }
+	/**
+ 	 * Creates the user account window with a reference to the debug window.
+     * @param decider boolean for which window: true for user / false for password.
+ 	 */
 
     public UserAccountWindow(boolean decider) {
     
@@ -65,20 +78,29 @@ public class UserAccountWindow {
     }
     // methods
 
+	/**
+	 *  updates the password or username in the Pass storage object.
+	 */
+	
     private void updateThePassword() {
 
         if (whichIsIt == USER) {
             if (debug) debugger.update("updating username");
-            new Pass().setPassword(username.getText(), USER);
+            Pass.setInfo(username.getText(), USER);
             inUse = false;
             frame.dispose();
         } else {
             if (debug) debugger.update("updating password" );
-            new Pass().setPassword(new String(passwordEntry.getPassword()), PASSWORD);
+            Pass.setInfo(new String(passwordEntry.getPassword()), PASSWORD);
             inUse = false;
             frame.dispose();
         }
     }
+
+	/**
+ 	 * Used to make sure a duplicate window isn't created for user name or password.
+     * @return true if there is a window open, false if not.
+ 	 */
 
     public static boolean exists() {
 
@@ -86,7 +108,15 @@ public class UserAccountWindow {
     }
     // inner classes
 
+   	/**
+ 	 * Allows enter key to update the password or username in the account window.
+ 	 */
+
     public class KeyboardUpdater extends KeyAdapter {
+
+        /**
+ 		 * Updates the password or username.
+		 */
 
         public void keyPressed(KeyEvent e) {
 
@@ -95,9 +125,16 @@ public class UserAccountWindow {
             }
         }
     }
+	/**
+ 	 * Allows click of the enter key to update the password or username in the account window.
+ 	 */
 
     public class MouseUpdater implements ActionListener {
 
+		/**
+ 		 * Updates the password or username.
+		 */
+		
         public void actionPerformed(ActionEvent e) {
 
             updateThePassword();

@@ -23,8 +23,8 @@ public class Debug {
     JFrame frame;
     // constructors
 /**
- *  creates a debug object complete with debug window.  Uses Napkin Look and Feel
- * to give the 'underdevelopment' look. It also logs information to a debug log file.
+ * Creates a debug object complete with debug window.  Uses Napkin Look and Feel
+ * to give the 'under development' look. It also logs information to a debug log file.
  */
     public Debug() {
 
@@ -71,7 +71,7 @@ public class Debug {
     }
     // methods
 /**
- *  adds new message to the debug log and the debugging window.
+ * Adds new message to the debug log and the debugging window.
  * @param newMessage String of the message that you want to output to the debug window and the logging file.
  */
     public void update(String newMessage) {

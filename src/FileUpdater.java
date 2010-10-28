@@ -8,7 +8,6 @@
  * matches the access control list file, local to the machine, then it determines whether to receive the newer
  * file or transmit its file because it is the latest.
  * @author Douglas Gardiner
- * @implements Runnable
  */
 
 import java.io.*;
@@ -21,7 +20,7 @@ public class FileUpdater implements Runnable {
     // class variables
 
     private static boolean isRunning = true; 
-    private static final boolean debug = false;
+    private static boolean debug = false;
     private static final int SEC_PER_MIN = 60;
     private static final int MIN_PER_HOUR = 60;
     private static final int HOUR_PER_DAY = 24;
@@ -47,6 +46,7 @@ public class FileUpdater implements Runnable {
 	
     public FileUpdater(JFrame frame, Debug passedframe) {
 
+		debug = true;
         debugger = passedframe;
         setRun(getHosts());
         beacon = new Broadcast(passedframe);
@@ -59,11 +59,7 @@ public class FileUpdater implements Runnable {
 
         this.frame = frame;
         setRun(getHosts());
-        if (debug) {
-            beacon = new Broadcast((debugger = new Debug()));
-        }else {
-            beacon = new Broadcast();       
-        }   
+        beacon = new Broadcast();         
     }
     
     // methods

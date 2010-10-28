@@ -36,37 +36,42 @@ public class Broadcast {
     private String addressTxt = "255.255.255.255"; // can restrict this to just subnet broadcast
 
     // constructors
-/**
- * Creates a Broadcast object with references to the debug windowing object.
- */
+
+	/**
+ 	 * Creates a Broadcast object with references to the debug windowing object.
+ 	 */
+
     public Broadcast(Debug passedframe) {
 
         debugger = passedframe;
+		debug = true;
         finishConstructor();
     }
-/**
- * Creates a standard Broadcast object with debugging not available.
- */
+	/**
+ 	 * Creates a standard Broadcast object with debugging not available.
+ 	 */
+
     public Broadcast() {
     
-        if (debug && debugger == null) debugger = new Debug();
         finishConstructor();
     }
     // methods 
 
-    private void finishConstructor() {
 	/**
 	 *  common method for the two constructors to used for common tasks during the creation of the
 	 *  broadcast object.
 	 */
-    
+    private void finishConstructor() {
+	 
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
         if (debug) debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
     }
 	/**
-	 *  Create the UDP datagram packet with the hash and timestamp of the file.  Then it broadcasts the message out.
+	 * Creates the UDP datagram packet with the hash and timestamp of the file.  It opens UDP port 10077 in broadcast mode.
+	 * Then it broadcasts the message out.
 	 */
+	
     public void sendMessage() {
 
         try {
@@ -106,7 +111,7 @@ public class Broadcast {
         if (debug) debugger.update(" -- Broadcast --\n --- End broadcast --- ");
     }
 	/**
-	 * gets the last modified date for a file.
+	 * Gets the last modified date for a file.
 	 * @return long time in milliseconds for the last modified for the file.
 	 */
     public long getFileDate() {

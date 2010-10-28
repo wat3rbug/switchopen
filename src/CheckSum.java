@@ -21,8 +21,8 @@ public class CheckSum {
 	
 /**
  * returns the String representation of the SHA1 hash of the filename as a String
- * @return String representation of the SHA1 hash in hexidecial form.
- * @param filename to be used
+ * @return buffer - String representation of the SHA1 hash in hexidecial form.
+ * @param filename String representation of the filename to be used.
  */
 	public static String update(String filename) {
 		

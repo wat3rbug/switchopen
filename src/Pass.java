@@ -3,25 +3,39 @@
 // Update Date: Sat Nov 22 18:05:23 CST 2008
 //
 
-/* Password and user name data class.
-*/
-
+/**
+ * User information storage object.  Used to storage user name and password
+ * @author Douglas Gardiner
+ */
 public class Pass {
 
     private static String password;
     private static String username;
     private static final boolean debug = false;
 
-    public static void setPassword(String newPassword, boolean decider) {
+	/**
+ 	 * Used for updating user information boolean argument is to decide whether it is username or password. 
+	 * True for password and False for username.
+	 * @param newInfo username / password based on boolean parameter
+	 * @param decider boolean true - username, false - password
+ 	 */
+
+    public static void setInfo(String newInfo, boolean decider) {
 
         if (decider) {
-            username = newPassword;
+            username = newInfo;
         } else {
-            password = newPassword;
+            password = newInfo;
         }
         if (debug) System.out.println("set user-" + username + "\nset pass-" + password);
     }
-    public static String getPassword(boolean decider) {
+	/**
+ 	 * Retrieves username or password based on boolean argument.  True retrieves username, false returns password.
+	 * @param decider boolean toggle for username or password.
+	 * @return String password or username based on boolean sent as argument.
+ 	 */
+
+    public static String getInfo(boolean decider) {
 
         if (debug) System.out.println("get user-" + username + "\nget pass-" + password);
         if (decider) {

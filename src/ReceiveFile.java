@@ -34,6 +34,8 @@ public class ReceiveFile {
 
 	/**
  	 * Creates a ReceiveFile object with a reference to the frame for the main GUI and debug window for updates.
+	 * @param frame reference to the main GUI for updates.
+	 * @param passedfram reference for the debug window
  	 */
 
     public ReceiveFile(JFrame frame, Debug passedframe) {
@@ -44,6 +46,7 @@ public class ReceiveFile {
     }
 	/**
  	 * Creates a ReceiveFile object with a reference to the frame for main GUI updates. 
+	 * @param frame reference to the main GUI for updates.
  	 */
 
     public ReceiveFile(JFrame frame) {
@@ -56,6 +59,7 @@ public class ReceiveFile {
  	 * Opens serversocket and copies contents from port 10079 to the file. 
 	 * @return boolean for success or failure to capture the information.
  	 */
+
     public boolean getFile() {
 	
 		// needs another ACL check to verify receive file is from ACL

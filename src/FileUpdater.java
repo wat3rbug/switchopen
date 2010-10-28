@@ -3,12 +3,13 @@
 // Update Date: Sat Oct 23 08:09:22 CDT 2010
 //
 
-/* This the the network server file.  It handles doing the
+/** This the the network server file.  It handles doing the
 	broadcast every minute, comparing the result with the local
 	file and deciding whether to ignore by ACL, invalid
 	checksums, or to transmit file or get ready to receive a
 	file.
-*/
+	@author Douglas Gardiner
+**/
 
 import java.io.*;
 import java.net.*;
@@ -61,10 +62,18 @@ public class FileUpdater implements Runnable {
     // threadsafe methods here
 
     public synchronized void setRun(boolean state) {
+	
+	/** 
+	Used to stop or start scheduler. @param boolean used to start/stop server 
+	*/
     
         isRunning = state;
     }
     public synchronized boolean getRun() {
+	
+	/** 
+		Retrieves the current running state of the scheduler 
+		*/
 
         return isRunning;
     } 

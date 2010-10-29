@@ -56,6 +56,7 @@ public class Checks {
                 if (debug) debugger.update(inLine + " allowed");
             }
             if (hostnames.isEmpty()) aclPresent = false;
+            reader.close();
         } catch (IOException ioe) {
             if (debug) debugger.update(" --- ACL not updated, shutting down server");
             aclPresent = false;

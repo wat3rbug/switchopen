@@ -37,9 +37,9 @@ public class Broadcast {
 
     // constructors
 
-	/**
- 	 * Creates a Broadcast object with references to the debug windowing object.
- 	 */
+    /**
+     * Creates a Broadcast object with references to the debug windowing object.
+     */
 
     public Broadcast(Debug passedframe) {
 
@@ -47,9 +47,9 @@ public class Broadcast {
 		debug = true;
         finishConstructor();
     }
-	/**
- 	 * Creates a standard Broadcast object with debugging not available.
- 	 */
+    /**
+     * Creates a standard Broadcast object with debugging not available.
+     */
 
     public Broadcast() {
     
@@ -57,21 +57,22 @@ public class Broadcast {
     }
     // methods 
 
-	/**
-	 *  common method for the two constructors to used for common tasks during the creation of the
-	 *  broadcast object.
-	 */
+    /**
+     *  common method for the two constructors to used for common tasks during the creation of the
+     *  broadcast object.
+     */
+
     private void finishConstructor() {
 	 
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
         if (debug) debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
     }
-	/**
-	 * Creates the UDP datagram packet with the hash and timestamp of the file.  It opens UDP port 10077 in broadcast mode.
-	 * Then it broadcasts the message out.
-	 */
-	
+    /**
+     * Creates the UDP datagram packet with the hash and timestamp of the file.  It opens UDP port 10077 in broadcast mode.
+     * Then it broadcasts the message out.
+     */
+    
     public void sendMessage() {
 
         try {
@@ -110,27 +111,29 @@ public class Broadcast {
         }
         if (debug) debugger.update(" -- Broadcast --\n --- End broadcast --- ");
     }
-	/**
-	 * Gets the last modified date for a file.
-	 * @return long time in milliseconds for the last modified for the file.
-	 */
+    /**
+     * Gets the last modified date for a file.
+     * @return long time in milliseconds for the last modified for the file.
+     */
+
     public long getFileDate() {
 
 	// method used to get the timestamp for a file, if it exists
-
-		if (switchFile.exists()) {
-			fileDate = switchFile.lastModified();
-		} else {
-			fileDate = 0;
-		}
+	
+	if (switchFile.exists()) {
+	    fileDate = switchFile.lastModified();
+	} else {
+	    fileDate = 0;
+	}
         return fileDate;
     }   
-/**
- * Gets the SHA1 hash of the file.
- * @return String hex form of file hash
- */
-	public String getFileCRC() {
-		
-		return new Checks().update(filename);
-	}
+    /**
+     * Gets the SHA1 hash of the file.
+     * @return String hex form of file hash
+     */
+
+    public String getFileCRC() {
+	
+	return new Checks().update(filename);
+    }
 }

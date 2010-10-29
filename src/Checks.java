@@ -21,12 +21,13 @@ public class Checks {
 	private boolean debug = false;
 	private boolean aclPresent = true;
 	private String hostFile = "hosts.txt";
-    private ArrayList<String> hostnames = new ArrayList<String>();
+        private ArrayList<String> hostnames = new ArrayList<String>();
 	private Debug debugger = null;
 	
-	/* This method loads up the access list of hosts that this application will respond to.  It returns false if there is none.
-		It is a security check with default deny.
-	*/
+	/* This method loads up the access list of hosts that this application will respond to.  
+	 * It returns false if there is none.
+	 * It is a security check with default deny.
+	 */
 	
 	// constructors
 	
@@ -34,6 +35,7 @@ public class Checks {
 	 *  Creates an object with a reference to the debugging window.
 	 * @param passedframe Reference to the debugging window.
 	 */
+
 	public Checks(Debug passedframe) {
 		
 		debug = true;
@@ -44,11 +46,11 @@ public class Checks {
 	 *  Creates an object to store the allowable hosts
 	 */	
 	
-    public Checks() {
+        public Checks() {
     
         /* this returns false if it cannot load the names.  
-		 * The intent is to shut down the server if it doesn't have a ACL file 
-		 */
+	 * The intent is to shut down the server if it doesn't have a ACL file 
+	 */
 		
         try{
             File hostFileHandle = new File(hostFile);
@@ -91,33 +93,33 @@ public class Checks {
 		return inTheACL;
 	}
 	
-/**
- * returns the String representation of the SHA1 hash of the filename as a String
- * @return buffer - String representation of the SHA1 hash in hexidecial form.
- * @param filename String representation of the filename to be used.
- */
+    /**
+     * returns the String representation of the SHA1 hash of the filename as a String
+     * @return buffer - String representation of the SHA1 hash in hexidecial form.
+     * @param filename String representation of the filename to be used.
+     */
 
-	public static String update(String filename) {
+    public static String update(String filename) {
 		
-		StringBuffer buffer = new StringBuffer("");
-		try {	
-			MessageDigest md = MessageDigest.getInstance("SHA1");
-	    	FileInputStream fis = new FileInputStream(filename);
-			byte[] dataBytes = new byte[1024];
-			
-			int nread = 0;
-			while ((nread = fis.read(dataBytes)) != -1) {
-				md.update(dataBytes, 0, nread);
-			}
-			byte[] mdbytes = md.digest();
-			for (int i = 0; i < mdbytes.length; i++) {
-				buffer.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
-			}
-			
-		} catch (Exception ioe) {
-			// do what? file failed send 0 out
-			buffer= new StringBuffer("0");
-		} 
-		return buffer.toString();
-	}
+	StringBuffer buffer = new StringBuffer("");
+	try {	
+	    MessageDigest md = MessageDigest.getInstance("SHA1");
+	    FileInputStream fis = new FileInputStream(filename);
+	    byte[] dataBytes = new byte[1024];
+	    
+	    int nread = 0;
+	    while ((nread = fis.read(dataBytes)) != -1) {
+		md.update(dataBytes, 0, nread);
+	    }
+	    byte[] mdbytes = md.digest();
+	    for (int i = 0; i < mdbytes.length; i++) {
+		buffer.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
+	    }
+	    
+	} catch (Exception ioe) {
+	    // do what? file failed send 0 out
+	    buffer= new StringBuffer("0");
+	} 
+	return buffer.toString();
+    }
 }

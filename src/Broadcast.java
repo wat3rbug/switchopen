@@ -4,9 +4,9 @@
 //
 
 /* The File takes care of broadcast task.  It calls the
-	checksum object to get the CRC of the switch file.  It also
-	gets the time stamp and then broadcasts in in UDP on port
-	10077.
+    checksum object to get the CRC of the switch file.  It also
+    gets the time stamp and then broadcasts in in UDP on port
+    10077.
 */
 
 import java.io.*;
@@ -27,7 +27,7 @@ public class Broadcast {
     // class variables
 
     private String filename = "switches.csv";
-	File switchFile;
+    File switchFile;
     private static long fileDate = 0;
     public DatagramSocket broadcastSocket;
     private static int port = 10077;
@@ -44,7 +44,7 @@ public class Broadcast {
     public Broadcast(Debug passedframe) {
 
         debugger = passedframe;
-		debug = true;
+        debug = true;
         finishConstructor();
     }
     /**
@@ -61,9 +61,8 @@ public class Broadcast {
      *  common method for the two constructors to used for common tasks during the creation of the
      *  broadcast object.
      */
-
     private void finishConstructor() {
-	 
+     
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
         if (debug) debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
@@ -83,8 +82,8 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(addressTxt);
             broadcastSocket.connect(address, port);
             if (debug) debugger.update("Opened port");
-			String rawMessage = (new Long(this.getFileDate()).toString()) + "," + this.getFileCRC();
-			byte[] sendBuff = (rawMessage.getBytes());
+            String rawMessage = (new Long(this.getFileDate()).toString()) + "," + this.getFileCRC();
+            byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
             if (debug)  debugger.update("Sent message: " + this.getFileDate());
@@ -115,16 +114,16 @@ public class Broadcast {
      * Gets the last modified date for a file.
      * @return long time in milliseconds for the last modified for the file.
      */
-
+    
     public long getFileDate() {
 
-	// method used to get the timestamp for a file, if it exists
-	
-	if (switchFile.exists()) {
-	    fileDate = switchFile.lastModified();
-	} else {
-	    fileDate = 0;
-	}
+    // method used to get the timestamp for a file, if it exists
+
+        if (switchFile.exists()) {
+            fileDate = switchFile.lastModified();
+        } else {
+            fileDate = 0;
+        }
         return fileDate;
     }   
     /**
@@ -133,7 +132,7 @@ public class Broadcast {
      */
 
     public String getFileCRC() {
-	
-	return new Checks().update(filename);
+        
+        return new Checks().update(filename);
     }
 }

@@ -34,22 +34,22 @@ public class UserAccountWindow {
 
     // constructors
 
-	/**
- 	 * Creates the user account window with a reference to the debug window.
+    /**
+     * Creates the user account window with a reference to the debug window.
      * @param decider boolean for which window: true for user / false for password.
-	 * @param passedframe the reference to the debug window for output.
- 	 */
+     * @param passedframe the reference to the debug window for output.
+     */
 
     public UserAccountWindow(boolean decider, Debug passedframe) {
-	
-		debug = true;
-		new UserAccountWindow(decider);
+    
+        debug = true;
+        new UserAccountWindow(decider);
         debugger = passedframe;
     }
-	/**
- 	 * Creates the user account window with a reference to the debug window.
+    /**
+     * Creates the user account window with a reference to the debug window.
      * @param decider boolean for which window: true for user / false for password.
- 	 */
+     */
 
     public UserAccountWindow(boolean decider) {
     
@@ -78,10 +78,10 @@ public class UserAccountWindow {
     }
     // methods
 
-	/**
-	 *  updates the password or username in the Pass storage object.
-	 */
-	
+    /**
+     *  updates the password or username in the Pass storage object.
+     */
+    
     private void updateThePassword() {
 
         if (whichIsIt == USER) {
@@ -97,10 +97,10 @@ public class UserAccountWindow {
         }
     }
 
-	/**
- 	 * Used to make sure a duplicate window isn't created for user name or password.
+    /**
+     * Used to make sure a duplicate window isn't created for user name or password.
      * @return true if there is a window open, false if not.
- 	 */
+     */
 
     public static boolean exists() {
 
@@ -108,15 +108,15 @@ public class UserAccountWindow {
     }
     // inner classes
 
-   	/**
- 	 * Allows enter key to update the password or username in the account window.
- 	 */
+    /**
+     * Allows enter key to update the password or username in the account window.
+     */
 
     public class KeyboardUpdater extends KeyAdapter {
 
         /**
- 		 * Updates the password or username.
-		 */
+         * Updates the password or username.
+         */
 
         public void keyPressed(KeyEvent e) {
 
@@ -125,16 +125,16 @@ public class UserAccountWindow {
             }
         }
     }
-	/**
- 	 * Allows click of the enter key to update the password or username in the account window.
- 	 */
+    /**
+     * Allows click of the enter key to update the password or username in the account window.
+     */
 
     public class MouseUpdater implements ActionListener {
 
-		/**
- 		 * Updates the password or username.
-		 */
-		
+        /**
+         * Updates the password or username.
+         */
+        
         public void actionPerformed(ActionEvent e) {
 
             updateThePassword();

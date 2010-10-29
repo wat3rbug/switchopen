@@ -3,8 +3,8 @@
 // Update Date: Sat Oct 23 08:04:29 CDT 2010
 //
 /** The File takes care of all debug functions.  It logs debug
- *	output to a file in append mode.  It also opens a debug
- *	window for output so that you can see what is happening.
+ *  output to a file in append mode.  It also opens a debug
+ *  window for output so that you can see what is happening.
  * @author Douglas Gardiner
  */
 
@@ -14,18 +14,20 @@ import net.sourceforge.napkinlaf.*;
 import java.io.*;
 
 public class Debug {
-	
-	
+    
+    
 
     // class variables
 
     JTextArea output = null;
     JFrame frame;
     // constructors
-/**
- * Creates a debug object complete with debug window.  Uses Napkin Look and Feel
- * to give the 'under development' look. It also logs information to a debug log file.
- */
+
+    /**
+     * Creates a debug object complete with debug window.  Uses Napkin Look and Feel
+     * to give the 'under development' look. It also logs information to a debug log file.
+     */
+
     public Debug() {
 
         frame = new JFrame("Debug output");
@@ -67,31 +69,33 @@ public class Debug {
         frame.setLocation(0,130);
         frame.pack();
         frame.setVisible(true);
-		this.update(" ########################\n ### start of new log ###\n ########################\n");
+        this.update(" ########################\n ### start of new log ###\n ########################\n");
     }
     // methods
-/**
- * Adds new message to the debug log and the debugging window.
- * @param newMessage String of the message that you want to output to the debug window and the logging file.
- */
+
+    /**
+     * Adds new message to the debug log and the debugging window.
+     * @param newMessage String of the message that you want to output to the debug window and the logging file.
+     */
+
     public void update(String newMessage) {
 
-		BufferedWriter writer = null;
-		try {		
-			writer = new BufferedWriter(new FileWriter("debug.txt", true));
-			writer.write(newMessage + "\n" );
-			writer.flush();
-		} catch (IOException ioe) {
-			 ioe.printStackTrace();
-		} finally {                       // always close the file
-			 if (writer != null) {
-				try {
-			    	writer.close();
-			 	} catch (IOException ioe2) {	
-			    	// just ignore it
-			 	}
-			}
-		}	
+        BufferedWriter writer = null;
+        try {       
+            writer = new BufferedWriter(new FileWriter("debug.txt", true));
+            writer.write(newMessage + "\n" );
+            writer.flush();
+        } catch (IOException ioe) {
+             ioe.printStackTrace();
+        } finally {                       // always close the file
+             if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException ioe2) {    
+                    // just ignore it
+                }
+            }
+        }   
         output.append(newMessage + "\n");
     }
 }

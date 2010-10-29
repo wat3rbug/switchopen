@@ -40,15 +40,15 @@ public class SwitchOpen {
     String directory = null;
     static Debug debugger = null;
     private static final boolean runNetwork = true;
-	static FileUpdater backgroundService = null;
-	JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Automatic");
+    static FileUpdater backgroundService = null;
+    JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Automatic");
 
     // constructors
 
-	/**
- 	 * Creates the main GUI for the application, starts the network thread, if enabled and
- 	 * starts listening for input.
- 	 */
+    /**
+     * Creates the main GUI for the application, starts the network thread, if enabled and
+     * starts listening for input.
+     */
 
     public SwitchOpen() {
 
@@ -93,8 +93,8 @@ public class SwitchOpen {
         JMenuItem aboutItem = new JMenuItem("About");
         JMenuItem helpItem = new JMenuItem("Help");
         JMenuItem passwordItem = new JMenuItem("Password");
-		JMenu network = new JMenu("Updates");
-		JMenu about = new JMenu("About");
+        JMenu network = new JMenu("Updates");
+        JMenu about = new JMenu("About");
         JMenu help = new JMenu("Help");
         BorderLayout layout = new BorderLayout();
         JPanel background = new JPanel(layout);
@@ -114,7 +114,7 @@ public class SwitchOpen {
         inputText.addKeyListener(new EnterCheck());
         aboutItem.addActionListener(new About());
         helpItem.addActionListener(new Help());
-		updating.addActionListener(new UpdaterCheck());
+        updating.addActionListener(new UpdaterCheck());
 
         // add components
 
@@ -125,15 +125,15 @@ public class SwitchOpen {
         contents.add(inputText);
         contents.add(outputText);
         files.add(importFileSelect);
-		network.add(updating);
-		updating.setState(runNetwork);
+        network.add(updating);
+        updating.setState(runNetwork);
         about.add(aboutItem);
         help.add(helpItem);
         user.add(username);
         user.add(passwordItem);
         menuBar.add(files);
         menuBar.add(user);
-		menuBar.add(network);
+        menuBar.add(network);
         menuBar.add(about);
         menuBar.add(help);
 
@@ -152,16 +152,16 @@ public class SwitchOpen {
     }
     // methods
 
-	/**
- 	 * Opens up the switch file for reading.
-	 * @param filename the String representation of the filename.
- 	 */
+    /**
+     * Opens up the switch file for reading.
+     * @param filename the String representation of the filename.
+     */
 
     private void readFile(String filename) {
 
         /* just opens the file and slurps up contents */
 
-		File temp = null;
+        File temp = null;
         try {
             // let local file handle this
         
@@ -179,17 +179,17 @@ public class SwitchOpen {
             if (debug) debugger.update("Finished reading " + filename);
         } catch (FileNotFoundException fnfe) {
             if (debug) debugger.update("File not there...trying network");
-			temp.delete();
+            temp.delete();
         } catch (IOException ex) {
             if (debug) ex.printStackTrace();
             JOptionPane.showMessageDialog(frame, "Are you sure " + filename + " is in " + directory + "?", "File problem", 
                 JOptionPane.WARNING_MESSAGE);
         }
     }
-	/**
- 	 * Opens up the file for writing.  Used for imports.
-  	 * @param filename String representation of the filename to write.
- 	 */
+    /**
+     * Opens up the file for writing.  Used for imports.
+     * @param filename String representation of the filename to write.
+     */
 
     private static void writeFile(String filename) {
 
@@ -216,11 +216,12 @@ public class SwitchOpen {
             JOptionPane.showMessageDialog(frame, filename + " is a bad boy", "File problem", JOptionPane.ERROR_MESSAGE);
         }
     }
-   	/* The start of everything */
-	
-	/**
-	 * Main() method no command line arguments are used
-	 */
+    /* The start of everything */
+    
+    /**
+     * Main() method no command line arguments are used
+     */
+    
     public static void main(String[] args) {
 
         new SwitchOpen();
@@ -236,10 +237,10 @@ public class SwitchOpen {
             if (debug) debugger.update(" --- Starting server --- ");
         } else if (debug) debugger.update(" --- Server not started ---");
     }
-	/** Converts the MAC address from one setup to something that will work in
-	 *	Cisco's user tracker toolbar. Results on changed on the GUI.
-	 */
-	
+    /** Converts the MAC address from one setup to something that will work in
+     *  Cisco's user tracker toolbar. Results on changed on the GUI.
+     */
+    
     private void figureIt() {
 
         StringBuffer buffer = new StringBuffer(inputText.getText());
@@ -274,10 +275,10 @@ public class SwitchOpen {
         System.out.println(buffer.toString());
         inputText.setText(buffer.toString());
     }
-	/** Activates the search.  It ties the username, password, system type to figure out
-	 *	whether to use putty, or ssh, looks for the DNS name and opens a session.
-	 */
-		
+    /** Activates the search.  It ties the username, password, system type to figure out
+     *  whether to use putty, or ssh, looks for the DNS name and opens a session.
+     */
+        
     private void runIt() {
 
         // if array is empty open dialog box saying import a file
@@ -313,7 +314,7 @@ public class SwitchOpen {
             if (switches.size() < 1 ) {
                 JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
                     JOptionPane.ERROR_MESSAGE);
-				return;
+                return;
             }
             for (int i = 0; i < switches.size(); i ++) {
         
@@ -327,12 +328,12 @@ public class SwitchOpen {
                     if (debug) debugger.update("Found " + validIp);
                 }
             }               
-        }	
+        }   
         if (validIp == null || validIp.equals("")) {
             JOptionPane.showMessageDialog(frame, testString + " is not found", "bad tag", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-		inputTag.setText("");
+            return;
+        }
+        inputTag.setText("");
         try {
             String destination ="";      
             if (userInfo.getInfo(USER) != null) {
@@ -355,16 +356,18 @@ public class SwitchOpen {
     }
     // inner classes
 
-	/**
- 	 * Listening class designed for password and username updates. 
- 	 */
+    /**
+     * Listening class designed for password and username updates. 
+     */
+
     public class PasswordUpdater implements ActionListener {
 
         /* used for reading when password is ready to be read */
 
-		/**
- 		 * Updates UserAccountWindow based on the command associated with the menu Item in the GUI.
- 		 */
+        /**
+         * Updates UserAccountWindow based on the command associated with the menu Item in the GUI.
+         */
+
         public void actionPerformed(ActionEvent pu) {
         
             if (debug) debugger.update("called " + pu.getActionCommand());
@@ -375,15 +378,15 @@ public class SwitchOpen {
             }
         }
     }
-	/**
- 	 * Listening class designed to bring up the help dialog box. 
- 	 */
+    /**
+     * Listening class designed to bring up the help dialog box. 
+     */
 
     public class Help implements ActionListener {
 
         /** 
-		 * Brings up the help dialog box 
-		 */
+         * Brings up the help dialog box 
+         */
 
         public void actionPerformed(ActionEvent as) {
 
@@ -393,15 +396,15 @@ public class SwitchOpen {
             JOptionPane.showMessageDialog(frame, message, "Help", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-	/**
- 	 * Listening class designed to bring up the about dialog box. 
- 	 */
+    /**
+     * Listening class designed to bring up the about dialog box. 
+     */
 
     public class About implements ActionListener {
 
         /**
- 		 * Displays the version number and author 
-		 */
+         * Displays the version number and author 
+         */
 
         public void actionPerformed(ActionEvent ad) {
 
@@ -411,15 +414,15 @@ public class SwitchOpen {
                 "about", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-	/**
- 	 * Listening class designed to bring up the import file dialog box. 
- 	 */
+    /**
+     * Listening class designed to bring up the import file dialog box. 
+     */
 
     public class ImportListener implements ActionListener {
 
         /**
          * Used for select the file to import and then makes a call to read the file contents 
-		 * and then write to the default file.
+         * and then write to the default file.
          */
 
         public void actionPerformed(ActionEvent es) {
@@ -436,34 +439,36 @@ public class SwitchOpen {
             }
         }
     }
-	/**
- 	 * Listening class to toggle network updates on or off. 
- 	 */
-	public class UpdaterCheck implements ActionListener {
+    /**
+     * Listening class to toggle network updates on or off. 
+     */
+
+    public class UpdaterCheck implements ActionListener {
 
         /**
- 		 * Toggles network updates on or off.
-		 */
+         * Toggles network updates on or off.
+         */
 
         public void actionPerformed(ActionEvent es) {
         
-			if (!backgroundService.getRun()) {
-				backgroundService.setRun(true);
-				Thread server = new Thread(backgroundService, "Server");
-		        server.start();
-		        if (debug) debugger.update(" --- Starting server --- ");
-			}
+            if (!backgroundService.getRun()) {
+                backgroundService.setRun(true);
+                Thread server = new Thread(backgroundService, "Server");
+                server.start();
+                if (debug) debugger.update(" --- Starting server --- ");
+            }
             backgroundService.setRun(updating.getState());
         }
     }
-	/**
- 	 * Allows enter key to activate mac address conversions or switch login attempts 
- 	 */
+    /**
+     * Allows enter key to activate mac address conversions or switch login attempts 
+     */
+
     public class EnterCheck extends KeyAdapter {
 
         /**
- 		 * Runs the runit and figureit function based on hitting enter. 
-		 */
+         * Runs the runit and figureit function based on hitting enter. 
+         */
 
         public void keyPressed(KeyEvent e) {
 
@@ -473,19 +478,19 @@ public class SwitchOpen {
             }
         }
     }
-	/**
- 	 * Allows clicking enter key with the mouse to activate mac address conversions or switch login attempts 
- 	 */
+    /**
+     * Allows clicking enter key with the mouse to activate mac address conversions or switch login attempts 
+     */
 
     public class RunTag implements ActionListener {
 
         /**
- 		 * Runs the runit and figureit function based on hitting enter. 
-		 */
+         * Runs the runit and figureit function based on hitting enter. 
+         */
 
         public void actionPerformed(ActionEvent ev) {
 
-			figureIt();
+            figureIt();
             runIt();
         }
     }   

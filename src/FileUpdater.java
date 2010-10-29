@@ -34,25 +34,25 @@ public class FileUpdater implements Runnable {
     private Broadcast beacon = null;
     private Debug debugger = null;
     private String localCRC = null; 
-	private Checks securityChecks = new Checks(); 
+    private Checks securityChecks = new Checks(); 
     
     // constructors
 
-	/**
-	 * Creates a scheduler with a reference to the GUI frame and a debug windowing object.  
-	 * Used for updating the GUI and the debug window.
-	 */
-	
+    /**
+     * Creates a scheduler with a reference to the GUI frame and a debug windowing object.  
+     * Used for updating the GUI and the debug window.
+     */
+    
     public FileUpdater(JFrame frame, Debug passedframe) {
 
-		debug = true;
+        debug = true;
         debugger = passedframe;
         setRun(securityChecks.exists());
         beacon = new Broadcast(passedframe);
     }
-	/**
- 	* Creates a scheduler with a reference to the GUI frame.  Used for updating the GUI.
- 	*/
+    /**
+    * Creates a scheduler with a reference to the GUI frame.  Used for updating the GUI.
+    */
 
     public FileUpdater(JFrame frame) {
 
@@ -65,41 +65,42 @@ public class FileUpdater implements Runnable {
 
     // threadsafe methods here
 
-	/**
- 	*  Sets the running state of the scheduler.  Used to start and stop the service.
-	*  Designed to be threadsafe.
- 	*/
+    /**
+    *  Sets the running state of the scheduler.  Used to start and stop the service.
+    *  Designed to be threadsafe.
+    */
 
     public synchronized void setRun(boolean state) {
     
         isRunning = state;
     }
-	/**
- 	* retrieves the running state of the scheduler.  Designed to be threadsafe.
-	* @return boolean current state of scheduler.
- 	*/
+    /**
+    * retrieves the running state of the scheduler.  Designed to be threadsafe.
+    * @return boolean current state of scheduler.
+    */
 
     public synchronized boolean getRun() {
 
         return isRunning;
     } 
-	// NON threadsafe methods
-	
-	/* This is the scheduler.  It keeps track of broadcasting, when to receive and when to transmit the file. */
-	
-	/**
-	 * The scheduling thread run method. Stopped by using the setRun() method.
-	 */
+    // NON threadsafe methods
+    
+    /* This is the scheduler.  It keeps track of broadcasting, when to receive and when to transmit the file. */
+    
+    /**
+     * The scheduling thread run method. Stopped by using the setRun() method.
+     */
+    
     public void run() {
 
         beacon.sendMessage();
         Calendar timer = Calendar.getInstance();
         long loopTimeStart = System.currentTimeMillis();
         InetAddress remoteAddress = null;
-		Checks securityStuff = new Checks();
+        Checks securityStuff = new Checks();
 
-		// check to make sure we still want to run network updates
-		
+        // check to make sure we still want to run network updates
+        
         while (this.getRun()) {
             
             if (debug) debugger.update(" -- FileUpdater --\nRunning server");
@@ -113,16 +114,16 @@ public class FileUpdater implements Runnable {
             } 
             // listen for message
 
-        	localCRC = new Checks().update(filename).trim();
+            localCRC = new Checks().update(filename).trim();
             DatagramSocket receiver = null;
             ServerSocket socket = null;
             long diffInTime = 0; 
-			long limitToCheck = SEC_LENGTH * SEC_PER_MIN;
-			Calendar localTime = Calendar.getInstance();
-			Calendar remoteTime = Calendar.getInstance();
-			localTime.setTimeInMillis(beacon.getFileDate());
-			String remoteCRC = null;
-			String rawMessage = null;
+            long limitToCheck = SEC_LENGTH * SEC_PER_MIN;
+            Calendar localTime = Calendar.getInstance();
+            Calendar remoteTime = Calendar.getInstance();
+            localTime.setTimeInMillis(beacon.getFileDate());
+            String remoteCRC = null;
+            String rawMessage = null;
             try {
                 receiver = new DatagramSocket(port);
                 byte[] msgBytes = new byte[100];
@@ -132,18 +133,18 @@ public class FileUpdater implements Runnable {
                 receiver.receive(message);
                 if (debug) debugger.update("Received\n ---- message - " + message.getData());
 
-				// convert message to CRC and time stamp and who did it.
+                // convert message to CRC and time stamp and who did it.
 
-				rawMessage = new String(message.getData());
-				remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",")));
-				if (rawMessage.indexOf(",") > 0) {
-					remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1).trim();	
-				} else {
-					remoteCRC = "";
-				}
-				if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
-				remoteTime.setTimeInMillis(remoteDate);
-				diffInTime = (remoteTime.getTimeInMillis() - localTime.getTimeInMillis()) / limitToCheck;
+                rawMessage = new String(message.getData());
+                remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",")));
+                if (rawMessage.indexOf(",") > 0) {
+                    remoteCRC = rawMessage.substring(rawMessage.indexOf(",") +1).trim();    
+                } else {
+                    remoteCRC = "";
+                }
+                if (debug) debugger.update("remoteCRC = " + remoteCRC +"\nlocalCRC  = " + localCRC);
+                remoteTime.setTimeInMillis(remoteDate);
+                diffInTime = (remoteTime.getTimeInMillis() - localTime.getTimeInMillis()) / limitToCheck;
                 beacon.sendMessage();
                 remoteAddress = message.getAddress();
                 receiver.close();
@@ -160,77 +161,77 @@ public class FileUpdater implements Runnable {
         
             // make sure host is in ACL and time is right
 
-          	boolean inTheACL = securityStuff.inACL(remoteAddress);
-			boolean testReceive = false;
+            boolean inTheACL = securityStuff.inACL(remoteAddress);
+            boolean testReceive = false;
             if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + (beacon.getFileDate() - limitToCheck) + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");
             if (inTheACL ) { // are they in ACL?
-				if (remoteCRC.compareTo(localCRC) != 0) { // are the files different?
-					if (debug) {
-						debugger.update(" -- CRC is different\n ---- " + remoteAddress.getHostName() +  " is in the List");
-						debugger.update(" -- CRC check result is " + remoteCRC.compareTo(localCRC));
-					}
-					if (remoteDate == 0 || diffInTime < 0 ) {
+                if (remoteCRC.compareTo(localCRC) != 0) { // are the files different?
+                    if (debug) {
+                        debugger.update(" -- CRC is different\n ---- " + remoteAddress.getHostName() +  " is in the List");
+                        debugger.update(" -- CRC check result is " + remoteCRC.compareTo(localCRC));
+                    }
+                    if (remoteDate == 0 || diffInTime < 0 ) {
 
-    				// local file is newer or doesnt exist so transmit this one
+                    // local file is newer or doesnt exist so transmit this one
 
-    					if (debug) {
-        					debugger.update("local is newer\n --- Entering transmit file mode --- ");
-    					}
-    					TransmitFile updateRemoteFile = null;
-    					if (debug) {
-        					updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
-    					} else {
-        					updateRemoteFile = new TransmitFile(frame, remoteAddress);
-    					}
-						testReceive = false;
-						int cycle = 0;
-						
-						// make 3 attempts and bail if it doesn't work
-						
-						while (!testReceive && cycle++ < 3) {
-    						if ((testReceive = updateRemoteFile.sendFile())) {
-        						if (debug) {
-            						debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
-        						}
-        						beacon.sendMessage();   
-    						}
-    							if (debug) {
-        							debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
-    							}
-								try {
-									Thread.sleep(SEC_LENGTH * 5);
-								} catch (InterruptedException ie) {
-			 					// do nothing because we are waiting to do things anyway
-								}
-							}
-						}
-                	if (beacon.getFileDate() == 0 || diffInTime > 0  ) {
+                        if (debug) {
+                            debugger.update("local is newer\n --- Entering transmit file mode --- ");
+                        }
+                        TransmitFile updateRemoteFile = null;
+                        if (debug) {
+                            updateRemoteFile = new TransmitFile(frame, remoteAddress, debugger);
+                        } else {
+                            updateRemoteFile = new TransmitFile(frame, remoteAddress);
+                        }
+                        testReceive = false;
+                        int cycle = 0;
+                        
+                        // make 3 attempts and bail if it doesn't work
+                        
+                        while (!testReceive && cycle++ < 3) {
+                            if ((testReceive = updateRemoteFile.sendFile())) {
+                                if (debug) {
+                                    debugger.update(" ---- Transmit failed...sending out another beacon to reestablish");
+                                }
+                                beacon.sendMessage();   
+                            }
+                                if (debug) {
+                                    debugger.update(" -- FileUpdater --\n -- end server loop instructions -- ");
+                                }
+                                try {
+                                    Thread.sleep(SEC_LENGTH * 5);
+                                } catch (InterruptedException ie) {
+                                // do nothing because we are waiting to do things anyway
+                                }
+                            }
+                        }
+                    if (beacon.getFileDate() == 0 || diffInTime > 0  ) {
 
                     // local file is older so get ready and receive file.
             
-                    	if (debug) {
-                        	debugger.update("local is older\n --- Entering receive file mode --- ");
-                    	}
-                    	ReceiveFile updateLocalFile = null;
-                    	if (debug) {
-                        	updateLocalFile = new ReceiveFile(frame, debugger);
-                    	} else {
-                        	updateLocalFile = new ReceiveFile(frame);
-                    	}
-						int cycle = 0;
-						while (!testReceive && cycle++ < 2) {
-                    		if ((testReceive = updateLocalFile.getFile())) {
-                        		if (debug) {
-                            		debugger.update(" ---- Receive failed...sending out another beacon to reestablish");
-                        		}
-                        		beacon.sendMessage();
-							}
-                    	}
-                	}
-				} else {
-					if (debug) debugger.update(" -- in ACL but CRC is the same");
-				}
+                        if (debug) {
+                            debugger.update("local is older\n --- Entering receive file mode --- ");
+                        }
+                        ReceiveFile updateLocalFile = null;
+                        if (debug) {
+                            updateLocalFile = new ReceiveFile(frame, debugger);
+                        } else {
+                            updateLocalFile = new ReceiveFile(frame);
+                        }
+                        int cycle = 0;
+                        while (!testReceive && cycle++ < 2) {
+                            if ((testReceive = updateLocalFile.getFile())) {
+                                if (debug) {
+                                    debugger.update(" ---- Receive failed...sending out another beacon to reestablish");
+                                }
+                                beacon.sendMessage();
+                            }
+                        }
+                    }
+                } else {
+                    if (debug) debugger.update(" -- in ACL but CRC is the same");
+                }
             } else { // not in ACL
                 if (debug) {
                     debugger.update (" ---- " + remoteAddress.getHostName() +  " is NOT in the List");

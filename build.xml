@@ -1,5 +1,9 @@
 <?xml version="1.0" ?>
-<project name="SwitchOpen" basedir="." default="run">
+<project name="SwitchOpen" basedir="." default="run" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+	
+	<!--><cs:checkstyle>
+		<fileset dir="${src}"/>
+	</cs:checkstyle> -->
   <property name="build" location="build"/>
   <property name="src" location="src"/>
   <property name="dist" location="dist"/>

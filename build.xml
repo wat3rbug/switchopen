@@ -21,8 +21,8 @@
 
 <!-- uncomment out the following lines for Mac users -->
 
-    <mkdir dir="${dist}/${napkin}"/>
-    <mkdir dir="${build}/${napkin}"/>
+ <!--   <mkdir dir="${dist}/${napkin}"/>
+    <mkdir dir="${build}/${napkin}"/> -->
 
     <copy todir="${dist}">
       <fileset dir="${lib}">
@@ -79,20 +79,14 @@
             <attribute name="Main-Class" value="SwitchOpen"/>
           </manifest>
        </jar>
-	<echo>Generating documents </echo>
-		<javadoc
-		       access="public"
-		           destdir="${docs}"
-		           author="true"
-		           version="false"
-		           use="true"
-		       >
+<!--	<echo>Generating documents </echo>
+		<javadoc access="public" destdir="${docs}" author="true" version="false" use="true">
 
 		        <fileset dir="${src}" defaultexcludes="yes">
 		            <include name="**/*.java"/>
 
 		        </fileset>
-		    </javadoc>
+		    </javadoc> -->
     </target>
     
 <!-- RUN - used for testing.  It also does the jarball. -->

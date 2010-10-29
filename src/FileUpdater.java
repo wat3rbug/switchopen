@@ -33,9 +33,8 @@ public class FileUpdater implements Runnable {
     private long remoteDate = 0;
     private Broadcast beacon = null;
     private Debug debugger = null;
-    private String hostFile = "hosts.txt";
-    private ArrayList<String> hostnames = new ArrayList<String>();
-	private String localCRC = null; 
+    private String localCRC = null; 
+	private Checks securityChecks = new Checks(); 
     
     // constructors
 
@@ -48,7 +47,7 @@ public class FileUpdater implements Runnable {
 
 		debug = true;
         debugger = passedframe;
-        setRun(getHosts());
+        setRun(securityChecks.exists());
         beacon = new Broadcast(passedframe);
     }
 	/**
@@ -58,7 +57,7 @@ public class FileUpdater implements Runnable {
     public FileUpdater(JFrame frame) {
 
         this.frame = frame;
-        setRun(getHosts());
+        setRun(securityChecks.exists());
         beacon = new Broadcast();         
     }
     
@@ -86,31 +85,6 @@ public class FileUpdater implements Runnable {
     } 
 	// NON threadsafe methods
 	
-	/* This method loads up the access list of hosts that this application will respond to.  It returns false if there is none.
-		It is a security check with default deny.
-	*/
-	/**
-	 *  updates the access control list based on the local machine file.  Returns the state of operations
-	 * @return boolean for the success of the file read.  Default deny is used.
-	 */	
-    private boolean getHosts() {
-    
-        /* this returns false if it cannot load the names.  The intent is to shut down the server if it doesn't have a ACL file */
-        try{
-            File hostFileHandle = new File(hostFile);
-            BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
-            String inLine = null;
-            while ((inLine = reader.readLine()) != null) {
-                hostnames.add(inLine.toLowerCase());
-                if (debug) debugger.update(inLine + " allowed");
-            }
-            if (hostnames.isEmpty()) return false;
-        } catch (IOException ioe) {
-            if (debug) debugger.update(" --- ACL not updated, shutting down server");
-            return false;
-        }
-        return true;
-    }
 	/* This is the scheduler.  It keeps track of broadcasting, when to receive and when to transmit the file. */
 	
 	/**
@@ -122,6 +96,7 @@ public class FileUpdater implements Runnable {
         Calendar timer = Calendar.getInstance();
         long loopTimeStart = System.currentTimeMillis();
         InetAddress remoteAddress = null;
+		Checks securityStuff = new Checks();
 
 		// check to make sure we still want to run network updates
 		
@@ -138,7 +113,7 @@ public class FileUpdater implements Runnable {
             } 
             // listen for message
 
-        	localCRC = new CheckSum().update(filename).trim();
+        	localCRC = new Checks().update(filename).trim();
             DatagramSocket receiver = null;
             ServerSocket socket = null;
             long diffInTime = 0; 
@@ -185,10 +160,7 @@ public class FileUpdater implements Runnable {
         
             // make sure host is in ACL and time is right
 
-            boolean inTheACL = false;
-            for (int i = 0 ; i < hostnames.size(); i++) {
-                if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
-            }
+          	boolean inTheACL = securityStuff.inACL(remoteAddress);
 			boolean testReceive = false;
             if (debug) debugger.update(" -- FileUpdater --\nlocal  file date = " + (beacon.getFileDate() - limitToCheck) + 
                 "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime + "\n");

@@ -2,9 +2,10 @@
 // Creation Date: Fri Oct 22 13:21:14 CDT 2010
 // Update Date: Sat Oct 23 08:07:26 CDT 2010
 //
-//@author Douglas Gardiner
 
-/** Used for getting a checksum hash of a file
+
+/** 
+ * Used for getting a checksum hash of a file
  * @author Douglas Gardiner
  */
 
@@ -49,7 +50,8 @@ public class Checks {
         
         try{
             File hostFileHandle = new File(hostFile);
-            BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
+            BufferedReader reader = new BufferedReader(new 
+                FileReader(hostFileHandle));
             String inLine = null;
             while ((inLine = reader.readLine()) != null) {
                 hostnames.add(inLine.toLowerCase());
@@ -58,7 +60,8 @@ public class Checks {
             if (hostnames.isEmpty()) aclPresent = false;
             reader.close();
         } catch (IOException ioe) {
-            if (debug) debugger.update(" --- ACL not updated, shutting down server");
+            if (debug) debugger.update(" --- ACL not updated, shutting down "
+                + "server");
             aclPresent = false;
         }
     }
@@ -67,7 +70,8 @@ public class Checks {
     
     /**
      * checks to see if the the ACL file exists and was read.
-     * @return aclPresent true if things worked out / false if the process failed for any reason
+     * @return aclPresent true if things worked out / false if the process 
+     * failed for any reason
      */
     
     public boolean exists() {
@@ -76,22 +80,27 @@ public class Checks {
     }
     /**
      * Checks to see if the address given, is in the access control list.
-     * @param remoteAddress Address of the machine that performed the broadcast or request.
-     * @return boolean result of the test, false if the host doesn't exist in the ACLand true if they are in the ACL. 
+     * @param remoteAddress Address of the machine that performed the 
+     * broadcast or request.
+     * @return boolean result of the test, false if the host doesn't exist
+     * in the ACLand true if they are in the ACL. 
      */
     
     public boolean inACL(InetAddress remoteAddress) {
         
         boolean inTheACL = false;
         for (int i = 0 ; i < hostnames.size(); i++) {
-            if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) inTheACL = true;
+            if (remoteAddress.getHostName().toLowerCase().equals(
+                hostnames.get(i))) inTheACL = true;
         }
         return inTheACL;
     }
     
     /**
-     * returns the String representation of the SHA1 hash of the filename as a String
-     * @return buffer - String representation of the SHA1 hash in hexidecial form.
+     * returns the String representation of the SHA1 hash of the filename 
+     * as a String
+     * @return buffer - String representation of the SHA1 hash in hexidecial
+     * form.
      * @param filename String representation of the filename to be used.
      */
 
@@ -109,7 +118,8 @@ public class Checks {
             }
             byte[] mdbytes = md.digest();
             for (int i = 0; i < mdbytes.length; i++) {
-                buffer.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
+                buffer.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 
+                    16).substring(1));
             }
             fis.close();
         } catch (Exception ioe) {

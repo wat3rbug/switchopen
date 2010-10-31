@@ -24,8 +24,9 @@ public class Debug {
     // constructors
 
     /**
-     * Creates a debug object complete with debug window.  Uses Napkin Look and Feel
-     * to give the 'under development' look. It also logs information to a debug log file.
+     * Creates a debug object complete with debug window.  Uses Napkin 
+	 * Look and Feel to give the 'under development' look. It also logs
+	 * information to a debug log file.
      */
 
     public Debug() {
@@ -50,9 +51,12 @@ public class Debug {
         // build the screen
         
         outputPanel.add(messageScroller);
-        outputPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Debug Messages"));
-        messageScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        messageScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        outputPanel.setBorder(BorderFactory.createTitledBorder(
+			BorderFactory.createEtchedBorder(), "Debug Messages"));
+        messageScroller.setHorizontalScrollBarPolicy(
+			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        messageScroller.setVerticalScrollBarPolicy(
+			ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         output.setLineWrap(true);
         output.setWrapStyleWord(true);
         BorderLayout layout = new BorderLayout();
@@ -69,13 +73,15 @@ public class Debug {
         frame.setLocation(0,130);
         frame.pack();
         frame.setVisible(true);
-        this.update(" ########################\n ### start of new log ###\n ########################\n");
+        this.update(" ########################\n ### start of new log ###"
+			+ "\n ########################\n");
     }
     // methods
 
     /**
      * Adds new message to the debug log and the debugging window.
-     * @param newMessage String of the message that you want to output to the debug window and the logging file.
+     * @param newMessage String of the message that you want to output to 
+	 * the debug window and the logging file.
      */
 
     public void update(String newMessage) {

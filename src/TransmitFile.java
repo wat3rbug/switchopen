@@ -29,9 +29,11 @@ public class TransmitFile {
     // constructors
 
     /**
-     * Creates TransmitFile object with reference to main GUI frame and the IP address of the host requesting.
+     * Creates TransmitFile object with reference to main GUI frame and the IP
+ 	 * address of the host requesting.
      * @param frame The reference for main GUI.
-     * @param address The IP address of the host receiving the file transmission.
+     * @param address The IP address of the host receiving the file 
+	 * transmission.
      * @param passedframe The reference the to debugging window for updates.
      */
     
@@ -42,9 +44,11 @@ public class TransmitFile {
         debugger = passedframe;
     }
     /**
-     * Creates TransmitFile object with reference to main GUI frame and the IP address of the host requesting.
+     * Creates TransmitFile object with reference to main GUI frame and the IP 
+	 * address of the host requesting.
      * @param frame The reference for main GUI.
-     * @param address The IP address of the host receiving the file transmission.
+     * @param address The IP address of the host receiving the file 
+	 * transmission.
      */
 
     public TransmitFile(JFrame frame, InetAddress address) {
@@ -56,7 +60,8 @@ public class TransmitFile {
 
     /**
      * Send the file out to the receiving host on port TCP 10079.
-     * @return boolean the success or failure of the method to transmit the file.
+     * @return boolean the success or failure of the method to transmit the 
+	 * file.
      */
     
     public boolean sendFile() {
@@ -68,17 +73,20 @@ public class TransmitFile {
             if (debug) debugger.update(" -- TransmitFile --");
             File newFile = new File(filename);
             reader = new BufferedReader(new FileReader(newFile));
-            if (debug) debugger.update("Address - "+ address.toString() + "\tport " + port);
+            if (debug) debugger.update("Address - "+ address.toString() + 
+				"\tport " + port);
             socket = new Socket(address, port);
             socket.setTcpNoDelay(false);    // turns off nagles
             if (debug) {
                  if (socket.isBound()) {
                     debugger.update("ouput found port " + socket.getPort());
                  } else {
-                    debugger.update("cannot bind outgoing " + socket.getPort());
+                    debugger.update("cannot bind outgoing " + 
+						socket.getPort());
                 }
             }
-            PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+            PrintWriter writer = new PrintWriter(new BufferedWriter(new 
+				OutputStreamWriter(socket.getOutputStream())), true);
             String inputLine = null;
             while ((inputLine = reader.readLine()) != null ) {
                 writer.println(inputLine);
@@ -97,7 +105,9 @@ public class TransmitFile {
                 success = false;
             }
         } catch (SecurityException se) {
-            JOptionPane.showMessageDialog(frame, "No permissions to read this file", "File Permissions", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "No permissions to read "
+				+ "this file", "File Permissions", 
+				JOptionPane.ERROR_MESSAGE);
             if (debug) {
                 debugger.update("--- Transmit File failure ---");
                 se.printStackTrace();

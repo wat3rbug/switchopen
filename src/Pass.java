@@ -15,8 +15,8 @@ public class Pass {
     private static final boolean debug = false;
 
     /**
-     * Used for updating user information boolean argument is to decide whether it is username or password. 
-     * True for password and False for username.
+     * Used for updating user information boolean argument is to decide whether 
+     * it is username or password.  True for password and False for username.
      * @param newInfo username / password based on boolean parameter
      * @param decider boolean true - username, false - password
      */
@@ -28,17 +28,20 @@ public class Pass {
         } else {
             password = newInfo;
         }
-        if (debug) System.out.println("set user-" + username + "\nset pass-" + password);
+        if (debug) System.out.println("set user-" + username + "\nset pass-" 
+            + password);
     }
     /**
-     * Retrieves username or password based on boolean argument.  True retrieves username, false returns password.
+     * Retrieves username or password based on boolean argument.  True 
+     * retrieves username, false returns password.
      * @param decider boolean toggle for username or password.
      * @return String password or username based on boolean sent as argument.
      */
 
     public static String getInfo(boolean decider) {
 
-        if (debug) System.out.println("get user-" + username + "\nget pass-" + password);
+        if (debug) System.out.println("get user-" + username + "\nget pass-" 
+            + password);
         if (decider) {
             return username;
         } else {

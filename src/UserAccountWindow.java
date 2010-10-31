@@ -36,7 +36,8 @@ public class UserAccountWindow {
 
     /**
      * Creates the user account window with a reference to the debug window.
-     * @param decider boolean for which window: true for user / false for password.
+     * @param decider boolean for which window: true for user / false for 
+	 * password.
      * @param passedframe the reference to the debug window for output.
      */
 
@@ -48,7 +49,8 @@ public class UserAccountWindow {
     }
     /**
      * Creates the user account window with a reference to the debug window.
-     * @param decider boolean for which window: true for user / false for password.
+     * @param decider boolean for which window: true for user / false for 
+	 * password.
      */
 
     public UserAccountWindow(boolean decider) {
@@ -98,7 +100,8 @@ public class UserAccountWindow {
     }
 
     /**
-     * Used to make sure a duplicate window isn't created for user name or password.
+     * Used to make sure a duplicate window isn't created for user name or 
+	 * password.
      * @return true if there is a window open, false if not.
      */
 
@@ -109,7 +112,8 @@ public class UserAccountWindow {
     // inner classes
 
     /**
-     * Allows enter key to update the password or username in the account window.
+     * Allows enter key to update the password or username in the account 
+	 * window.
      */
 
     public class KeyboardUpdater extends KeyAdapter {
@@ -126,7 +130,8 @@ public class UserAccountWindow {
         }
     }
     /**
-     * Allows click of the enter key to update the password or username in the account window.
+     * Allows click of the enter key to update the password or username in 
+	 * the account window.
      */
 
     public class MouseUpdater implements ActionListener {

@@ -41,7 +41,7 @@ public class Broadcast {
 
     /**
      * Creates a Broadcast object with references to the debug 
-	 * windowing object.
+     * windowing object.
      */
 
     public Broadcast(Debug passedframe) {
@@ -52,7 +52,7 @@ public class Broadcast {
     }
     /**
      * Creates a standard Broadcast object with debugging not 
-	 * available.
+     * available.
      */
 
     public Broadcast() {
@@ -63,20 +63,21 @@ public class Broadcast {
 
     /**
      * Common method for the two constructors to used for 
-	 * common tasks during the creation of the broadcast 
-	 * object.
+     * common tasks during the creation of the broadcast 
+     * object.
      */
+
     private void finishConstructor() {
      
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
         if (debug) debugger.update(" -- Broadcast --\n "
-			+ "--- File date is " + fileDate);
+            + "--- File date is " + fileDate);
     }
     /**
      * Creates the UDP datagram packet with the hash and 
-	 * timestamp of the file.  It opens UDP port 10077 in 
-	 * broadcast mode.  Then it broadcasts the message out.
+     * timestamp of the file.  It opens UDP port 10077 in 
+     * broadcast mode.  Then it broadcasts the message out.
      */
     
     public void sendMessage() {
@@ -90,7 +91,7 @@ public class Broadcast {
             broadcastSocket.connect(address, port);
             if (debug) debugger.update("Opened port");
             String rawMessage = (new Long(this.getFileDate()).toString()) 
-				+ "," + this.getFileCRC();
+                + "," + this.getFileCRC();
             byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
@@ -113,18 +114,18 @@ public class Broadcast {
             if (debug) {
                 debugger.update("Broadcast failure");
                 if (ioe.getMessage().matches("No route to host")) {
-					debugger.update("Check cable or make sure wireless "
-						+ "is turned on");
+                    debugger.update("Check cable or make sure wireless "
+                        + "is turned on");
                 } else ioe.printStackTrace();
             }  
         }
         if (debug) debugger.update(" -- Broadcast --\n --- End "
-			+ "broadcast --- ");
+            + "broadcast --- ");
     }
     /**
      * Gets the last modified date for a file.
      * @return long time in milliseconds for the last modified 
-	 * for the file.
+     * for the file.
      */
     
     public long getFileDate() {

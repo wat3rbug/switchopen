@@ -3,10 +3,12 @@
 // Update Date: Sat Oct 23 08:09:22 CDT 2010
 //
 
-/** Handles scheduling for the network operations.  It performs a broadcast every minute.
- * It handles receiving UDP broadcasts and decides whether to respond to them or how.  If the host
- * matches the access control list file, local to the machine, then it determines whether to receive the newer
- * file or transmit its file because it is the latest.
+/** Handles scheduling for the network operations.  It performs a 
+ * broadcast every minute. It handles receiving UDP broadcasts and 
+ * decides whether to respond to them or how.  If the host matches 
+ * the access control list file, local to the machine, then it 
+ * determines whether to receive the newer file or transmit its file 
+ * because it is the latest.
  * @author Douglas Gardiner
  */
 
@@ -28,7 +30,8 @@ public class FileUpdater implements Runnable {
     private String fileDate = null;
     private String filename = "switches.csv";
     private int port = 10077;
-    private static final long TIMER_LEN = (long)SEC_PER_MIN  * SEC_LENGTH;
+    private static final long TIMER_LEN = (long)SEC_PER_MIN  * 
+		SEC_LENGTH;
     private JFrame frame;
     private long remoteDate = 0;
     private Broadcast beacon = null;

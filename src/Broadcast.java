@@ -14,10 +14,12 @@ import java.net.*;
 
 
 /**
- * This object is for sending broadcast beacons only.  Beacons are are UDP packets on port 10077.  
- * They incorporate a SHA1 hash of the file and the timestamp for the last time it was modified.
- * A future version will be done to use non-blocking I/O.  Note: This will be refactored because during initial
- * development other operations were being performed for the file information, which have since been removed.
+ * This object is for sending broadcast beacons only.  Beacons are are UDP
+ * packets on port 10077.  They incorporate a SHA1 hash of the file and 
+ * the timestamp for the last time it was modified.  A future version will
+ * be done to use non-blocking I/O.  Note: This will be refactored because 
+ * during initial development other operations were being performed for 
+ * the file information, which have since been removed.
  * @author Douglas Gardiner
  */
 
@@ -33,12 +35,13 @@ public class Broadcast {
     private static int port = 10077;
     private boolean debug = false;
     private Debug debugger = null;
-    private String addressTxt = "255.255.255.255"; // can restrict this to just subnet broadcast
+    private String addressTxt = "255.255.255.255"; 
 
     // constructors
 
     /**
-     * Creates a Broadcast object with references to the debug windowing object.
+     * Creates a Broadcast object with references to the debug 
+	 * windowing object.
      */
 
     public Broadcast(Debug passedframe) {
@@ -48,7 +51,8 @@ public class Broadcast {
         finishConstructor();
     }
     /**
-     * Creates a standard Broadcast object with debugging not available.
+     * Creates a standard Broadcast object with debugging not 
+	 * available.
      */
 
     public Broadcast() {
@@ -58,18 +62,21 @@ public class Broadcast {
     // methods 
 
     /**
-     *  common method for the two constructors to used for common tasks during the creation of the
-     *  broadcast object.
+     * Common method for the two constructors to used for 
+	 * common tasks during the creation of the broadcast 
+	 * object.
      */
     private void finishConstructor() {
      
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
-        if (debug) debugger.update(" -- Broadcast --\n --- File date is " + fileDate);
+        if (debug) debugger.update(" -- Broadcast --\n "
+			+ "--- File date is " + fileDate);
     }
     /**
-     * Creates the UDP datagram packet with the hash and timestamp of the file.  It opens UDP port 10077 in broadcast mode.
-     * Then it broadcasts the message out.
+     * Creates the UDP datagram packet with the hash and 
+	 * timestamp of the file.  It opens UDP port 10077 in 
+	 * broadcast mode.  Then it broadcasts the message out.
      */
     
     public void sendMessage() {
@@ -82,7 +89,8 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(addressTxt);
             broadcastSocket.connect(address, port);
             if (debug) debugger.update("Opened port");
-            String rawMessage = (new Long(this.getFileDate()).toString()) + "," + this.getFileCRC();
+            String rawMessage = (new Long(this.getFileDate()).toString()) 
+				+ "," + this.getFileCRC();
             byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
@@ -104,15 +112,19 @@ public class Broadcast {
         } catch (IOException ioe) {     
             if (debug) {
                 debugger.update("Broadcast failure");
-                if (ioe.getMessage().matches("No route to host")) debugger.update("Check cable or make sure wireless is turned on");
-                else ioe.printStackTrace();
+                if (ioe.getMessage().matches("No route to host")) {
+					debugger.update("Check cable or make sure wireless "
+						+ "is turned on");
+                } else ioe.printStackTrace();
             }  
         }
-        if (debug) debugger.update(" -- Broadcast --\n --- End broadcast --- ");
+        if (debug) debugger.update(" -- Broadcast --\n --- End "
+			+ "broadcast --- ");
     }
     /**
      * Gets the last modified date for a file.
-     * @return long time in milliseconds for the last modified for the file.
+     * @return long time in milliseconds for the last modified 
+	 * for the file.
      */
     
     public long getFileDate() {

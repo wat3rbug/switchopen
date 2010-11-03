@@ -1,6 +1,6 @@
 // Created by: Douglas Gardiner
 // Creation Date: Fri Apr 03 17:05:03 CDT 2009
-// Update Date: Sat Nov 22 18:05:23 CST 2008
+// Update Date: Sun Oct 31 03:55:17 CDT 2010
 //
 
 
@@ -322,7 +322,7 @@ public class SwitchOpen {
         else {
             if (switches.size() < 1 ) {
                 JOptionPane.showMessageDialog(frame, "Import a file because "
-					"you have no data", "No switch data", 
+					+ "you have no data", "No switch data", 
                     JOptionPane.ERROR_MESSAGE);
                 return;
             }

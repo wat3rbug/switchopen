@@ -61,7 +61,7 @@
 
   <target name="compile" depends="init" description="Compile" >
     <echo>Compiling...</echo>
-    <javac debug="on" srcdir="${src}" destdir="${build}" includeantruntime="false">
+    <javac debug="on" srcdir="${src}" destdir="${build}" includeantruntime="false" classpath="${lib}">
       <compilerarg value="-Xlint"/> 
        <!-- or -->
       <compilerarg value="-Xlint:unchecked"/> 

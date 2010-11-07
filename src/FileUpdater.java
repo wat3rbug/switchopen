@@ -158,7 +158,7 @@ public class FileUpdater implements Runnable {
                 diffInTime = (remoteTime.getTimeInMillis() - 
 					localTime.getTimeInMillis()) 
 					/ limitToCheck;
-                beacon.sendMessage();
+                // beacon.sendMessage();
                 remoteAddress = message.getAddress();
                 receiver.close();
             } catch (SocketTimeoutException ste) {
@@ -181,7 +181,8 @@ public class FileUpdater implements Runnable {
                 "\nremote file date = " + (remoteDate) + "\nDifference in " +
 				"times " + diffInTime + "\n");
             if (inTheACL ) { // are they in ACL?
-                if (remoteCRC.compareTo(localCRC) != 0) { 
+				if (remoteCRC.compareTo(localCRC) != 0) { 
+					beacon.sendMessage();
                     if (debug) {
                         debugger.update(" -- CRC is different\n ---- " + 
 							remoteAddress.getHostName() +  " is in the List");

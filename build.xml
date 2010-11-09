@@ -1,9 +1,7 @@
 <?xml version="1.0" ?>
 <project name="SwitchOpen" basedir="." default="run"  xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 	
-	<!--><cs:checkstyle>
-		<fileset dir="${src}"/>
-	</cs:checkstyle> -->
+<taskdef resource="checkstyletask.properties" classpath="${lib}/checkstyle-all.jar"/>
   <property name="build" location="build"/>
   <property name="src" location="src"/>
   <property name="dist" location="dist"/>
@@ -115,6 +113,14 @@
 <!-- REBUILD - cleans up and runs after a compile and jar.  Used for testing -->
 
     <target name="rebuild" depends="clean,compile,run" description="cleanly compiles all sources."/>
+
+<target name="checkstyle" description="Runs checkstyle on all the source files">
+	<taskdef resource="checkstyletask.properties" classpath="${lib}/checkstyle-5.3-all.jar"/>
+	<checkstyle config="${config}/sun_checks.xml">
+	<fileset dir="${src}" includes="*.java"/>
+	<formatter type="plain"/>
+</checkstyle>
+</target>
 	
 <!-- END of PROJECT -->
 

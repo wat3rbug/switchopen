@@ -9,7 +9,7 @@
  */
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.*;
 
 public class UserAccountWindow {
@@ -37,7 +37,7 @@ public class UserAccountWindow {
     /**
      * Creates the user account window with a reference to the debug window.
      * @param decider boolean for which window: true for user / false for 
-	 * password.
+     * password.
      * @param passedframe the reference to the debug window for output.
      */
 
@@ -50,7 +50,7 @@ public class UserAccountWindow {
     /**
      * Creates the user account window with a reference to the debug window.
      * @param decider boolean for which window: true for user / false for 
-	 * password.
+     * password.
      */
 
     public UserAccountWindow(boolean decider) {
@@ -59,19 +59,23 @@ public class UserAccountWindow {
         contents.setLayout(new BoxLayout(contents, BoxLayout.X_AXIS));
         whichIsIt = decider;
         if (decider == USER) {
-            if (debug) debugger.update("Opening user window");
+            if (debug) {
+                debugger.update("Opening user window");
+            }
             contents.add(userNameLabel);
             contents.add(username);
             username.addKeyListener(new KeyboardUpdater());
         } else {
-            if (debug) debugger.update("Opening password window");
+            if (debug) {
+                debugger.update("Opening password window");
+            }
             contents.add(passwordLabel);
             contents.add(passwordEntry);
             passwordEntry.addKeyListener(new KeyboardUpdater());
         }
         contents.add(enter);
         enter.addActionListener(new MouseUpdater());
-        background.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        background.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         background.add(contents);
         frame.getContentPane().add(background);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -87,12 +91,16 @@ public class UserAccountWindow {
     private void updateThePassword() {
 
         if (whichIsIt == USER) {
-            if (debug) debugger.update("updating username");
+            if (debug) {
+                debugger.update("updating username");
+            }
             Pass.setInfo(username.getText(), USER);
             inUse = false;
             frame.dispose();
         } else {
-            if (debug) debugger.update("updating password" );
+            if (debug) {
+                debugger.update("updating password");
+            }
             Pass.setInfo(new String(passwordEntry.getPassword()), PASSWORD);
             inUse = false;
             frame.dispose();
@@ -101,7 +109,7 @@ public class UserAccountWindow {
 
     /**
      * Used to make sure a duplicate window isn't created for user name or 
-	 * password.
+     * password.
      * @return true if there is a window open, false if not.
      */
 
@@ -113,7 +121,7 @@ public class UserAccountWindow {
 
     /**
      * Allows enter key to update the password or username in the account 
-	 * window.
+     * window.
      */
 
     public class KeyboardUpdater extends KeyAdapter {
@@ -131,7 +139,7 @@ public class UserAccountWindow {
     }
     /**
      * Allows click of the enter key to update the password or username in 
-	 * the account window.
+     * the account window.
      */
 
     public class MouseUpdater implements ActionListener {

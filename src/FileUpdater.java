@@ -12,10 +12,15 @@
  * @author Douglas Gardiner
  */
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.swing.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
+import java.net.SocketException;
+import java.net.InetAddress;
+import java.net.SocketTimeoutException;
+import java.util.Calendar;
+import javax.swing.JFrame;
 
 public class FileUpdater implements Runnable {
 
@@ -24,14 +29,12 @@ public class FileUpdater implements Runnable {
     private static boolean isRunning = true; 
     private static boolean debug = false;
     private static final int SEC_PER_MIN = 60;
-    private static final int MIN_PER_HOUR = 60;
-    private static final int HOUR_PER_DAY = 24;
     private static final int SEC_LENGTH = 1000;
     private String fileDate = null;
     private String filename = "switches.csv";
-    private int port = 10077;
-    private static final long TIMER_LEN = (long)SEC_PER_MIN  * 
-		SEC_LENGTH;
+    private final int PORT = 10077;
+    private static final long TIMER_LEN = (long) SEC_PER_MIN   
+        * SEC_LENGTH;
     private JFrame frame;
     private long remoteDate = 0;
     private Broadcast beacon = null;
@@ -43,8 +46,8 @@ public class FileUpdater implements Runnable {
 
     /**
      * Creates a scheduler with a reference to the GUI frame and a 
-	 * debug windowing object. Used for updating the GUI and the 
-	 * debug window.
+     * debug windowing object. Used for updating the GUI and the 
+     * debug window.
      */
     
     public FileUpdater(JFrame frame, Debug passedframe) {
@@ -91,7 +94,7 @@ public class FileUpdater implements Runnable {
     // NON threadsafe methods
     
     /* This is the scheduler.  It keeps track of broadcasting, when to receive 
-	   and when to transmit the file. */
+       and when to transmit the file. */
     
     /**
      * The scheduling thread run method. Stopped by using the setRun() method.
@@ -109,14 +112,17 @@ public class FileUpdater implements Runnable {
         
         while (this.getRun()) {
             
-            if (debug) debugger.update(" -- FileUpdater --\nRunning server");
-
+            if (debug) {
+                debugger.update(" -- FileUpdater --\nRunning server");
+            }
             // if timer 1 minutes then send beacon and reset timer
         
             if (System.currentTimeMillis() > loopTimeStart + TIMER_LEN) {
                 beacon.sendMessage();
                 loopTimeStart = System.currentTimeMillis();
-                if (debug) debugger.update("timer up, do broadcast");
+                if (debug) {
+                    debugger.update("timer up, do broadcast");
+                }
             } 
             // listen for message
 
@@ -131,79 +137,96 @@ public class FileUpdater implements Runnable {
             String remoteCRC = null;
             String rawMessage = null;
             try {
-                receiver = new DatagramSocket(port);
+                receiver = new DatagramSocket(PORT);
                 byte[] msgBytes = new byte[100];
                 DatagramPacket message = new DatagramPacket(msgBytes, 
-					msgBytes.length);
-                if (debug) debugger.update("Server listening");
+                    msgBytes.length);
+                if (debug) {
+                    debugger.update("Server listening");
+                }
                 receiver.setSoTimeout(SEC_LENGTH * 15);
                 receiver.receive(message);
-                if (debug) debugger.update("Received\n ---- message - " + 
-					message.getData());
-
+                if (debug) {
+                    debugger.update("Received\n ---- message - "  
+                    + message.getData());
+                }
                 // convert message to CRC and time stamp and who did it.
 
                 rawMessage = new String(message.getData());
                 remoteDate = Long.parseLong(rawMessage.substring(0, 
-					rawMessage.indexOf(",")));
+                    rawMessage.indexOf(",")));
                 if (rawMessage.indexOf(",") > 0) {
                     remoteCRC = rawMessage.substring(rawMessage.indexOf(",")
- 						+1).trim();    
+                        + 1).trim();    
                 } else {
                     remoteCRC = "";
                 }
-                if (debug) debugger.update("remoteCRC = " + remoteCRC + 
-					"\nlocalCRC  = " + localCRC);
+                if (debug) {
+                    debugger.update("remoteCRC = " + remoteCRC  
+                    + "\nlocalCRC  = " + localCRC);
+                }
                 remoteTime.setTimeInMillis(remoteDate);
-                diffInTime = (remoteTime.getTimeInMillis() - 
-					localTime.getTimeInMillis()) 
-					/ limitToCheck;
+                diffInTime = (remoteTime.getTimeInMillis()  
+                    - localTime.getTimeInMillis()) 
+                    / limitToCheck;
                 // beacon.sendMessage();
                 remoteAddress = message.getAddress();
                 receiver.close();
             } catch (SocketTimeoutException ste) {
-                if (debug) debugger.update("nothing heard");
-                if (! receiver.isClosed()) receiver.close();
-                if (debug) debugger.update("closed listening socket");
+                if (debug) {
+                    debugger.update("nothing heard");
+                }
+                if (!receiver.isClosed()) {
+                    receiver.close();
+                }
+                if (debug) {
+                    debugger.update("closed listening socket");
+                }
                 continue;
             } catch (SocketException se) {
-                if (debug) se.printStackTrace();
+                if (debug) {
+                    se.printStackTrace();
+                }
             } catch (IOException ioe) {
-                if (debug) ioe.printStackTrace();
+                if (debug) {
+                    ioe.printStackTrace();
+                }
             }   // end listen for response from broadcast
         
             // make sure host is in ACL and time is right
 
             boolean inTheACL = securityStuff.inACL(remoteAddress);
             boolean testReceive = false;
-            if (debug) debugger.update(" -- FileUpdater --\nlocal  file date =" 
-				+ " " + (beacon.getFileDate() - limitToCheck) + 
-                "\nremote file date = " + (remoteDate) + "\nDifference in " +
-				"times " + diffInTime + "\n");
-            if (inTheACL ) { // are they in ACL?
-				if (remoteCRC.compareTo(localCRC) != 0) { 
-					beacon.sendMessage();
+            if (debug) {
+                debugger.update(" -- FileUpdater --\nlocal  file date =" 
+                + " " + (beacon.getFileDate() - limitToCheck)  
+                + "\nremote file date = " + (remoteDate) + "\nDifference in " 
+                + "times " + diffInTime + "\n");
+            }
+            if (inTheACL) { // are they in ACL?
+                if (remoteCRC.compareTo(localCRC) != 0) { 
+                    beacon.sendMessage();
                     if (debug) {
-                        debugger.update(" -- CRC is different\n ---- " + 
-							remoteAddress.getHostName() +  " is in the List");
-                        debugger.update(" -- CRC check result is " + 
-							remoteCRC.compareTo(localCRC));
+                        debugger.update(" -- CRC is different\n ---- "  
+                            + remoteAddress.getHostName() +  " is in the List");
+                        debugger.update(" -- CRC check result is "  
+                            + remoteCRC.compareTo(localCRC));
                     }
-                    if (remoteDate == 0 || diffInTime < 0 ) {
+                    if (remoteDate == 0 || diffInTime < 0) {
 
                     // local file is newer or doesnt exist so transmit this one
 
                         if (debug) {
-                            debugger.update("local is newer\n --- Entering" +
-								" transmit file mode --- ");
+                            debugger.update("local is newer\n --- Entering" 
+                                + " transmit file mode --- ");
                         }
                         TransmitFile updateRemoteFile = null;
                         if (debug) {
                             updateRemoteFile = new TransmitFile(frame, 
-								remoteAddress, debugger);
+                                remoteAddress, debugger);
                         } else {
                             updateRemoteFile = new TransmitFile(frame, 
-								remoteAddress);
+                                remoteAddress);
                         }
                         testReceive = false;
                         int cycle = 0;
@@ -214,31 +237,31 @@ public class FileUpdater implements Runnable {
                             if ((testReceive = updateRemoteFile.sendFile())) {
                                 if (debug) {
                                     debugger.update(" ---- Transmit failed" 
-										+ "...sending " 
-										+ "out another beacon to reestablish");
+                                        + "...sending " 
+                                        + "out another beacon to reestablish");
                                 }
                                 beacon.sendMessage();   
                             }
                                 if (debug) {
                                     debugger.update(" -- FileUpdater --\n "
-										+ "-- end server loop instructions" +
-										 "-- ");
+                                        + "-- end server loop instructions" 
+                                        + "-- ");
                                 }
                                 try {
                                     Thread.sleep(SEC_LENGTH * 5);
                                 } catch (InterruptedException ie) {
                                 /* do nothing because we are waiting to do 
-									things anyway */
+                                    things anyway */
                                 }
                             }
                         }
-                    if (beacon.getFileDate() == 0 || diffInTime > 0  ) {
+                    if (beacon.getFileDate() == 0 || diffInTime > 0) {
 
                     // local file is older so get ready and receive file.
             
                         if (debug) {
                             debugger.update("local is older\n --- Entering "
-								+ "receive file mode --- ");
+                                + "receive file mode --- ");
                         }
                         ReceiveFile updateLocalFile = null;
                         if (debug) {
@@ -251,25 +274,29 @@ public class FileUpdater implements Runnable {
                             if ((testReceive = updateLocalFile.getFile())) {
                                 if (debug) {
                                     debugger.update(" ---- Receive failed" 
-										+ "...sending out another beacon "
-										+ "to reestablish");
+                                        + "...sending out another beacon "
+                                        + "to reestablish");
                                 }
                                 beacon.sendMessage();
                             }
                         }
                     }
                 } else {
-                    if (debug) debugger.update(" -- in ACL but CRC is "
-						+ "the same");
+                    if (debug) {
+                        debugger.update(" -- in ACL but CRC is "
+                        + "the same");
+                    }
                 }
             } else { // not in ACL
                 if (debug) {
-                    debugger.update (" ---- " + remoteAddress.getHostName() +  
-						" is NOT in the List");
+                    debugger.update(" ---- " + remoteAddress.getHostName()   
+                        + " is NOT in the List");
                 }
             }
         } // end while running is true   
-        if (debug) debugger.update(" --- shutting down server");        
+        if (debug) {
+            debugger.update(" --- shutting down server");   
+        }     
     }
 }
 

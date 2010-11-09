@@ -9,11 +9,14 @@
  * @author Douglas Gardiner
  */
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.security.MessageDigest;
-import java.util.*;
-import java.net.*;
-
+import java.util.ArrayList;
+import java.net.InetAddress;
+import java.io.IOException;
  
 public class Checks {
  
@@ -24,6 +27,7 @@ public class Checks {
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
     private Debug debugger = null;
+    private static final int MAX = 1024;
     
     // constructors
     
@@ -39,29 +43,35 @@ public class Checks {
         new Checks();
     }
     /**
-     *  Creates an object to store the allowable hosts
+     *  Creates an object to store the allowable hosts.
      */ 
     
     public Checks() {
     
         /* this returns false if it cannot load the names.  
-         * The intent is to shut down the server if it doesn't have a ACL file 
+         * The intent is to shut down the server if it doesn't have a ACL file. 
          */
         
-        try{
+        try {
             File hostFileHandle = new File(hostFile);
             BufferedReader reader = new BufferedReader(new 
                 FileReader(hostFileHandle));
             String inLine = null;
             while ((inLine = reader.readLine()) != null) {
                 hostnames.add(inLine.toLowerCase());
-                if (debug) debugger.update(inLine + " allowed");
+                if (debug) {
+                    debugger.update(inLine + " allowed");
+                }
             }
-            if (hostnames.isEmpty()) aclPresent = false;
+            if (hostnames.isEmpty()) {
+                aclPresent = false;
+            }
             reader.close();
         } catch (IOException ioe) {
-            if (debug) debugger.update(" --- ACL not updated, shutting down "
+            if (debug) {
+                debugger.update(" --- ACL not updated, shutting down "
                 + "server");
+            }
             aclPresent = false;
         }
     }
@@ -89,16 +99,18 @@ public class Checks {
     public boolean inACL(InetAddress remoteAddress) {
         
         boolean inTheACL = false;
-        for (int i = 0 ; i < hostnames.size(); i++) {
+        for (int i = 0; i < hostnames.size(); i++) {
             if (remoteAddress.getHostName().toLowerCase().equals(
-                hostnames.get(i))) inTheACL = true;
+                hostnames.get(i))) {
+                inTheACL = true;
+            }
         }
         return inTheACL;
     }
     
     /**
      * returns the String representation of the SHA1 hash of the filename 
-     * as a String
+     * as a String.
      * @return buffer - String representation of the SHA1 hash in hexidecial
      * form.
      * @param filename String representation of the filename to be used.
@@ -110,7 +122,7 @@ public class Checks {
         try {   
             MessageDigest md = MessageDigest.getInstance("SHA1");
             FileInputStream fis = new FileInputStream(filename);
-            byte[] dataBytes = new byte[1024];
+            byte[] dataBytes = new byte[MAX];
             
             int nread = 0;
             while ((nread = fis.read(dataBytes)) != -1) {
@@ -124,7 +136,7 @@ public class Checks {
             fis.close();
         } catch (Exception ioe) {
             // do what? file failed send 0 out
-            buffer= new StringBuffer("0");
+            buffer = new StringBuffer("0");
         } 
         return buffer.toString();
     }

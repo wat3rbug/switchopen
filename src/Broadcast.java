@@ -9,9 +9,13 @@
     10077.
 */
 
-import java.io.*;
-import java.net.*;
-
+import java.io.File;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.net.SocketException;
 
 /**
  * This object is for sending broadcast beacons only.  Beacons are are UDP
@@ -29,10 +33,10 @@ public class Broadcast {
     // class variables
 
     private String filename = "switches.csv";
-    File switchFile;
+    private File switchFile;
     private static long fileDate = 0;
-    public DatagramSocket broadcastSocket;
-    private static int port = 10077;
+    private DatagramSocket broadcastSocket;
+    private static final int port = 10077;
     private boolean debug = false;
     private Debug debugger = null;
     private String addressTxt = "255.255.255.255"; 
@@ -71,8 +75,10 @@ public class Broadcast {
      
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
-        if (debug) debugger.update(" -- Broadcast --\n "
+        if (debug) {
+            debugger.update(" -- Broadcast --\n "
             + "--- File date is " + fileDate);
+        }
     }
     /**
      * Creates the UDP datagram packet with the hash and 
@@ -83,19 +89,25 @@ public class Broadcast {
     public void sendMessage() {
 
         try {
-            if (debug) debugger.update(" --- Start broadcast --- ");
+            if (debug) {
+                debugger.update(" --- Start broadcast --- ");
+            }
             broadcastSocket = new DatagramSocket();
             broadcastSocket.setBroadcast(true);
             DatagramPacket message;
             InetAddress address = InetAddress.getByName(addressTxt);
             broadcastSocket.connect(address, port);
-            if (debug) debugger.update("Opened port");
+            if (debug) {
+                debugger.update("Opened port");
+            }
             String rawMessage = (new Long(this.getFileDate()).toString()) 
                 + "," + this.getFileCRC();
             byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
-            if (debug)  debugger.update("Sent message: " + this.getFileDate());
+            if (debug)  {
+                debugger.update("Sent message: " + this.getFileDate());
+            }
             broadcastSocket.disconnect();
             broadcastSocket.close();
         } catch (UnknownHostException uhe) {
@@ -116,11 +128,15 @@ public class Broadcast {
                 if (ioe.getMessage().matches("No route to host")) {
                     debugger.update("Check cable or make sure wireless "
                         + "is turned on");
-                } else ioe.printStackTrace();
+                } else {
+                    ioe.printStackTrace();
+                }
             }  
         }
-        if (debug) debugger.update(" -- Broadcast --\n --- End "
+        if (debug) {
+            debugger.update(" -- Broadcast --\n --- End "
             + "broadcast --- ");
+        }
     }
     /**
      * Gets the last modified date for a file.

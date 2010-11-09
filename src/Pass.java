@@ -21,15 +21,17 @@ public class Pass {
      * @param decider boolean true - username, false - password
      */
 
-    public static void setInfo(String newInfo, boolean decider) {
+    public static void setInfo(final String newInfo, final boolean decider) {
 
         if (decider) {
             username = newInfo;
         } else {
             password = newInfo;
         }
-        if (debug) System.out.println("set user-" + username + "\nset pass-" 
+        if (debug) {
+            System.out.println("set user-" + username + "\nset pass-" 
             + password);
+        }
     }
     /**
      * Retrieves username or password based on boolean argument.  True 
@@ -38,10 +40,12 @@ public class Pass {
      * @return String password or username based on boolean sent as argument.
      */
 
-    public static String getInfo(boolean decider) {
+    public static String getInfo(final boolean decider) {
 
-        if (debug) System.out.println("get user-" + username + "\nget pass-" 
+        if (debug) {
+            System.out.println("get user-" + username + "\nget pass-" 
             + password);
+        }
         if (decider) {
             return username;
         } else {

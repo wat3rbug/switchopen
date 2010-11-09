@@ -17,9 +17,16 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.*;
-import java.io.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import net.sourceforge.napkinlaf.*;
 
 public class SwitchOpen {
@@ -34,9 +41,9 @@ public class SwitchOpen {
     static String switchFile = "switches.csv";
     String importFile = null;
     Pass userInfo = new Pass();
-    JTextField inputText = new JTextField("",12); 
+    JTextField inputText = new JTextField("", 12); 
     JLabel outputText = new JLabel("");
-    static ArrayList <String> switches = new ArrayList<String>();
+    static ArrayList<String> switches = new ArrayList<String>();
     String directory = null;
     static Debug debugger = null;
     private static final boolean runNetwork = true;
@@ -47,7 +54,7 @@ public class SwitchOpen {
 
     /**
      * Creates the main GUI for the application, starts the network thread, 
-	 * if enabled and starts listening for input.
+     * if enabled and starts listening for input.
      */
 
     public SwitchOpen() {
@@ -59,7 +66,9 @@ public class SwitchOpen {
 
         String destination = "net.sourceforge.napkinlaf.NapkinLookAndFeel";
         if (debug) {
-            if (debugger == null) debugger = new Debug();
+            if (debugger == null) {
+                debugger = new Debug();
+            }
             try {
                 UIManager.setLookAndFeel(destination);
             } catch (ClassNotFoundException es) {
@@ -75,7 +84,7 @@ public class SwitchOpen {
         } else {
             try {
                 UIManager.setLookAndFeel(
-					UIManager.getCrossPlatformLookAndFeelClassName());
+                    UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ef) {
                 // disregard as this is to be quiet,  It's a hack.  If it
                 // doesn't load so much the better
@@ -101,7 +110,7 @@ public class SwitchOpen {
         JPanel background = new JPanel(layout);
         JPanel contents = new JPanel();
         JLabel enterText = new JLabel("Enter mac:");
-        contents.setLayout(new GridLayout(2,3));
+        contents.setLayout(new GridLayout(2, 3));
 
         // add listeners
 
@@ -140,9 +149,11 @@ public class SwitchOpen {
 
         // tie frame stuff up
 
-        if (debug) debugger.update("laf " + 
-			UIManager.getLookAndFeel().getName());
-        background.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        if (debug) {
+            debugger.update("laf "  
+            + UIManager.getLookAndFeel().getName());
+        }
+        background.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         background.add(contents);
         frame.setJMenuBar(menuBar);
         frame.getContentPane().add(background);
@@ -167,27 +178,35 @@ public class SwitchOpen {
         try {
             // let local file handle this
         
-            if (debug) debugger.update("Using local file\nReading "+ filename);
+            if (debug) {
+                debugger.update("Using local file\nReading " + filename);
+            }
             String buffer = null;
             temp = new File(filename);
             directory = temp.getPath();
             BufferedReader reader = new BufferedReader(new FileReader(new 
-				File(filename)));
-            while ((buffer = reader.readLine())!= null) {
-                if (! switches.contains(buffer)) {
+                File(filename)));
+            while ((buffer = reader.readLine()) != null) {
+                if (!switches.contains(buffer)) {
                     switches.add(buffer);
                 }
             } 
             reader.close();
-            if (debug) debugger.update("Finished reading " + filename);
+            if (debug) {
+                debugger.update("Finished reading " + filename);
+            }
         } catch (FileNotFoundException fnfe) {
-            if (debug) debugger.update("File not there...trying network");
+            if (debug) {
+                debugger.update("File not there...trying network");
+            }
             temp.delete();
         } catch (IOException ex) {
-            if (debug) ex.printStackTrace();
+            if (debug) {
+                ex.printStackTrace();
+            }
             JOptionPane.showMessageDialog(frame, "Are you sure " + filename 
-				+ " is in " + directory + "?", "File problem", 
-				JOptionPane.WARNING_MESSAGE);
+                + " is in " + directory + "?", "File problem", 
+                JOptionPane.WARNING_MESSAGE);
         }
     }
     /**
@@ -200,26 +219,34 @@ public class SwitchOpen {
         /* writes a new switches file, used for imports of other files */
 
         try {
-            if (debug) debugger.update("Writing "+ filename);
+            if (debug) {
+                debugger.update("Writing " + filename);
+            }
             BufferedWriter writer = new BufferedWriter(new 
             FileWriter(new File(filename)));
-            for (int i = 0 ; i < switches.size(); i++) {
-            writer.write(switches.get(i) + "\r\n");
-            if (debug) debugger.update("Wrote - " + switches.get(i));
-        }
-        writer.close();
-        if (debug) debugger.update("Finished writing " + filename);
+            for (int i = 0; i < switches.size(); i++) {
+                writer.write(switches.get(i) + "\r\n");
+                if (debug) {
+                    debugger.update("Wrote - " + switches.get(i));
+                }
+            }
+            writer.close();
+            if (debug) {
+                debugger.update("Finished writing " + filename);
+            }
         } catch (FileNotFoundException sf) {
             if (debug) {
                 debugger.update(switchFile + " is not found");
                 sf.printStackTrace();
             } 
             JOptionPane.showMessageDialog(frame, filename + " is in use", 
-				"File problem", JOptionPane.ERROR_MESSAGE);
+                "File problem", JOptionPane.ERROR_MESSAGE);
         } catch (IOException sd) {
-            if (debug) sd.printStackTrace();
+            if (debug) {
+                sd.printStackTrace();
+            }
             JOptionPane.showMessageDialog(frame, filename + " is a bad boy", 
-				"File problem", JOptionPane.ERROR_MESSAGE);
+                "File problem", JOptionPane.ERROR_MESSAGE);
         }
     }
     /* The start of everything */
@@ -231,8 +258,10 @@ public class SwitchOpen {
     public static void main(String[] args) {
 
         new SwitchOpen();
-        if (debug){
-            if (debugger == null) debugger = new Debug();
+        if (debug) {
+            if (debugger == null) {
+                debugger = new Debug();
+            }
             backgroundService = new FileUpdater(frame, debugger);
         } else {
             backgroundService = new FileUpdater(frame);
@@ -240,8 +269,14 @@ public class SwitchOpen {
         Thread server = new Thread(backgroundService, "Server");
         if (runNetwork) {
             server.start();
-            if (debug) debugger.update(" --- Starting server --- ");
-        } else if (debug) debugger.update(" --- Server not started ---");
+            if (debug) {
+                debugger.update(" --- Starting server --- ");
+            }
+        } else {
+            if (debug) {
+                debugger.update(" --- Server not started ---");
+            }
+        }
     }
     /** Converts the MAC address from one setup to something that will work in
      *  Cisco's user tracker toolbar. Results on changed on the GUI.
@@ -253,26 +288,30 @@ public class SwitchOpen {
         int len = buffer.length();
         boolean colons = false;
         boolean period = false;
-        for (int i =0; i < len ; i++ ) {
-            if (buffer.charAt(i) == Character.valueOf(':')) colons = true;
-            if (buffer.charAt(i) == Character.valueOf('.')) period = true;
+        for (int i = 0; i < len; i++) {
+            if (buffer.charAt(i) == Character.valueOf(':')) {
+                colons = true;
+            }
+            if (buffer.charAt(i) == Character.valueOf('.')) {
+                period = true;
+            }
         }
         if (colons) {
-            for (int i = 0; i < len ; i ++ ) {
-                if ((buffer.charAt(i))== ':') {
+            for (int i = 0; i < len; i++) {
+                if (buffer.charAt(i) == ':') {
                     buffer.deleteCharAt(i);
                     buffer.insert(i, '-');
                 }
             }
         }  // assumes using 0001.1111.2222 notation
         if (period) {
-            for (int i =0 ; i < len; i++) {
-                if((buffer.charAt(i))=='.') {
+            for (int i = 0; i < len; i++) {
+                if (buffer.charAt(i) == '.') {
                     buffer.deleteCharAt(i);
-                    buffer.insert( i ,'-');
-                    buffer.insert(i-2, '-');
+                    buffer.insert(i, '-');
+                    buffer.insert(i - 2, '-');
                     if (i > 9) {
-                        buffer.insert(i +4,'-');
+                        buffer.insert(i + 4, '-');
                     }               
                 }
             }   
@@ -282,51 +321,56 @@ public class SwitchOpen {
         inputText.setText(buffer.toString());
     }
     /** Activates the search.  It ties the username, password, system 
-	 * type to figure out whether to use putty, or ssh, looks for the 
-	 * DNS name and opens a session.
+     * type to figure out whether to use putty, or ssh, looks for the 
+     * DNS name and opens a session.
      */
         
     private void runIt() {
 
         // if array is empty open dialog box saying import a file
 
-        if (debug) debugger.update("Starting to open a switch");
+        if (debug) {
+            debugger.update("Starting to open a switch");
+        }
         String testString = inputTag.getText();
         String command = null;
         if (System.getProperty("os.name").startsWith("Windows")) {
             command = "putty ";
         } else {
-            command ="xterm -e ssh ";
+            command = "xterm -e ssh ";
         }
         String commandLine;
-        if (userInfo.getInfo(PASSWORD) != null && 
-			command.startsWith("putty")) {
+        if (userInfo.getInfo(PASSWORD) != null  
+            && command.startsWith("putty")) {
             commandLine = command + "-pw " + userInfo.getInfo(PASSWORD) + " ";
         } else {
             commandLine = command;
         }
-        if (testString.length() < 1 ) return;
+        if (testString.length() < 1) {
+            return;
+        }
         if (debug) {
-            debugger.update("command line: "+commandLine);
+            debugger.update("command line: " + commandLine);
             debugger.update("Looking for the switch based on " + testString);
         }
         
         Pattern ipAddress = Pattern.compile(
-			"^[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*$");
+            "^[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*$");
         Matcher validateIp = ipAddress.matcher(testString);
         String validIp = null;
         if (validateIp.matches()) {
-            if (debug) debugger.update(testString + " is a valid IP");
+            if (debug) {
+                debugger.update(testString + " is a valid IP");
+            }
             validIp = testString;
-        }
-        else {
-            if (switches.size() < 1 ) {
+        } else {
+            if (switches.size() < 1) {
                 JOptionPane.showMessageDialog(frame, "Import a file because "
-					+ "you have no data", "No switch data", 
+                    + "you have no data", "No switch data", 
                     JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            for (int i = 0; i < switches.size(); i ++) {
+            for (int i = 0; i < switches.size(); i++) {
         
                 // go through array and find item that has this text in it
         
@@ -335,36 +379,44 @@ public class SwitchOpen {
                     // run a system command to use putty using the 
                     // string from array
                     validIp = switches.get(i);
-                    if (debug) debugger.update("Found " + validIp);
+                    if (debug) {
+                        debugger.update("Found " + validIp);
+                    }
                 }
             }               
         }   
         if (validIp == null || validIp.equals("")) {
             JOptionPane.showMessageDialog(frame, testString + " is not found", 
-				"bad tag", JOptionPane.ERROR_MESSAGE);
+                "bad tag", JOptionPane.ERROR_MESSAGE);
             return;
         }
         inputTag.setText("");
         try {
-            String destination ="";      
+            String destination = "";      
             if (userInfo.getInfo(USER) != null) {
                     destination = userInfo.getInfo(USER) + "@";
             }
             destination = destination + validIp;
-            if (command.startsWith("xterm")) destination+= " &";
-            if (debug) debugger.update(commandLine + destination);
-            Process child = Runtime.getRuntime().exec(commandLine + 
-				destination);
+            if (command.startsWith("xterm")) {
+                destination += " &";
+            }
+            if (debug) {
+                debugger.update(commandLine + destination);
+            }
+            Process child = Runtime.getRuntime().exec(commandLine  
+                + destination);
        } catch (IOException e) {
             if (debug) {
                   debugger.update("Something didn't work");
                   e.printStackTrace();
             }
-            JOptionPane.showMessageDialog(frame, "Either putty is in " + 
-				directory +" or you have bigger issues", 
-				"Putty?", JOptionPane.ERROR_MESSAGE);
-            debugger.update("Make sure putty is in the " + directory + 
-                        "directory");
+            JOptionPane.showMessageDialog(frame, "Either putty is in "  
+                + directory + " or you have bigger issues", 
+                "Putty?", JOptionPane.ERROR_MESSAGE);
+            if (debug) {
+                debugger.update("Make sure putty is in the " + directory  
+                    + "directory");
+                }
         } // end catch block
     }
     // inner classes
@@ -379,17 +431,21 @@ public class SwitchOpen {
 
         /**
          * Updates UserAccountWindow based on the command associated with 
-		 * the menu Item in the GUI.
+         * the menu Item in the GUI.
          */
 
         public void actionPerformed(ActionEvent pu) {
         
-            if (debug) debugger.update("called " + pu.getActionCommand());
-            if (pu.getActionCommand().equals("user") && 
-				!UserAccountWindow.exists()) {
+            if (debug) {
+                debugger.update("called " + pu.getActionCommand());
+            }
+            if (pu.getActionCommand().equals("user")  
+                && !UserAccountWindow.exists()) {
                 new UserAccountWindow(USER);
-            } else if (!UserAccountWindow.exists()) {
-                new UserAccountWindow(PASSWORD);
+            } else {
+                if (!UserAccountWindow.exists()) {
+                    new UserAccountWindow(PASSWORD);
+                }
             }
         }
     }
@@ -406,11 +462,11 @@ public class SwitchOpen {
         public void actionPerformed(ActionEvent as) {
 
             String message = "Requirements\n\nPutty must be in the same "
-				+ "directory \nas this program.  A switch.csv file \nmust"
-				+ " also be in the same directory. It \ncan be created by"
-				+ " the import menu \nitem or from a network of others";
+                + "directory \nas this program.  A switch.csv file \nmust"
+                + " also be in the same directory. It \ncan be created by"
+                + " the import menu \nitem or from a network of others";
             JOptionPane.showMessageDialog(frame, message, "Help", 
-				JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.INFORMATION_MESSAGE);
         }
     }
     /**
@@ -439,7 +495,7 @@ public class SwitchOpen {
 
         /**
          * Used for select the file to import and then makes a call to read 
-		 * the file contents and then write to the default file.
+         * the file contents and then write to the default file.
          */
 
         public void actionPerformed(ActionEvent es) {
@@ -472,14 +528,16 @@ public class SwitchOpen {
                 backgroundService.setRun(true);
                 Thread server = new Thread(backgroundService, "Server");
                 server.start();
-                if (debug) debugger.update(" --- Starting server --- ");
+                if (debug) {
+                    debugger.update(" --- Starting server --- ");
+                }
             }
             backgroundService.setRun(updating.getState());
         }
     }
     /**
      * Allows enter key to activate mac address conversions or switch 
-	 * login attempts 
+     * login attempts 
      */
 
     public class EnterCheck extends KeyAdapter {
@@ -498,7 +556,7 @@ public class SwitchOpen {
     }
     /**
      * Allows clicking enter key with the mouse to activate mac address 
-	 * conversions or switch login attempts 
+     * conversions or switch login attempts 
      */
 
     public class RunTag implements ActionListener {

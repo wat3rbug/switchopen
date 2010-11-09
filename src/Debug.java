@@ -9,9 +9,11 @@
  */
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import net.sourceforge.napkinlaf.*;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.FileWriter;
 
 public class Debug {
     
@@ -32,7 +34,7 @@ public class Debug {
     public Debug() {
 
         frame = new JFrame("Debug output");
-        output = new JTextArea(15,45);
+        output = new JTextArea(15, 45);
         JPanel outputPanel = new JPanel();
         JScrollPane messageScroller = new JScrollPane(output);
         String destination = "net.sourceforge.napkinlaf.NapkinLookAndFeel";
@@ -62,7 +64,7 @@ public class Debug {
         BorderLayout layout = new BorderLayout();
         JPanel background = new JPanel(layout);
         JPanel contents = new JPanel();
-        background.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        background.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         contents.add(outputPanel);
         background.add(contents);
         frame.getContentPane().add(background);
@@ -70,7 +72,7 @@ public class Debug {
         SwingUtilities.updateComponentTreeUI(frame);
     
         // ugly hack, getBounds result in issues with both windows?
-        frame.setLocation(0,130);
+        frame.setLocation(0, 130);
         frame.pack();
         frame.setVisible(true);
         this.update(" ########################\n ### start of new log ###"
@@ -89,7 +91,7 @@ public class Debug {
         BufferedWriter writer = null;
         try {       
             writer = new BufferedWriter(new FileWriter("debug.txt", true));
-            writer.write(newMessage + "\n" );
+            writer.write(newMessage + "\n");
             writer.flush();
         } catch (IOException ioe) {
              ioe.printStackTrace();

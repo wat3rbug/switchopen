@@ -1,6 +1,6 @@
 // Created by: Douglas Gardiner
 // Creation Date: Fri Apr 03 17:06:00 CDT 2009
-// Update Date: Fri Nov 12 15:13:42 CST 2010
+// Update Date: Fri Nov 12 20:01:56 CST 2010
 //
 
 /** This class just opens a dialog window for entry either

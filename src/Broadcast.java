@@ -1,6 +1,6 @@
 // Created by: Douglas Gardiner
 // Creation Date: Sat Oct 23 07:55:04 CDT 2010
-// Update Date: Mon Nov 08 21:23:49 CST 2010
+// Update Date: Fri Nov 12 19:41:15 CST 2010
 //
 
 /* The File takes care of broadcast task.  It calls the
@@ -33,7 +33,7 @@ public class Broadcast {
     // class variables
 
     private String filename = "switches.csv";
-    private File switchFile;
+    private static File switchFile;
     private static long fileDate = 0;
     private DatagramSocket broadcastSocket;
     private static final int port = 10077;
@@ -144,7 +144,7 @@ public class Broadcast {
      * for the file.
      */
     
-    public long getFileDate() {
+    public static long getFileDate() {
 
     // method used to get the timestamp for a file, if it exists
 

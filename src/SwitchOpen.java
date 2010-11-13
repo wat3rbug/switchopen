@@ -1,6 +1,6 @@
 // Created by: Douglas Gardiner
 // Creation Date: Fri Apr 03 17:05:03 CDT 2009
-// Update Date: Mon Nov 08 21:20:14 CST 2010
+// Update Date: Fri Nov 12 20:01:25 CST 2010
 //
 
 
@@ -27,6 +27,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Calendar;
 import net.sourceforge.napkinlaf.*;
 
 public class SwitchOpen {
@@ -481,8 +482,17 @@ public class SwitchOpen {
 
         public void actionPerformed(ActionEvent ad) {
 
-            String message = "Version: 2.0\nCreation Date: 20 March 2009\n"
-                + "Author: Douglas Gardiner";
+			String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+			String days[] = {"Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
+			Calendar fileStamp = Calendar.getInstance();
+			fileStamp.setTimeInMillis(Broadcast.getFileDate());
+			String fileDate = "Last Update: " + days[fileStamp.get(Calendar.DAY_OF_WEEK)] 
+				+ " " + fileStamp.get(Calendar.DAY_OF_MONTH) + " "
+				+ months[fileStamp.get(Calendar.MONTH)] + " "
+				+ fileStamp.get(Calendar.YEAR);
+            String message = "Version: 2.1\nCreation Date: 20 March 2009\n"
+                + "Author: Douglas Gardiner\n" 
+				+ fileDate;
             JOptionPane.showMessageDialog(frame, message, 
                 "about", JOptionPane.INFORMATION_MESSAGE);
         }

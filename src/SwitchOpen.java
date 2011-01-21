@@ -29,6 +29,9 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Calendar;
 import net.sourceforge.napkinlaf.*;
+import java.awt.datatransfer.*;
+
+import java.awt.Toolkit;
 
 public class SwitchOpen {
 
@@ -163,6 +166,14 @@ public class SwitchOpen {
         frame.pack();
         frame.setVisible(true);
         readFile(switchFile);
+
+	// popup menu stuff
+
+	
+	inputText.addMouseListener(new MouseClicker());
+	inputTag.addMouseListener(new MouseClicker());
+
+
     }
     // methods
 
@@ -581,6 +592,74 @@ public class SwitchOpen {
             runIt();
         }
     }   
+    /**
+     * Allows right click to cut and paste information.
+     */
+
+    public class MouseClicker extends MouseAdapter {
+
+	public void mousePressed(MouseEvent e) {
+
+	    JTextField baseToChange = (JTextField) e.getSource();  
+	    if (debug) {
+		debugger.update("copy or paste: " + baseToChange.getText());
+	    }
+	    if (e.getButton() == MouseEvent.BUTTON3) {
+		if (debug) {
+		    debugger.update("right click?");
+		}
+		JMenuItem pMenuItem;
+		JPopupMenu popup = new JPopupMenu();
+		pMenuItem = new JMenuItem("copy");
+		pMenuItem.addActionListener(new Copier(baseToChange.getText())); 
+		popup.add(pMenuItem);
+		pMenuItem = new JMenuItem("paste");
+		pMenuItem.addActionListener(new Paster(baseToChange)); 
+		popup.add(pMenuItem);
+		popup.show(e.getComponent(), e.getX(), e.getY());
+	    }
+		
+	}
+    }
+    public class Copier implements ActionListener {
+
+	String text = null;
+
+	public Copier(String text) {
+
+	    this.text = text;
+	}
+	public void actionPerformed(ActionEvent ae) {
+
+	    // copies selection to the clipboard
+
+	    if (debug) debugger.update("In copy action " + text);
+	    StringSelection ss = new StringSelection(text);
+	    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+	    
+	}
+    }
+    public class Paster implements ActionListener {
+
+	JTextField text = null;
+
+	public Paster(JTextField text) {
+
+	    this.text = text;
+	}
+	public void actionPerformed(ActionEvent ae) {
+
+	    if (debug) debugger.update("In paste action");
+	    Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+	    try {
+		if ( t!= null &&  t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+		    text.setText((String) t.getTransferData(DataFlavor.stringFlavor));
+		}	
+	    } catch (UnsupportedFlavorException e) {
+	    } catch (IOException e) {
+	    }
+	}
+    }
 }
 
 

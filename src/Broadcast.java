@@ -89,6 +89,7 @@ public class Broadcast {
 		} else {
 			workingAddress = tempAddr;
 		}
+		sendMessage();
 	}
     
     public void sendMessage() {

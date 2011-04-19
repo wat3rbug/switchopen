@@ -21,10 +21,10 @@
     <mkdir dir="${build}"/>
     <mkdir dir="${dist}"/>
 
-<!-- uncomment out the following lines for Mac users -->
+<!-- uncomment out the following lines for Mac users
 
     <mkdir dir="${dist}/${napkin}"/>
-    <mkdir dir="${build}/${napkin}"/>
+    <mkdir dir="${build}/${napkin}"/> -->
 
 <!-- end of comment section -->
 

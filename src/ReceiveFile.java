@@ -160,11 +160,11 @@ public class ReceiveFile {
             JOptionPane.showMessageDialog(frame, "No permissions to write read" 
                 + " this file", "File Permissions", JOptionPane.ERROR_MESSAGE);
             update("Receive File failure");
-            se.printStackTrace();
+            if (debugger != null) se.printStackTrace();
             success = false;
         } catch (IOException ioe) {
             update("Receive File failure");
-            ioe.printStackTrace();
+            if (debugger != null) ioe.printStackTrace();
             success = false;
         } finally {
             if (!socket.isClosed()) {

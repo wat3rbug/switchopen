@@ -105,17 +105,17 @@ public class TransmitFile {
             success = true;
         } catch (SocketException cr) { 
             update("Transmit forced fail");
-            cr.printStackTrace();
+            if (debugger != null) cr.printStackTrace();
             success = false;
         } catch (SecurityException se) {
             JOptionPane.showMessageDialog(frame, "No permissions to read this file", "File Permissions", 
                 JOptionPane.ERROR_MESSAGE);
             update("Transmit File failure");
-            se.printStackTrace();
+            if (debugger != null) se.printStackTrace();
             success = false;
         } catch (IOException ioe) {
             	update("Transmit File failure");
-                ioe.printStackTrace();
+                if (debugger != null) ioe.printStackTrace();
             success = false;
         } 
         return success;

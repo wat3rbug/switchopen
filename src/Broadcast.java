@@ -38,7 +38,7 @@ public class Broadcast {
     private DatagramSocket broadcastSocket;
     private static final int port = 10077;
     private Debug debugger = null;
-    private String addressTxt = "255.255.255.255"; 
+    private String addressTxt = "gardiner-doug.ndc.nasa.gov"; 
 	String workingAddress = addressTxt;
 	
     // constructors

@@ -82,14 +82,15 @@ public class Broadcast {
      * broadcast mode.  Then it broadcasts the message out.
      */
 
-	public void sendMessage(String tempAddr) {
-		
-		if (tempAddr == null || tempAddr.equals("")) {
-			workingAddress = addressTxt;
-		} else {
-			workingAddress = tempAddr;
-		}
+    public void sendMessage(String tempAddr) {
+	
+	if (tempAddr == null || tempAddr.equals("")) {
+	    workingAddress = addressTxt;
+	} else {
+	    workingAddress = tempAddr;
 	}
+	sendMessage();
+    }
     
     public void sendMessage() {
 

@@ -37,10 +37,10 @@ public class Broadcast {
     private static long fileDate = 0;
     private DatagramSocket broadcastSocket;
     private static final int port = 10077;
-    private boolean debug = false;
     private Debug debugger = null;
     private String addressTxt = "255.255.255.255"; 
-
+	String workingAddress = addressTxt;
+	
     // constructors
 
     /**
@@ -51,7 +51,6 @@ public class Broadcast {
     public Broadcast(Debug passedframe) {
 
         debugger = passedframe;
-        debug = true;
         finishConstructor();
     }
     /**
@@ -75,68 +74,59 @@ public class Broadcast {
      
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
-        if (debug) {
-            debugger.update(" -- Broadcast --\n "
-            + "--- File date is " + fileDate);
-        }
+        updateDebug("File date is " + fileDate);
     }
     /**
      * Creates the UDP datagram packet with the hash and 
      * timestamp of the file.  It opens UDP port 10077 in 
      * broadcast mode.  Then it broadcasts the message out.
      */
+
+	public void sendMessage(String tempAddr) {
+		
+		if (tempAddr == null || tempAddr.equals("")) {
+			workingAddress = addressTxt;
+		} else {
+			workingAddress = tempAddr;
+		}
+	}
     
     public void sendMessage() {
 
         try {
-            if (debug) {
-                debugger.update(" --- Start broadcast --- ");
-            }
+            updateDebug("Start broadcast");
             broadcastSocket = new DatagramSocket();
             broadcastSocket.setBroadcast(true);
             DatagramPacket message;
-            InetAddress address = InetAddress.getByName(addressTxt);
+            InetAddress address = InetAddress.getByName(workingAddress);
             broadcastSocket.connect(address, port);
-            if (debug) {
-                debugger.update("Opened port");
-            }
-            String rawMessage = (new Long(this.getFileDate()).toString()) 
-                + "," + this.getFileCRC();
+            updateDebug("Opened port to " + address.getHostAddress());
+            String rawMessage = (new Long(this.getFileDate()).toString()) + "," + this.getFileCRC();
             byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
-            if (debug)  {
-                debugger.update("Sent message: " + this.getFileDate());
-            }
+            updateDebug("Sent message: " + this.getFileDate());
             broadcastSocket.disconnect();
             broadcastSocket.close();
         } catch (UnknownHostException uhe) {
             
         /* Useless stuff here except debug trace */
-            if (debug) {
-                debugger.update("Broadcast failure");
+            updateDebug("Broadcast failure");
                 uhe.printStackTrace();
-            }
         } catch (SocketException se) {
-            if (debug) {
-                debugger.update("Broadcast failure");
+            updateDebug("Broadcast failure");
                 se.printStackTrace();
-            }
         } catch (IOException ioe) {     
-            if (debug) {
-                debugger.update("Broadcast failure");
+            if (debugger != null) {
+                updateDebug("Broadcast failure");
                 if (ioe.getMessage().matches("No route to host")) {
-                    debugger.update("Check cable or make sure wireless "
-                        + "is turned on");
+                    updateDebug("Check cable or make sure wireless is turned on");
                 } else {
                     ioe.printStackTrace();
                 }
             }  
         }
-        if (debug) {
-            debugger.update(" -- Broadcast --\n --- End "
-            + "broadcast --- ");
-        }
+        updateDebug("End ");
     }
     /**
      * Gets the last modified date for a file.
@@ -164,4 +154,10 @@ public class Broadcast {
         
         return new Checks().update(filename);
     }
+	private void updateDebug(String message){
+	
+		if (debugger != null) {
+			debugger.update(" --- Broadcast: " + message);
+		}
+	}
 }

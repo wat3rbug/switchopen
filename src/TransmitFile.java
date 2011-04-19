@@ -28,7 +28,6 @@ public class TransmitFile {
     private String filename = "switches.csv";
     private final int PORT = 10079;
     private InetAddress address;
-    private boolean debug = false;
     private boolean runTest = true;
     private JFrame frame;
     private boolean success = true;
@@ -49,7 +48,6 @@ public class TransmitFile {
     public TransmitFile(JFrame frame, InetAddress address, Debug passedframe) {
 
         this(frame, address);
-        debug = true;
         debugger = passedframe;
     }
     /**
@@ -79,23 +77,17 @@ public class TransmitFile {
         Socket socket = null;
         success = false;
         try {
-            if (debug) {
-                debugger.update(" -- TransmitFile --");
-            }
+            update("Start transmit");
             File newFile = new File(filename);
             reader = new BufferedReader(new FileReader(newFile));
-            if (debug) {
-                debugger.update("Address - " + address.toString()  
-                + "\tport " + PORT);
-            }
+            update("Address - " + address.toString() + "\tport " + PORT);
             socket = new Socket(address, PORT);
             socket.setTcpNoDelay(false);    // turns off nagles
-            if (debug) {
+            if (debugger != null) {
                  if (socket.isBound()) {
-                    debugger.update("ouput found port " + socket.getPort());
+                    update("output found port " + socket.getPort());
                  } else {
-                    debugger.update("cannot bind outgoing "  
-                        + socket.getPort());
+                    update("cannot bind outgoing " + socket.getPort());
                 }
             }
             PrintWriter writer = new PrintWriter(new BufferedWriter(new 
@@ -103,9 +95,7 @@ public class TransmitFile {
             String inputLine = null;
             while ((inputLine = reader.readLine()) != null) {
                 writer.println(inputLine);
-                if (debug) {
-                    debugger.update(" --- Sending " + inputLine);
-                }
+                update("Sending " + inputLine);
             }
             writer.println(EOF);
             writer.flush();
@@ -114,27 +104,26 @@ public class TransmitFile {
             socket.close();
             success = true;
         } catch (SocketException cr) { 
-            if (debug) {
-                 debugger.update("--- Transmit forced fail ---");
-                  cr.printStackTrace();
-                success = false;
-            }
+            update("Transmit forced fail");
+            cr.printStackTrace();
+            success = false;
         } catch (SecurityException se) {
-            JOptionPane.showMessageDialog(frame, "No permissions to read "
-                + "this file", "File Permissions", 
+            JOptionPane.showMessageDialog(frame, "No permissions to read this file", "File Permissions", 
                 JOptionPane.ERROR_MESSAGE);
-            if (debug) {
-                debugger.update("--- Transmit File failure ---");
-                se.printStackTrace();
-            }
+            update("Transmit File failure");
+            se.printStackTrace();
             success = false;
         } catch (IOException ioe) {
-            if (debug) {
-                debugger.update("--- Transmit File failure ---");
+            	update("Transmit File failure");
                 ioe.printStackTrace();
-            }
             success = false;
         } 
         return success;
     }
+	private void update(String message) {
+		
+	 	if (debugger != null) {
+			debugger.update(" --- TransmitFile: " + message);
+		}
+	}
 }

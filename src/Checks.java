@@ -22,7 +22,6 @@ public class Checks {
  
     // class variables
     
-    private boolean debug = false;
     private boolean aclPresent = true;
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
@@ -38,15 +37,18 @@ public class Checks {
 
     public Checks(Debug passedframe) {
         
-        debug = true;
         debugger = passedframe;
-        new Checks();
+        finishConstructor();
     }
     /**
      *  Creates an object to store the allowable hosts.
      */ 
     
     public Checks() {
+	
+		finishConstructor();
+	}
+	private void finishConstructor() {
     
         /* this returns false if it cannot load the names.  
          * The intent is to shut down the server if it doesn't have a ACL file. 
@@ -54,24 +56,18 @@ public class Checks {
         
         try {
             File hostFileHandle = new File(hostFile);
-            BufferedReader reader = new BufferedReader(new 
-                FileReader(hostFileHandle));
+            BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
             String inLine = null;
             while ((inLine = reader.readLine()) != null) {
                 hostnames.add(inLine.toLowerCase());
-                if (debug) {
-                    debugger.update(inLine + " allowed");
-                }
+                updateDebug(inLine + " allowed");
             }
             if (hostnames.isEmpty()) {
                 aclPresent = false;
             }
             reader.close();
         } catch (IOException ioe) {
-            if (debug) {
-                debugger.update(" --- ACL not updated, shutting down "
-                + "server");
-            }
+            updateDebug("ACL not updated, shutting down server");
             aclPresent = false;
         }
     }
@@ -100,8 +96,7 @@ public class Checks {
         
         boolean inTheACL = false;
         for (int i = 0; i < hostnames.size(); i++) {
-            if (remoteAddress.getHostName().toLowerCase().equals(
-                hostnames.get(i))) {
+            if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) {
                 inTheACL = true;
             }
         }
@@ -122,16 +117,14 @@ public class Checks {
         try {   
             MessageDigest md = MessageDigest.getInstance("SHA1");
             FileInputStream fis = new FileInputStream(filename);
-            byte[] dataBytes = new byte[MAX];
-            
+            byte[] dataBytes = new byte[MAX];          
             int nread = 0;
             while ((nread = fis.read(dataBytes)) != -1) {
                 md.update(dataBytes, 0, nread);
             }
             byte[] mdbytes = md.digest();
             for (int i = 0; i < mdbytes.length; i++) {
-                buffer.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 
-                    16).substring(1));
+                buffer.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             fis.close();
         } catch (Exception ioe) {
@@ -140,4 +133,10 @@ public class Checks {
         } 
         return buffer.toString();
     }
+	private void updateDebug(String message){
+	
+		if (debugger != null) {
+			debugger.update(" --- Checks: " + message);
+		}
+	}
 }

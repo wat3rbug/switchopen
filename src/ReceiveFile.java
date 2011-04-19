@@ -34,7 +34,6 @@ public class ReceiveFile {
     // class variables
 
     private String filename = "switches.csv";
-    private static boolean debug = false;
     private boolean runTest = true;
     private final int PORT = 10079;
     private JFrame frame;
@@ -54,7 +53,6 @@ public class ReceiveFile {
 
     public ReceiveFile(final JFrame frame, final Debug passedframe) {
 
-        debug = true;
         debugger = passedframe;
         this.frame = frame;
     }
@@ -79,26 +77,21 @@ public class ReceiveFile {
     
         // needs another ACL check to verify receive file is from ACL
 
-        if (debug) {
-            debugger.update(" --- starting receive process --- ");
-        }
+        update("starting receive process");
         ServerSocket socket = null;
         success = true;
         try {
             Checks securityStuff = new Checks();
-            if (debug) {
-                debugger.update(" --- opening TCP socket --- ");
-            }
+            update("opening TCP socket");
             socket = new ServerSocket(PORT);
             socket.setReuseAddress(true);
-            if (debug) {
+            if (debugger != null) {
                 if (socket.isBound()) {
-                    debugger.update("bound to socket "
-                    + socket.getLocalPort());
+                    update("bound to socket " + socket.getLocalPort());
                 } else {
-                    debugger.update("Did not bind");
+                    update("Did not bind");
                 }
-                debugger.update(socket.toString());
+                update(socket.toString());
             }
             socket.setSoTimeout(SEC_LENGTH * 15); 
 
@@ -107,15 +100,12 @@ public class ReceiveFile {
             Socket connection = socket.accept();
             InetAddress doubleCheck = connection.getInetAddress();
             if (securityStuff.exists() && securityStuff.inACL(doubleCheck)) {
-                if (debug) {
-                    debugger.update(" -- heard distant end");
-                }
+                update("heard distant end");
                 BufferedReader reader = new BufferedReader(new 
                     InputStreamReader(connection.getInputStream()));
                 String inputLine = null;
-                if (debug) {
-                    debugger.update(" --- receiving file --- ");
-                }
+                update("receiving file");
+
                 // stream accepted and now reading contents to file
             
                 ArrayList<String> fileContents = new ArrayList<String>();
@@ -132,26 +122,16 @@ public class ReceiveFile {
                     newFile.delete();
                 } 
                 newFile.createNewFile();
-                BufferedWriter writer = new BufferedWriter(new 
-                    FileWriter(newFile));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
                 for (int i = 0; i < fileContents.size(); i++) {
                     writer.write(fileContents.get(i) + "\r\n");
-                    if (debug) {
-                        debugger.update(" ---- wrote "  
-                        + fileContents.get(i));
-                    }
+                    update(" ---- wrote " + fileContents.get(i));
                 }
-                if (debug) {
-                    debugger.update(" --- closing file and TCP " 
-                    + "socket --- ");
-                }
+                update("closing file and TCP socket");
                 fileContents.clear();
                 writer.flush();
                 writer.close();         
-                if (debug) {
-                    debugger.update(Calendar.getInstance().getTime()  
-                        + "\n --- Leaving receive file process ---");
-                }
+                update(Calendar.getInstance().getTime() + "\n --- Leaving receive file process ---");
                 JOptionPane.showMessageDialog(frame, "Update successful", 
                     "SwitchFinder Update", JOptionPane.INFORMATION_MESSAGE);
                 success = true;
@@ -159,39 +139,32 @@ public class ReceiveFile {
                 success = false;
             }
         } catch (FileNotFoundException fnfe) {
-            JOptionPane.showMessageDialog(frame, "Something is blocking\nwrite"
-                + " permissions to " + filename, "File in Use", 
+            JOptionPane.showMessageDialog(frame, "Something is blocking\nwrite permissions to " + filename, "File in Use", 
                     JOptionPane.ERROR_MESSAGE);
-                if (debug) {
+                if (debugger != null) {
                     fnfe.printStackTrace();
                 }
             success = false;
         } catch (SocketTimeoutException ste) {
-            if (debug) {
-                debugger.update("Timeout occurred");
-            }
+            update("Timeout occurred");
             success = false;
         } catch (BindException be) {
             if (!socket.isClosed()) {
                 socket.isClosed();
             }
             success = false;
-            if (debug) {
+            if (debugger != null) {
                 be.printStackTrace();
             }
         } catch (SecurityException se) {
             JOptionPane.showMessageDialog(frame, "No permissions to write read" 
                 + " this file", "File Permissions", JOptionPane.ERROR_MESSAGE);
-            if (debug) {
-                debugger.update("--- Receive File failure ---");
-                se.printStackTrace();
-            }
+            update("Receive File failure");
+            se.printStackTrace();
             success = false;
         } catch (IOException ioe) {
-            if (debug) {
-                debugger.update("--- Receive File failure ---");
-                ioe.printStackTrace();
-            }
+            update("Receive File failure");
+            ioe.printStackTrace();
             success = false;
         } finally {
             if (!socket.isClosed()) {
@@ -205,4 +178,10 @@ public class ReceiveFile {
         }
         return success;
     }
+	private void update(String message) {
+		
+	 	if (debugger != null) {
+			debugger.update(" --- ReceiveFile: " + message);
+		}
+	}
 }

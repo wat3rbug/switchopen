@@ -20,7 +20,6 @@ public class UserAccountWindow {
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;
     private static boolean whichIsIt = PASSWORD; 
-    private static boolean debug = false;
     JFrame frame = new JFrame();
     JLabel passwordLabel = new JLabel("Password");
     JLabel userNameLabel = new JLabel("Username");
@@ -43,7 +42,6 @@ public class UserAccountWindow {
 
     public UserAccountWindow(boolean decider, Debug passedframe) {
     
-        debug = true;
         new UserAccountWindow(decider);
         debugger = passedframe;
     }
@@ -59,16 +57,12 @@ public class UserAccountWindow {
         contents.setLayout(new BoxLayout(contents, BoxLayout.X_AXIS));
         whichIsIt = decider;
         if (decider == USER) {
-            if (debug) {
-                debugger.update("Opening user window");
-            }
+            update("Opening user window");
             contents.add(userNameLabel);
             contents.add(username);
             username.addKeyListener(new KeyboardUpdater());
         } else {
-            if (debug) {
-                debugger.update("Opening password window");
-            }
+            update("Opening password window");
             contents.add(passwordLabel);
             contents.add(passwordEntry);
             passwordEntry.addKeyListener(new KeyboardUpdater());
@@ -91,16 +85,12 @@ public class UserAccountWindow {
     private void updateThePassword() {
 
         if (whichIsIt == USER) {
-            if (debug) {
-                debugger.update("updating username");
-            }
+            update("updating username");
             Pass.setInfo(username.getText(), USER);
             inUse = false;
             frame.dispose();
         } else {
-            if (debug) {
-                debugger.update("updating password");
-            }
+            update("updating password");
             Pass.setInfo(new String(passwordEntry.getPassword()), PASSWORD);
             inUse = false;
             frame.dispose();
@@ -117,6 +107,12 @@ public class UserAccountWindow {
 
         return inUse;
     }
+	private void update(String message) {
+		
+	 	if (debugger != null) {
+			debugger.update(" --- UserAccountWindow: " + message);
+		}
+	}
     // inner classes
 
     /**

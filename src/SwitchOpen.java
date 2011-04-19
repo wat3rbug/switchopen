@@ -39,7 +39,7 @@ public class SwitchOpen {
 
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;
-    private static boolean debug = false;
+    private static boolean debug = true;
     static JFrame frame;
     JTextField inputTag;
     static String switchFile = "switches.csv";
@@ -153,7 +153,7 @@ public class SwitchOpen {
 
         // tie frame stuff up
 
-        if (debug) {
+        if (debugger != null) {
             debugger.update("laf "  
             + UIManager.getLookAndFeel().getName());
         }
@@ -190,7 +190,7 @@ public class SwitchOpen {
         try {
             // let local file handle this
         
-            if (debug) {
+            if (debugger != null) {
                 debugger.update("Using local file\nReading " + filename);
             }
             String buffer = null;
@@ -204,16 +204,16 @@ public class SwitchOpen {
                 }
             } 
             reader.close();
-            if (debug) {
+            if (debugger != null) {
                 debugger.update("Finished reading " + filename);
             }
         } catch (FileNotFoundException fnfe) {
-            if (debug) {
+            if (debugger != null) {
                 debugger.update("File not there...trying network");
             }
             temp.delete();
         } catch (IOException ex) {
-            if (debug) {
+            if (debugger != null) {
                 ex.printStackTrace();
             }
             JOptionPane.showMessageDialog(frame, "Are you sure " + filename 
@@ -231,30 +231,30 @@ public class SwitchOpen {
         /* writes a new switches file, used for imports of other files */
 
         try {
-            if (debug) {
+            if (debugger != null) {
                 debugger.update("Writing " + filename);
             }
             BufferedWriter writer = new BufferedWriter(new 
             FileWriter(new File(filename)));
             for (int i = 0; i < switches.size(); i++) {
                 writer.write(switches.get(i) + "\r\n");
-                if (debug) {
+                if (debugger != null) {
                     debugger.update("Wrote - " + switches.get(i));
                 }
             }
             writer.close();
-            if (debug) {
+            if (debugger != null) {
                 debugger.update("Finished writing " + filename);
             }
         } catch (FileNotFoundException sf) {
-            if (debug) {
+            if (debugger != null) {
                 debugger.update(switchFile + " is not found");
                 sf.printStackTrace();
             } 
             JOptionPane.showMessageDialog(frame, filename + " is in use", 
                 "File problem", JOptionPane.ERROR_MESSAGE);
         } catch (IOException sd) {
-            if (debug) {
+            if (debugger != null) {
                 sd.printStackTrace();
             }
             JOptionPane.showMessageDialog(frame, filename + " is a bad boy", 
@@ -281,11 +281,11 @@ public class SwitchOpen {
         Thread server = new Thread(backgroundService, "Server");
         if (runNetwork) {
             server.start();
-            if (debug) {
+            if (debugger != null) {
                 debugger.update(" --- Starting server --- ");
             }
         } else {
-            if (debug) {
+            if (debugger != null) {
                 debugger.update(" --- Server not started ---");
             }
         }
@@ -341,7 +341,7 @@ public class SwitchOpen {
 
         // if array is empty open dialog box saying import a file
 
-        if (debug) {
+        if (debugger != null) {
             debugger.update("Starting to open a switch");
         }
         String testString = inputTag.getText();
@@ -361,7 +361,7 @@ public class SwitchOpen {
         if (testString.length() < 1) {
             return;
         }
-        if (debug) {
+        if (debugger != null) {
             debugger.update("command line: " + commandLine);
             debugger.update("Looking for the switch based on " + testString);
         }
@@ -371,7 +371,7 @@ public class SwitchOpen {
         Matcher validateIp = ipAddress.matcher(testString);
         String validIp = null;
         if (validateIp.matches()) {
-            if (debug) {
+            if (debugger != null) {
                 debugger.update(testString + " is a valid IP");
             }
             validIp = testString;
@@ -412,20 +412,20 @@ public class SwitchOpen {
             if (command.startsWith("xterm")) {
                 destination += " ";
             }
-            if (debug) {
+            if (debugger != null) {
                 debugger.update(commandLine + destination);
             }
             Process child = Runtime.getRuntime().exec(commandLine  
                 + destination);
        } catch (IOException e) {
-            if (debug) {
+            if (debugger != null) {
                   debugger.update("Something didn't work");
                   e.printStackTrace();
             }
             JOptionPane.showMessageDialog(frame, "Either putty is in "  
                 + directory + " or you have bigger issues", 
                 "Putty?", JOptionPane.ERROR_MESSAGE);
-            if (debug) {
+            if (debugger != null) {
                 debugger.update("Make sure putty is in the " + directory  
                     + "directory");
                 }
@@ -448,7 +448,7 @@ public class SwitchOpen {
 
         public void actionPerformed(ActionEvent pu) {
         
-            if (debug) {
+            if (debugger != null) {
                 debugger.update("called " + pu.getActionCommand());
             }
             if (pu.getActionCommand().equals("user")  
@@ -549,7 +549,7 @@ public class SwitchOpen {
                 backgroundService.setRun(true);
                 Thread server = new Thread(backgroundService, "Server");
                 server.start();
-                if (debug) {
+                if (debugger != null) {
                     debugger.update(" --- Starting server --- ");
                 }
             }
@@ -598,67 +598,66 @@ public class SwitchOpen {
 
     public class MouseClicker extends MouseAdapter {
 
-	public void mousePressed(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 
-	    JTextField baseToChange = (JTextField) e.getSource();  
-	    if (debug) {
-		debugger.update("copy or paste: " + baseToChange.getText());
+		    JTextField baseToChange = (JTextField) e.getSource();  
+		    if (debugger != null) {
+				debugger.update("copy or paste: " + baseToChange.getText());
+		    }
+		    if (e.getButton() == MouseEvent.BUTTON3) {
+				if (debugger != null) {
+			    	debugger.update("right click?");
+				}
+				JMenuItem pMenuItem;
+				JPopupMenu popup = new JPopupMenu();
+				pMenuItem = new JMenuItem("copy");
+				pMenuItem.addActionListener(new Copier(baseToChange.getText())); 
+				popup.add(pMenuItem);
+				pMenuItem = new JMenuItem("paste");
+				pMenuItem.addActionListener(new Paster(baseToChange)); 
+				popup.add(pMenuItem);
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			    }	
+			}
 	    }
-	    if (e.getButton() == MouseEvent.BUTTON3) {
-		if (debug) {
-		    debugger.update("right click?");
-		}
-		JMenuItem pMenuItem;
-		JPopupMenu popup = new JPopupMenu();
-		pMenuItem = new JMenuItem("copy");
-		pMenuItem.addActionListener(new Copier(baseToChange.getText())); 
-		popup.add(pMenuItem);
-		pMenuItem = new JMenuItem("paste");
-		pMenuItem.addActionListener(new Paster(baseToChange)); 
-		popup.add(pMenuItem);
-		popup.show(e.getComponent(), e.getX(), e.getY());
-	    }
-		
-	}
-    }
     public class Copier implements ActionListener {
 
-	String text = null;
+		String text = null;
 
-	public Copier(String text) {
+		public Copier(String text) {
 
-	    this.text = text;
-	}
-	public void actionPerformed(ActionEvent ae) {
+		    this.text = text;
+		}
+		public void actionPerformed(ActionEvent ae) {
 
-	    // copies selection to the clipboard
+		    // copies selection to the clipboard
 
-	    if (debug) debugger.update("In copy action " + text);
-	    StringSelection ss = new StringSelection(text);
-	    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+		    if (debugger != null) debugger.update("In copy action " + text);
+		    StringSelection ss = new StringSelection(text);
+		    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 	    
-	}
+		}
     }
     public class Paster implements ActionListener {
 
-	JTextField text = null;
+		JTextField text = null;
 
-	public Paster(JTextField text) {
+		public Paster(JTextField text) {
 
-	    this.text = text;
-	}
-	public void actionPerformed(ActionEvent ae) {
+		    this.text = text;
+		}
+		public void actionPerformed(ActionEvent ae) {
 
-	    if (debug) debugger.update("In paste action");
-	    Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-	    try {
-		if ( t!= null &&  t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-		    text.setText((String) t.getTransferData(DataFlavor.stringFlavor));
-		}	
-	    } catch (UnsupportedFlavorException e) {
-	    } catch (IOException e) {
-	    }
-	}
+		    if (debugger != null) debugger.update("In paste action");
+		    	Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+			    try {
+					if ( t!= null &&  t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+					    text.setText((String) t.getTransferData(DataFlavor.stringFlavor));
+					}	
+			    } catch (UnsupportedFlavorException e) {
+			    } catch (IOException e) {
+		    }
+		}
     }
 }
 

@@ -352,12 +352,14 @@ public class SwitchOpen {
             command = "xterm -e ssh ";
         }
         String commandLine;
-        if (userInfo.getInfo(PASSWORD) != null  
-            && command.startsWith("putty")) {
+        if (userInfo.getInfo(PASSWORD) != null && command.startsWith("putty")) {
             commandLine = command + "-pw " + userInfo.getInfo(PASSWORD) + " ";
         } else {
             commandLine = command;
         }
+		if (userInfo.getInfo(USER) != null && command.startsWith("xterm")) {
+            commandLine = command + "-l " + userInfo.getInfo(USER) + " ";
+		}
         if (testString.length() < 1) {
             return;
         }

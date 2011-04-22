@@ -377,10 +377,12 @@ public class SwitchOpen {
             validIp = testString;
         } else {
             if (switches.size() < 1) {
-                JOptionPane.showMessageDialog(frame, "Import a file because "
-                    + "you have no data", "No switch data", 
-                    JOptionPane.ERROR_MESSAGE);
-                return;
+				readFile(switchFile);
+				if (switches.size() < 1) {
+                	JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
+                    	JOptionPane.ERROR_MESSAGE);
+                	return;
+				}
             }
             for (int i = 0; i < switches.size(); i++) {
         

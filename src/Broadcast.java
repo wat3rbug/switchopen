@@ -41,6 +41,7 @@ public class Broadcast {
     private String addressTxt = "gardiner-doug.ndc.nasa.gov"; 
 	String workingAddress = addressTxt;
 	private Checks hostList;
+	private InetAddress address = null;
 	
     // constructors
 
@@ -101,12 +102,12 @@ public class Broadcast {
 		boolean retry = true;
 		int countOfRetries = 0;
 		do {
-			InetAddress address = null;
         	try {
 	            updateDebug("Start broadcast");
 	            broadcastSocket = new DatagramSocket();
 	            broadcastSocket.setBroadcast(true);
 	            DatagramPacket message;
+				stopLocalHostBroadcast();
 	            address = InetAddress.getByName(workingAddress);
 	            broadcastSocket.connect(address, port);
 	            updateDebug("Opened port to " + address.getHostAddress() + " at " + workingAddress);
@@ -121,15 +122,7 @@ public class Broadcast {
 	        } catch (UnknownHostException uhe) {
 	            /* change to cycle through ACL hosts */
 	        	workingAddress = hostList.next();
-				try {
-					updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName());
-					if (workingAddress.indexOf(address.getLocalHost().getHostName()) >= 0) {
-						workingAddress = hostList.next();
-						countOfRetries++;
-					}
-				} catch (UnknownHostException uhe2) {
-					// silly because I'm already in exception
-				}
+				stopLocalHostBroadcast();
 				if (countOfRetries >= hostList.numberOfHosts()) {
 					retry = false;
 					updateDebug("Broadcast failure. No hosts available");
@@ -185,6 +178,17 @@ public class Broadcast {
 	
 		if (debugger != null) {
 			debugger.update(" --- Broadcast: " + message);
+		}
+	}
+	private void stopLocalHostBroadcast() {
+		
+		try {
+			updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName());
+			if (workingAddress.indexOf(address.getLocalHost().getHostName()) >= 0) {
+				workingAddress = hostList.next();
+			}
+		} catch (UnknownHostException uhe2) {
+			// silly because I'm already in exception
 		}
 	}
 }

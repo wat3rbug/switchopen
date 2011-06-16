@@ -122,8 +122,8 @@ public class Broadcast {
 	            /* change to cycle through ACL hosts */
 	        	workingAddress = hostList.next();
 				try {
+					updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName());
 					if (workingAddress.indexOf(address.getLocalHost().getHostName()) >= 0) {
-						updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName());
 						workingAddress = hostList.next();
 						countOfRetries++;
 					}

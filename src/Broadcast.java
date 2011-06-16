@@ -32,14 +32,14 @@ public class Broadcast {
     
     // class variables
 
-    private String filename = "switches.csv";
+    String workingAddress = addressTxt;
+	private String filename = "switches.csv";
     private static File switchFile;
     private static long fileDate = 0;
     private DatagramSocket broadcastSocket;
     private static final int port = 10077;
     private Debug debugger = null;
     private String addressTxt = "gardiner-doug.ndc.nasa.gov"; 
-	String workingAddress = addressTxt;
 	private Checks hostList;
 	private InetAddress address = null;
 	
@@ -68,19 +68,7 @@ public class Broadcast {
     }
     // methods 
 
-    /**
-     * Common method for the two constructors to used for 
-     * common tasks during the creation of the broadcast 
-     * object.
-     */
-
-    private void finishConstructor() {
-     
-        switchFile = new File(filename);
-        fileDate = switchFile.lastModified();
-        updateDebug("File date is " + fileDate);
-    }
-    /**
+	/**
      * Creates the UDP datagram packet with the hash and 
      * timestamp of the file.  It opens UDP port 10077 in 
      * broadcast mode.  Then it broadcasts the message out.
@@ -96,8 +84,7 @@ public class Broadcast {
 		}
 		sendMessage();
 	}
-    
-    public void sendMessage() {
+	public void sendMessage() {
 
 		boolean retry = true;
 		int countOfRetries = 0;
@@ -174,17 +161,31 @@ public class Broadcast {
         
         return new Checks().update(filename);
     }
+    /**
+     * Common method for the two constructors to used for 
+     * common tasks during the creation of the broadcast 
+     * object.
+     */
+
+    private void finishConstructor() {
+     
+        switchFile = new File(filename);
+        fileDate = switchFile.lastModified();
+        updateDebug("File date is " + fileDate);
+    }
+
 	private void updateDebug(String message){
 	
 		if (debugger != null) {
 			debugger.update(" --- Broadcast: " + message);
 		}
 	}
+	
 	private void stopLocalHostBroadcast() {
 		
 		try {
 			if (workingAddress.indexOf(address.getLocalHost().getHostName().toLowerCase()) >= 0) {
-				updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName() + "matches");
+				updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName() + " matches");
 				workingAddress = hostList.next();
 				updateDebug("next: " + workingAddress);
 			}

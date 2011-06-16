@@ -23,6 +23,7 @@ public class Debug {
 
     JTextArea output = null;
     JFrame frame;
+
     // constructors
 
     /**

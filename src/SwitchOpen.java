@@ -37,12 +37,9 @@ public class SwitchOpen {
 
     // variables
 
-    private static final boolean USER = true;
-    private static final boolean PASSWORD = false;
-    private static boolean debug = true;
-    static JFrame frame;
+	static JFrame frame;
     JTextField inputTag;
-    static String switchFile = "switches.csv";
+	static String switchFile = "switches.csv";
     String importFile = null;
     Pass userInfo = new Pass();
     JTextField inputText = new JTextField("", 12); 
@@ -50,10 +47,14 @@ public class SwitchOpen {
     static ArrayList<String> switches = new ArrayList<String>();
     String directory = null;
     static Debug debugger = null;
-    private static final boolean runNetwork = true;
-    static FileUpdater backgroundService = null;
+	static FileUpdater backgroundService = null;
     JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Automatic");
 
+    private static boolean debug = false;
+    private static final boolean USER = true;
+    private static final boolean PASSWORD = false;  
+    private static final boolean runNetwork = true;
+    
     // constructors
 
     /**
@@ -177,6 +178,33 @@ public class SwitchOpen {
     }
     // methods
 
+	/**
+     * Main() method no command line arguments are used
+     */
+
+    public static void main(String[] args) {
+
+        new SwitchOpen();
+        if (debug) {
+            if (debugger == null) {
+                debugger = new Debug();
+            }
+            backgroundService = new FileUpdater(frame, debugger);
+        } else {
+            backgroundService = new FileUpdater(frame);
+        }
+        Thread server = new Thread(backgroundService, "Server");
+        if (runNetwork) {
+            server.start();
+            if (debugger != null) {
+                debugger.update(" --- Starting server --- ");
+            }
+        } else {
+            if (debugger != null) {
+                debugger.update(" --- Server not started ---");
+            }
+        }
+    }
     /**
      * Opens up the switch file for reading.
      * @param filename the String representation of the filename.
@@ -263,33 +291,7 @@ public class SwitchOpen {
     }
     /* The start of everything */
     
-    /**
-     * Main() method no command line arguments are used
-     */
     
-    public static void main(String[] args) {
-
-        new SwitchOpen();
-        if (debug) {
-            if (debugger == null) {
-                debugger = new Debug();
-            }
-            backgroundService = new FileUpdater(frame, debugger);
-        } else {
-            backgroundService = new FileUpdater(frame);
-        }
-        Thread server = new Thread(backgroundService, "Server");
-        if (runNetwork) {
-            server.start();
-            if (debugger != null) {
-                debugger.update(" --- Starting server --- ");
-            }
-        } else {
-            if (debugger != null) {
-                debugger.update(" --- Server not started ---");
-            }
-        }
-    }
     /** Converts the MAC address from one setup to something that will work in
      *  Cisco's user tracker toolbar. Results on changed on the GUI.
      */

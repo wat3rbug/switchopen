@@ -49,29 +49,6 @@ public class Checks {
 	
 		finishConstructor();
 	}
-	private void finishConstructor() {
-    
-        /* this returns false if it cannot load the names.  
-         * The intent is to shut down the server if it doesn't have a ACL file. 
-         */
-        
-        try {
-            File hostFileHandle = new File(hostFile);
-            BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
-            String inLine = null;
-            while ((inLine = reader.readLine()) != null) {
-                hostnames.add(inLine.toLowerCase());
-                updateDebug(inLine + " allowed");
-            }
-            if (hostnames.isEmpty()) {
-                aclPresent = false;
-            }
-            reader.close();
-        } catch (IOException ioe) {
-            updateDebug("ACL not updated, shutting down server");
-            aclPresent = false;
-        }
-    }
     
     // methods
     
@@ -145,6 +122,31 @@ public class Checks {
 		
 		return hostnames.size();
 	}
+	
+	private void finishConstructor() {
+    
+        /* this returns false if it cannot load the names.  
+         * The intent is to shut down the server if it doesn't have a ACL file. 
+         */
+        
+        try {
+            File hostFileHandle = new File(hostFile);
+            BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
+            String inLine = null;
+            while ((inLine = reader.readLine()) != null) {
+                hostnames.add(inLine.toLowerCase());
+                updateDebug(inLine + " allowed");
+            }
+            if (hostnames.isEmpty()) {
+                aclPresent = false;
+            }
+            reader.close();
+        } catch (IOException ioe) {
+            updateDebug("ACL not updated, shutting down server");
+            aclPresent = false;
+        }
+    }
+
 	private void updateDebug(String message){
 	
 		if (debugger != null) {

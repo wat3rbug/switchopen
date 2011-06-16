@@ -78,6 +78,16 @@ public class UserAccountWindow {
     }
     // methods
 
+	/**
+     * Used to make sure a duplicate window isn't created for user name or 
+     * password.
+     * @return true if there is a window open, false if not.
+     */
+
+	public static boolean exists() {
+
+        return inUse;
+    }
     /**
      *  updates the password or username in the Pass storage object.
      */
@@ -96,17 +106,7 @@ public class UserAccountWindow {
             frame.dispose();
         }
     }
-
-    /**
-     * Used to make sure a duplicate window isn't created for user name or 
-     * password.
-     * @return true if there is a window open, false if not.
-     */
-
-    public static boolean exists() {
-
-        return inUse;
-    }
+  
 	private void update(String message) {
 		
 	 	if (debugger != null) {

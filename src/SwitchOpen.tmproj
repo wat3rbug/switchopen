@@ -13,6 +13,8 @@
 			<string>src</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>selected</key>
+			<true/>
 			<key>sourceDirectory</key>
 			<string></string>
 		</dict>
@@ -53,38 +55,54 @@
 			<key>firstVisibleLine</key>
 			<integer>152</integer>
 		</dict>
-		<key>Debug.java</key>
+		<key>Broadcast.java</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>95</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>110</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>51</integer>
+			<integer>102</integer>
+		</dict>
+		<key>Checks.java</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>13</integer>
+				<key>line</key>
+				<integer>138</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>22</integer>
 		</dict>
 		<key>SwitchOpen.java</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>44</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>505</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>97</integer>
+			<integer>477</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>SwitchOpen.java</string>
+		<string>Broadcast.java</string>
+		<string>Checks.java</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

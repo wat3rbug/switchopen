@@ -101,12 +101,13 @@ public class Broadcast {
 		boolean retry = true;
 		int countOfRetries = 0;
 		do {
+			InetAddress address = null;
         	try {
 	            updateDebug("Start broadcast");
 	            broadcastSocket = new DatagramSocket();
 	            broadcastSocket.setBroadcast(true);
 	            DatagramPacket message;
-	            InetAddress address = InetAddress.getByName(workingAddress);
+	            address = InetAddress.getByName(workingAddress);
 	            broadcastSocket.connect(address, port);
 	            updateDebug("Opened port to " + address.getHostAddress() + " at " + workingAddress);
 	            String rawMessage = (new Long(this.getFileDate()).toString()) + "," + this.getFileCRC();
@@ -120,6 +121,14 @@ public class Broadcast {
 	        } catch (UnknownHostException uhe) {
 	            /* change to cycle through ACL hosts */
 	        	workingAddress = hostList.next();
+				try {
+					if (workingAddress.indexOf(address.getLocalHost().getHostName()) >= 0) {
+						workingAddress = hostList.next();
+						countOfRetries++;
+					}
+				} catch (UnknownHostException uhe2) {
+					// silly because I'm already in exception
+				}
 				if (countOfRetries >= hostList.numberOfHosts()) {
 					retry = false;
 					updateDebug("Broadcast failure. No hosts available");

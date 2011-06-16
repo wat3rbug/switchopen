@@ -32,6 +32,7 @@ public class Broadcast {
     
     // class variables
 
+	private String addressTxt = "gardiner-doug.ndc.nasa.gov"; 
     String workingAddress = addressTxt;
 	private String filename = "switches.csv";
     private static File switchFile;
@@ -39,8 +40,7 @@ public class Broadcast {
     private DatagramSocket broadcastSocket;
     private static final int port = 10077;
     private Debug debugger = null;
-    private String addressTxt = "gardiner-doug.ndc.nasa.gov"; 
-	private Checks hostList;
+    private Checks hostList;
 	private InetAddress address = null;
 	
     // constructors

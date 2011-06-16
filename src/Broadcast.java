@@ -183,9 +183,10 @@ public class Broadcast {
 	private void stopLocalHostBroadcast() {
 		
 		try {
-			updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName());
 			if (workingAddress.indexOf(address.getLocalHost().getHostName().toLowerCase()) >= 0) {
+				updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName() + "matches");
 				workingAddress = hostList.next();
+				updateDebug("next: " + workingAddress);
 			}
 		} catch (UnknownHostException uhe2) {
 			// silly because I'm already in exception

@@ -503,7 +503,7 @@ public class SwitchOpen {
 				+ " " + fileStamp.get(Calendar.DAY_OF_MONTH) + " "
 				+ months[fileStamp.get(Calendar.MONTH)] + " "
 				+ fileStamp.get(Calendar.YEAR);
-            String message = "Version: 2.1\nCreation Date: 20 March 2009\n"
+            String message = "Version: 2.1.1\nCreation Date: 20 March 2009\n"
                 + "Author: Douglas Gardiner\n" 
 				+ fileDate;
             JOptionPane.showMessageDialog(frame, message, 

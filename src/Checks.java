@@ -27,6 +27,7 @@ public class Checks {
     private ArrayList<String> hostnames = new ArrayList<String>();
     private Debug debugger = null;
     private static final int MAX = 1024;
+	private int last = 0;
     
     // constructors
     
@@ -133,6 +134,17 @@ public class Checks {
         } 
         return buffer.toString();
     }
+	public String next() {
+		
+		if (last >= hostnames.size()) {
+			last = 0;
+		}
+		return hostnames.get(last++);
+	}
+	public int numberOfHosts() {
+		
+		return hostnames.size();
+	}
 	private void updateDebug(String message){
 	
 		if (debugger != null) {

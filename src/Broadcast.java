@@ -123,6 +123,7 @@ public class Broadcast {
 	        	workingAddress = hostList.next();
 				try {
 					if (workingAddress.indexOf(address.getLocalHost().getHostName()) >= 0) {
+						updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName());
 						workingAddress = hostList.next();
 						countOfRetries++;
 					}

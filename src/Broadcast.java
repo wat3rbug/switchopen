@@ -184,7 +184,7 @@ public class Broadcast {
 		
 		try {
 			updateDebug("DEST: " + workingAddress + " LOCAL: " + address.getLocalHost().getHostName());
-			if (workingAddress.indexOf(address.getLocalHost().getHostName()) >= 0) {
+			if (workingAddress.indexOf(address.getLocalHost().getHostName().toLowerCase()) >= 0) {
 				workingAddress = hostList.next();
 			}
 		} catch (UnknownHostException uhe2) {

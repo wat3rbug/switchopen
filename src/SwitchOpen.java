@@ -344,7 +344,7 @@ public class SwitchOpen {
         if (debugger != null) {
             debugger.update("Starting to open a switch");
         }
-        String testString = inputTag.getText();
+        String testString = inputTag.getText().trim();
         String command = null;
         if (System.getProperty("os.name").startsWith("Windows")) {
             command = "putty ";

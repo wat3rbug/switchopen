@@ -50,7 +50,7 @@ public class SwitchOpen {
 	static FileUpdater backgroundService = null;
     JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Automatic");
 
-    private static boolean debug = false;
+    private static boolean debug = true;
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;  
     private static final boolean runNetwork = true;
@@ -223,7 +223,7 @@ public class SwitchOpen {
             }
             String buffer = null;
             temp = new File(filename);
-            directory = temp.getPath();
+            directory = temp.getAbsolutePath();
             BufferedReader reader = new BufferedReader(new FileReader(new 
                 File(filename)));
             while ((buffer = reader.readLine()) != null) {
@@ -346,7 +346,7 @@ public class SwitchOpen {
         if (debugger != null) {
             debugger.update("Starting to open a switch");
         }
-        String testString = inputTag.getText();
+        String testString = inputTag.getText().trim();
         String command = null;
         if (System.getProperty("os.name").startsWith("Windows")) {
             command = "putty ";
@@ -426,7 +426,7 @@ public class SwitchOpen {
                   debugger.update("Something didn't work");
                   e.printStackTrace();
             }
-            JOptionPane.showMessageDialog(frame, "Either putty is in "  
+            JOptionPane.showMessageDialog(frame, "Either putty is not in "  
                 + directory + " or you have bigger issues", 
                 "Putty?", JOptionPane.ERROR_MESSAGE);
             if (debugger != null) {

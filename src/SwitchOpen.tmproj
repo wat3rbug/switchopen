@@ -153,20 +153,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>PopupMenu.java</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>14</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 		<key>ReceiveFile.java</key>
 		<dict>
 			<key>caret</key>
@@ -223,20 +209,6 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>hosts.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>9</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
@@ -247,9 +219,7 @@
 		<string>Pass.java</string>
 		<string>ReceiveFile.java</string>
 		<string>SwitchOpen.java</string>
-		<string>PopupMenu.java</string>
 		<string>../things.todo</string>
-		<string>hosts.txt</string>
 		<string>TransmitFile.java</string>
 		<string>UserAccountWindow.java</string>
 		<string>../config/sun_checks.xml</string>

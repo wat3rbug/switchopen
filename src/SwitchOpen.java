@@ -39,7 +39,7 @@ public class SwitchOpen {
 
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;
-    private static boolean debug = false;
+    private static boolean debug = true;
     static JFrame frame;
     JTextField inputTag;
     static String switchFile = "switches.csv";
@@ -346,7 +346,11 @@ public class SwitchOpen {
         }
         String testString = inputTag.getText().trim();
         String command = null;
+<<<<<<< HEAD
 	if (debugger != null) {
+=======
+		if (debugger != null) {
+>>>>>>> fa7d92a497c2bccfcb4de3df5aabff0a46f4146c
             debugger.update("OS Name is " + System.getProperty("os.name"));
         }
         if (System.getProperty("os.name").startsWith("Windows")) {

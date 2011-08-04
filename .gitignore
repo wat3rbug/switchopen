@@ -4,4 +4,5 @@ switches.csv
 *.todo
 *.numbers
 putty.exe
-
+*.*~
+.gitignore

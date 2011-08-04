@@ -103,11 +103,6 @@ public class TransmitFile {
             reader.close();
             socket.close();
             success = true;
-	} catch (java.net.ConnectException ce) {
-	    if (debugger != null) {
-		update("Refuses connection");
-	    }
-	    success = false;
         } catch (SocketException cr) { 
             update("Transmit forced fail");
             if (debugger != null) cr.printStackTrace();

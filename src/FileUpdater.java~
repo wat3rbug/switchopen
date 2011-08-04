@@ -178,7 +178,7 @@ public class FileUpdater implements Runnable {
                 + "\nremote file date = " + (remoteDate) + "\nDifference in times " + diffInTime);
             if (inTheACL) { // are they in ACL?
                 if (remoteCRC.compareTo(localCRC) != 0) { 
-                    beacon.sendMessage(remoteAddress.getHostName());
+                    beacon.sendMessage();
                     update("CRC is different" + remoteAddress.getHostName() + " is in the List\n" + 
 						"CRC check result is " + remoteCRC.compareTo(localCRC));
                     if (remoteDate == 0 || diffInTime < 0) {

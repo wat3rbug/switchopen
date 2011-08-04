@@ -4,5 +4,6 @@ switches.csv
 *.todo
 *.numbers
 putty.exe
-*.*~
-.gitignore
+lib
+src/SwitchOpen.tmproj
+config/*

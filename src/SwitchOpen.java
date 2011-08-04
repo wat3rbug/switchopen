@@ -169,8 +169,11 @@ public class SwitchOpen {
 
 	// popup menu stuff
 
+	
 	inputText.addMouseListener(new MouseClicker());
 	inputTag.addMouseListener(new MouseClicker());
+
+
     }
     // methods
 
@@ -258,7 +261,8 @@ public class SwitchOpen {
                 "File problem", JOptionPane.ERROR_MESSAGE);
         }
     }
-    /* The start of everything */   
+    /* The start of everything */
+    
     /**
      * Main() method no command line arguments are used
      */
@@ -342,7 +346,7 @@ public class SwitchOpen {
         }
         String testString = inputTag.getText().trim();
         String command = null;
-	if (debugger != null) {
+		if (debugger != null) {
             debugger.update("OS Name is " + System.getProperty("os.name"));
         }
         if (System.getProperty("os.name").startsWith("Windows")) {
@@ -356,7 +360,7 @@ public class SwitchOpen {
         } else {
             commandLine = command;
         }
-       	if (userInfo.getInfo(USER) != null && command.startsWith("xterm")) {
+		if (userInfo.getInfo(USER) != null && command.startsWith("xterm")) {
             commandLine = command + "-l " + userInfo.getInfo(USER) + " ";
 		}
         if (testString.length() < 1) {
@@ -366,6 +370,7 @@ public class SwitchOpen {
             debugger.update("command line: " + commandLine);
             debugger.update("Looking for the switch based on " + testString);
         }
+        
         Pattern ipAddress = Pattern.compile(
             "^[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*$");
         Matcher validateIp = ipAddress.matcher(testString);
@@ -377,21 +382,21 @@ public class SwitchOpen {
             validIp = testString;
         } else {
             if (switches.size() < 1) {
-		if (debugger != null) {
-		    debugger.update("first check for file failed");
-	        }
-	      	readFile(switchFile);
-		if (debugger != null) {
-		    debugger.update("read file again");
-		}
-		if (switches.size() < 1) {
-		    if (debugger != null) {
-			debugger.update("second check for file failed");
-		    }
-		    JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
+				if (debugger != null) {
+	                debugger.update("first check for file failed");
+	            }
+				readFile(switchFile);
+				if (debugger != null) {
+	                debugger.update("read file again");
+	            }
+				if (switches.size() < 1) {
+					if (debugger != null) {
+		                debugger.update("second check for file failed");
+		            }
+                	JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
                     	JOptionPane.ERROR_MESSAGE);
-		    return;
-		}
+                	return;
+				}
             }
             for (int i = 0; i < switches.size(); i++) {
         
@@ -504,17 +509,17 @@ public class SwitchOpen {
 
         public void actionPerformed(ActionEvent ad) {
 
-	    String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-	    String days[] = {"Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
-	    Calendar fileStamp = Calendar.getInstance();
-	    fileStamp.setTimeInMillis(Broadcast.getFileDate());
-	    String fileDate = "Last Update: " + days[fileStamp.get(Calendar.DAY_OF_WEEK)] 
-		+ " " + fileStamp.get(Calendar.DAY_OF_MONTH) + " "
-		+ months[fileStamp.get(Calendar.MONTH)] + " "
-		+ fileStamp.get(Calendar.YEAR);
+			String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+			String days[] = {"Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
+			Calendar fileStamp = Calendar.getInstance();
+			fileStamp.setTimeInMillis(Broadcast.getFileDate());
+			String fileDate = "Last Update: " + days[fileStamp.get(Calendar.DAY_OF_WEEK)] 
+				+ " " + fileStamp.get(Calendar.DAY_OF_MONTH) + " "
+				+ months[fileStamp.get(Calendar.MONTH)] + " "
+				+ fileStamp.get(Calendar.YEAR);
             String message = "Version: 2.1\nCreation Date: 20 March 2009\n"
                 + "Author: Douglas Gardiner\n" 
-		+ fileDate;
+				+ fileDate;
             JOptionPane.showMessageDialog(frame, message, 
                 "about", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -609,64 +614,67 @@ public class SwitchOpen {
 
     public class MouseClicker extends MouseAdapter {
 
-       	public void mousePressed(MouseEvent e) {
+		public void mousePressed(MouseEvent e) {
 
-	    JTextField baseToChange = (JTextField) e.getSource();  
-	    if (debugger != null) {
-		debugger.update("copy or paste: " + baseToChange.getText());
+		    JTextField baseToChange = (JTextField) e.getSource();  
+		    if (debugger != null) {
+				debugger.update("copy or paste: " + baseToChange.getText());
+		    }
+		    if (e.getButton() == MouseEvent.BUTTON3) {
+				if (debugger != null) {
+			    	debugger.update("right click?");
+				}
+				JMenuItem pMenuItem;
+				JPopupMenu popup = new JPopupMenu();
+				pMenuItem = new JMenuItem("copy");
+				pMenuItem.addActionListener(new Copier(baseToChange.getText())); 
+				popup.add(pMenuItem);
+				pMenuItem = new JMenuItem("paste");
+				pMenuItem.addActionListener(new Paster(baseToChange)); 
+				popup.add(pMenuItem);
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			    }	
+			}
 	    }
-	    if (e.getButton() == MouseEvent.BUTTON3) {
-		if (debugger != null) {
-		    debugger.update("right click?");
-		}
-		JMenuItem pMenuItem;
-		JPopupMenu popup = new JPopupMenu();
-		pMenuItem = new JMenuItem("copy");
-		pMenuItem.addActionListener(new Copier(baseToChange.getText())); 
-		popup.add(pMenuItem);
-		pMenuItem = new JMenuItem("paste");
-		pMenuItem.addActionListener(new Paster(baseToChange)); 
-		popup.add(pMenuItem);
-		popup.show(e.getComponent(), e.getX(), e.getY());
-	    }	
-	}
-    }
     public class Copier implements ActionListener {
 
-	String text = null;
+		String text = null;
 
-	public Copier(String text) {
+		public Copier(String text) {
 
-	    this.text = text;
-	}
-	public void actionPerformed(ActionEvent ae) {
+		    this.text = text;
+		}
+		public void actionPerformed(ActionEvent ae) {
 
-	    // copies selection to the clipboard
+		    // copies selection to the clipboard
 
-	    if (debugger != null) debugger.update("In copy action " + text);
-	    StringSelection ss = new StringSelection(text);
-	    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
-	}
+		    if (debugger != null) debugger.update("In copy action " + text);
+		    StringSelection ss = new StringSelection(text);
+		    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+	    
+		}
     }
     public class Paster implements ActionListener {
 
-	JTextField text = null;
+		JTextField text = null;
 
-	public Paster(JTextField text) {
+		public Paster(JTextField text) {
 
-	    this.text = text;
-	}
-	public void actionPerformed(ActionEvent ae) {
+		    this.text = text;
+		}
+		public void actionPerformed(ActionEvent ae) {
 
-	    if (debugger != null) debugger.update("In paste action");
-	    Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-	    try {
-		if ( t!= null &&  t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-		    text.setText((String) t.getTransferData(DataFlavor.stringFlavor));
-		}	
-	    } catch (UnsupportedFlavorException e) {
-	    } catch (IOException e) {
-	    }
-	}
+		    if (debugger != null) debugger.update("In paste action");
+		    	Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+			    try {
+					if ( t!= null &&  t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+					    text.setText((String) t.getTransferData(DataFlavor.stringFlavor));
+					}	
+			    } catch (UnsupportedFlavorException e) {
+			    } catch (IOException e) {
+		    }
+		}
     }
 }
+
+

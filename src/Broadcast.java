@@ -3,20 +3,6 @@
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
 
-/* The File takes care of broadcast task.  It calls the
-    checksum object to get the CRC of the switch file.  It also
-    gets the time stamp and then broadcasts in in UDP on port
-    10077.
-*/
-
-import java.io.File;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.net.SocketException;
-
 /**
  * This object is for sending broadcast beacons only.  Beacons are are UDP
  * packets on port 10077.  They incorporate a SHA1 hash of the file and 
@@ -26,6 +12,14 @@ import java.net.SocketException;
  * the file information, which have since been removed.
  * @author Douglas Gardiner
  */
+
+import java.io.File;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.net.SocketException;
 
 public class Broadcast {
 
@@ -44,8 +38,12 @@ public class Broadcast {
     // constructors
 
     /**
-     * Creates a Broadcast object with references to the debug 
-     * windowing object.
+     * This object is for sending broadcast beacons only.  Beacons are are UDP
+	 * packets on port 10077.  They incorporate a SHA1 hash of the file and 
+	 * the timestamp for the last time it was modified.  A future version will
+	 * be done to use non-blocking I/O.  Note: This will be refactored because 
+	 * during initial development other operations were being performed for 
+	 * the file information, which have since been removed.
      */
 
     public Broadcast(DebugWindow passedframe) {
@@ -64,22 +62,13 @@ public class Broadcast {
     }
     // methods 
 
-    /**
-     * Common method for the two constructors to used for 
-     * common tasks during the creation of the broadcast 
-     * object.
-     */
-
-    private void finishConstructor() {
-     
-        switchFile = new File(filename);
-        fileDate = switchFile.lastModified();
-        updateDebug("File date is " + fileDate);
-    }
+    
     /**
      * Creates the UDP datagram packet with the hash and 
      * timestamp of the file.  It opens UDP port 10077 in 
-     * broadcast mode.  Then it broadcasts the message out.
+     * broadcast mode.  Then it broadcasts the message out 
+	 * to the address supplied as tempAddr.
+	 * @param tempAddr the destination address of the host.
      */
 
     public void sendMessage(String tempAddr) {
@@ -91,7 +80,13 @@ public class Broadcast {
 	}
 	sendMessage();
     }
-    
+    /**
+     * Creates the UDP datagram packet with the hash and 
+     * timestamp of the file.  It opens UDP port 10077 in 
+     * broadcast mode.  Then it broadcasts the message out 
+	 * to the subnet broadcast address.
+     */
+
     public void sendMessage() {
 
         try {
@@ -102,7 +97,8 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(workingAddress);
             broadcastSocket.connect(address, port);
             updateDebug("Opened port to " + address.getHostAddress());
-            String rawMessage = (new Long(this.getFileDate()).toString()) + "," + this.getFileCRC();
+            String rawMessage = (new Long(this.getFileDate()).toString()) +
+ 				"," + this.getFileCRC();
             byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
@@ -121,7 +117,8 @@ public class Broadcast {
             if (debugger != null) {
                 updateDebug("Broadcast failure");
                 if (ioe.getMessage().matches("No route to host")) {
-                    updateDebug("Check cable or make sure wireless is turned on");
+                    updateDebug("Check cable or make sure wireless "
+						+ "is turned on");
                 } else {
                     ioe.printStackTrace();
                 }
@@ -130,8 +127,8 @@ public class Broadcast {
         updateDebug("End ");
     }
     /**
-     * Gets the last modified date for a file.
-     * @return long time in milliseconds for the last modified 
+     * Gets the last modified date for the switch file in milliseconds.
+     * @return time in milliseconds for the last modified 
      * for the file.
      */
     
@@ -147,13 +144,25 @@ public class Broadcast {
         return fileDate;
     }   
     /**
-     * Gets the SHA1 hash of the file.
-     * @return String hex form of file hash
+     * Gets the SHA1 hash of the switch file.
+     * @return String hex form of file hash.
      */
 
     public String getFileCRC() {
         
         return new Checks().update(filename);
+    }
+	/**
+     * Common method for the two constructors to used for 
+     * common tasks during the creation of the broadcast 
+     * object.
+     */
+
+    private void finishConstructor() {
+     
+        switchFile = new File(filename);
+        fileDate = switchFile.lastModified();
+        updateDebug("File date is " + fileDate);
     }
 	private void updateDebug(String message){
 	

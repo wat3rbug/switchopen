@@ -15,7 +15,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.FileWriter;
 
-public class Debug {
+public class DebugWindow {
     
     
 
@@ -31,7 +31,7 @@ public class Debug {
 	 * information to a debug log file.
      */
 
-    public Debug() {
+    public DebugWindow() {
 
         frame = new JFrame("Debug output");
         output = new JTextArea(15, 60);

@@ -39,7 +39,7 @@ public class ReceiveFile {
     private JFrame frame;
     private static final int SEC_LENGTH = 1000;
     private boolean success = true;
-    private Debug debugger = null;
+    private DebugWindow debugger = null;
     private static final String EOF = "-1";
 
     // constructors
@@ -51,7 +51,7 @@ public class ReceiveFile {
      * @param passedframe reference for the debug window
      */
 
-    public ReceiveFile(final JFrame frame, final Debug passedframe) {
+    public ReceiveFile(final JFrame frame, final DebugWindow passedframe) {
 
         debugger = passedframe;
         this.frame = frame;

@@ -37,7 +37,7 @@ public class Broadcast {
     private static long fileDate = 0;
     private DatagramSocket broadcastSocket;
     private static final int port = 10077;
-    private Debug debugger = null;
+    private DebugWindow debugger = null;
     private String addressTxt = "255.255.255.255"; 
 	String workingAddress = addressTxt;
 	
@@ -48,7 +48,7 @@ public class Broadcast {
      * windowing object.
      */
 
-    public Broadcast(Debug passedframe) {
+    public Broadcast(DebugWindow passedframe) {
 
         debugger = passedframe;
         finishConstructor();

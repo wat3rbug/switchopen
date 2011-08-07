@@ -36,7 +36,7 @@ public class FileUpdater implements Runnable {
     private JFrame frame;
     private long remoteDate = 0;
     private Broadcast beacon = null;
-    private Debug debugger = null;
+    private DebugWindow debugger = null;
     private String localCRC = null; 
     private Checks securityChecks = null; 
     
@@ -48,7 +48,7 @@ public class FileUpdater implements Runnable {
      * debug window.
      */
     
-    public FileUpdater(JFrame frame, Debug passedframe) {
+    public FileUpdater(JFrame frame, DebugWindow passedframe) {
 
 		this.frame = frame;
         debugger = passedframe;

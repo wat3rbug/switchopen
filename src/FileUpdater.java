@@ -115,7 +115,10 @@ public class FileUpdater implements Runnable {
             // if timer 1 minutes then send beacon and reset timer
         
             if (System.currentTimeMillis() > loopTimeStart + TIMER_LEN) {
-                beacon.sendMessage();
+		
+				for (int i = 0; i < securityChecks.numberOfHosts(); i++) {
+					beacon.sendMessage(securityChecks.next());
+				}
                 loopTimeStart = System.currentTimeMillis();
                 update("timer up, do broadcast");
             } 

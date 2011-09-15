@@ -50,7 +50,7 @@ public class SwitchOpen {
 	static FileUpdater backgroundService = null;
     JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Automatic");
 
-    private static boolean debug = true;
+    private static boolean debug = false;
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;  
     private static final boolean runNetwork = true;
@@ -378,14 +378,24 @@ public class SwitchOpen {
             }
             validIp = testString;
         } else {
-            if (switches.size() < 1) {
-				readFile(switchFile);
-				if (switches.size() < 1) {
-                	JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
-                    	JOptionPane.ERROR_MESSAGE);
-                	return;
-				}
-            }
+             if (switches.size() < 1) {
+					if (debugger != null) {
+		                debugger.update("first check for file failed");
+		            }
+					readFile(switchFile);
+					if (debugger != null) {
+		                debugger.update("read file again");
+		            }
+					if (switches.size() < 1) {
+						if (debugger != null) {
+			                debugger.update("second check for file failed");
+			            }
+	                	JOptionPane.showMessageDialog(frame, "Import a file because you have no data", "No switch data", 
+	                    	JOptionPane.ERROR_MESSAGE);
+	                	return;
+					}
+	            }
+			readFile(switchFile);
             for (int i = 0; i < switches.size(); i++) {
         
                 // go through array and find item that has this text in it

@@ -46,14 +46,18 @@ public class Broadcast {
 	 * the file information, which have since been removed.
      */
 
+	/**
+     * Creates a UDP Broadcast object with debugging enabled.
+	 * @param passedframe is the reference to DebugWindow that the object
+	 * will use.
+     */
     public Broadcast(DebugWindow passedframe) {
 
         debugger = passedframe;
         finishConstructor();
     }
     /**
-     * Creates a standard Broadcast object with debugging not 
-     * available.
+     * Creates a UDP Broadcast object.
      */
 
     public Broadcast() {
@@ -64,10 +68,9 @@ public class Broadcast {
 
     
     /**
-     * Creates the UDP datagram packet with the hash and 
-     * timestamp of the file.  It opens UDP port 10077 in 
+     * Opens UDP port 10077 in 
      * broadcast mode.  Then it broadcasts the message out 
-	 * to the address supplied as tempAddr.
+	 * to the host address supplied as tempAddr.
 	 * @param tempAddr the destination address of the host.
      */
 
@@ -81,10 +84,8 @@ public class Broadcast {
 	sendMessage();
     }
     /**
-     * Creates the UDP datagram packet with the hash and 
-     * timestamp of the file.  It opens UDP port 10077 in 
-     * broadcast mode.  Then it broadcasts the message out 
-	 * to the subnet broadcast address.
+     * Opens UDP port 10077 in broadcast mode.  Then it broadcasts 
+	 * the message out to the subnet broadcast address.
      */
 
     public void sendMessage() {
@@ -153,9 +154,9 @@ public class Broadcast {
         return new Checks().update(filename);
     }
 	/**
-     * Common method for the two constructors to used for 
-     * common tasks during the creation of the broadcast 
-     * object.
+     * Common method for the two constructors to complete
+     * tasks for both.  Constructor overloading was not working
+     * as intended.
      */
 
     private void finishConstructor() {
@@ -163,7 +164,12 @@ public class Broadcast {
         switchFile = new File(filename);
         fileDate = switchFile.lastModified();
         updateDebug("File date is " + fileDate);
-    }
+    }	
+	/**
+	 * updates the debug window in the GUI of the application.
+	 * @param message string to send to DebugWindow.	  
+  	 */
+
 	private void updateDebug(String message){
 	
 		if (debugger != null) {

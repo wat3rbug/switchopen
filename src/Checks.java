@@ -5,7 +5,8 @@
 
 
 /** 
- * Used for getting a checksum hash of a file
+ * Used for getting a checksum hash of a file.  This provides general
+ * security checks for the SwitchFinder application.
  * @author Douglas Gardiner
  */
 
@@ -31,7 +32,7 @@ public class Checks {
     // constructors
     
     /**
-     *  Creates an object with a reference to the debugging window.
+     *  Creates an ACL object with a reference to the debugging window.
      * @param passedframe Reference to the debugging window.
      */
 
@@ -41,22 +42,29 @@ public class Checks {
         finishConstructor();
     }
     /**
-     *  Creates an object to store the allowable hosts.
+     *  Creates an ACL object to store the allowable hosts.
      */ 
     
     public Checks() {
 	
 		finishConstructor();
 	}
+	/** 
+	 * Provides functions for both styles of constructors since
+	 * constructor overloading was not working as intended.
+	 */
+	
 	private void finishConstructor() {
     
         /* this returns false if it cannot load the names.  
-         * The intent is to shut down the server if it doesn't have a ACL file. 
+         * The intent is to shut down the server if it doesn't have a ACL 
+		 * file. 
          */
         
         try {
             File hostFileHandle = new File(hostFile);
-            BufferedReader reader = new BufferedReader(new FileReader(hostFileHandle));
+            BufferedReader reader = new BufferedReader(new
+ 				FileReader(hostFileHandle));
             String inLine = null;
             while ((inLine = reader.readLine()) != null) {
                 hostnames.add(inLine.toLowerCase());
@@ -86,9 +94,9 @@ public class Checks {
     }
     /**
      * Checks to see if the address given, is in the access control list.
-     * @param remoteAddress Address of the machine that performed the 
+     * @param remoteAddress Address of the remote host performed the 
      * broadcast or request.
-     * @return boolean result of the test, false if the host doesn't exist
+     * @return result of the test, false if the host doesn't exist
      * in the ACLand true if they are in the ACL. 
      */
     

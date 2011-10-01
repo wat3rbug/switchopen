@@ -39,7 +39,7 @@ public class ReceiveFile {
     private JFrame frame;
     private static final int SEC_LENGTH = 1000;
     private boolean success = true;
-    private Debug debugger = null;
+    private DebugWindow debugger = null;
     private static final String EOF = "-1";
 
     // constructors
@@ -51,7 +51,7 @@ public class ReceiveFile {
      * @param passedframe reference for the debug window
      */
 
-    public ReceiveFile(final JFrame frame, final Debug passedframe) {
+    public ReceiveFile(final JFrame frame, final DebugWindow passedframe) {
 
         debugger = passedframe;
         this.frame = frame;
@@ -132,7 +132,7 @@ public class ReceiveFile {
                 writer.flush();
                 writer.close();         
                 update(Calendar.getInstance().getTime() + "\n --- Leaving receive file process ---");
-                JOptionPane.showMessageDialog(frame, "Update successful", 
+                JOptionPane.showMessageDialog(frame, "Update successful from " + doubleCheck.getHostName(), 
                     "SwitchFinder Update", JOptionPane.INFORMATION_MESSAGE);
                 success = true;
             } else {
@@ -164,7 +164,7 @@ public class ReceiveFile {
             success = false;
         } catch (IOException ioe) {
             update("Receive File failure");
-            if (debugger != null) ioe.printStackTrace();
+            if (debugger !=  null) ioe.printStackTrace();
             success = false;
         } finally {
             if (!socket.isClosed()) {

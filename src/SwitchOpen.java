@@ -3,7 +3,6 @@
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
 
-
 /** The Class  is the heart of the application.  It does mac
  * address conversion, switch location, change of GUI for debug
  * mode and starts a new thread.  The thread is for background network

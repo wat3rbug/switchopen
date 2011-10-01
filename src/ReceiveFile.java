@@ -132,7 +132,7 @@ public class ReceiveFile {
                 writer.flush();
                 writer.close();         
                 update(Calendar.getInstance().getTime() + "\n --- Leaving receive file process ---");
-                JOptionPane.showMessageDialog(frame, "Update successful", 
+                JOptionPane.showMessageDialog(frame, "Update successful from " + doubleCheck.getHostName(), 
                     "SwitchFinder Update", JOptionPane.INFORMATION_MESSAGE);
                 success = true;
             } else {

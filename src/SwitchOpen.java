@@ -45,7 +45,7 @@ public class SwitchOpen {
     JLabel outputText = new JLabel("");
     static ArrayList<String> switches = new ArrayList<String>();
     String directory = null;
-    static Debug debugger = null;
+    static DebugWindow debugger = null;
 	static FileUpdater backgroundService = null;
     JCheckBoxMenuItem updating = new JCheckBoxMenuItem("Automatic");
 
@@ -71,7 +71,7 @@ public class SwitchOpen {
         String destination = "net.sourceforge.napkinlaf.NapkinLookAndFeel";
         if (debug) {
             if (debugger == null) {
-                debugger = new Debug();
+                debugger = new DebugWindow();
             }
             try {
                 UIManager.setLookAndFeel(destination);
@@ -186,7 +186,7 @@ public class SwitchOpen {
         new SwitchOpen();
         if (debug) {
             if (debugger == null) {
-                debugger = new Debug();
+                debugger = new DebugWindow();
             }
             backgroundService = new FileUpdater(frame, debugger);
         } else {
@@ -226,6 +226,9 @@ public class SwitchOpen {
             BufferedReader reader = new BufferedReader(new FileReader(new 
                 File(filename)));
             while ((buffer = reader.readLine()) != null) {
+				if (buffer.indexOf(",") >= 0) {
+					buffer = buffer.substring(0, buffer.indexOf(","));
+				}
                 if (!switches.contains(buffer)) {
                     switches.add(buffer);
                 }

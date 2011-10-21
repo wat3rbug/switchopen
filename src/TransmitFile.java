@@ -31,7 +31,7 @@ public class TransmitFile {
     private boolean runTest = true;
     private JFrame frame;
     private boolean success = true;
-    private Debug debugger = null;
+    private DebugWindow debugger = null;
     private static final String EOF = "-1";
 
     // constructors
@@ -45,7 +45,7 @@ public class TransmitFile {
      * @param passedframe The reference the to debugging window for updates.
      */
     
-    public TransmitFile(JFrame frame, InetAddress address, Debug passedframe) {
+    public TransmitFile(JFrame frame, InetAddress address, DebugWindow passedframe) {
 
         this(frame, address);
         debugger = passedframe;

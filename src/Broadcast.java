@@ -39,7 +39,7 @@ public class Broadcast {
     private static long fileDate = 0;
     private DatagramSocket broadcastSocket;
     private static final int port = 10077;
-    private Debug debugger = null;
+    private DebugWindow debugger = null;
     private Checks hostList;
 	private InetAddress address = null;
 	
@@ -50,7 +50,7 @@ public class Broadcast {
      * windowing object.
      */
 
-    public Broadcast(Debug passedframe) {
+    public Broadcast(DebugWindow passedframe) {
 
         debugger = passedframe;
 		hostList = new Checks(passedframe);

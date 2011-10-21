@@ -25,7 +25,7 @@ public class Checks {
     private boolean aclPresent = true;
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
-    private Debug debugger = null;
+    private DebugWindow debugger = null;
     private static final int MAX = 1024;
 	private int last = 0;
     
@@ -36,7 +36,7 @@ public class Checks {
      * @param passedframe Reference to the debugging window.
      */
 
-    public Checks(Debug passedframe) {
+    public Checks(DebugWindow passedframe) {
         
         debugger = passedframe;
         finishConstructor();

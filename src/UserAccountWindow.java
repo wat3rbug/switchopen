@@ -29,7 +29,7 @@ public class UserAccountWindow {
     BorderLayout layout = new BorderLayout();
     JPanel background = new JPanel(layout);
     JPanel contents = new JPanel();
-    private Debug debugger;
+    private DebugWindow debugger;
 
     // constructors
 
@@ -40,7 +40,7 @@ public class UserAccountWindow {
      * @param passedframe the reference to the debug window for output.
      */
 
-    public UserAccountWindow(boolean decider, Debug passedframe) {
+    public UserAccountWindow(boolean decider, DebugWindow passedframe) {
     
         new UserAccountWindow(decider);
         debugger = passedframe;

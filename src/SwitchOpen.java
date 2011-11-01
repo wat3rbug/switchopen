@@ -29,7 +29,6 @@ import java.util.regex.Matcher;
 import java.util.Calendar;
 import net.sourceforge.napkinlaf.*;
 import java.awt.datatransfer.*;
-
 import java.awt.Toolkit;
 
 public class SwitchOpen {

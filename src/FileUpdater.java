@@ -134,12 +134,16 @@ public class FileUpdater implements Runnable {
 
                 rawMessage = new String(message.getData());
 				String incomingHash = ""; 
-				if (rawMessaage.indexOf("}") > 0) {
+				if (rawMessage.indexOf("}") > 0) {
 					incomingHash = rawMessage.substring(1, rawMessage.indexOf("}"));
 					rawMessage = rawMessage.substring(rawMessage.indexOf("}") + 1);
+					securityChecks.processIncHash(incomingHash);
+				}	
+				if (rawMessage.indexOf(",") < 0) {
+					update("wrong format for message");
+				} else {
+                	remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",")));
 				}
-				securityChecks.processIncHash(incomingHash);
-                remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",")));
                 if (rawMessage.indexOf(",") > 0) {
                     remoteCRC = rawMessage.substring(rawMessage.indexOf(",") + 1).trim();    
                 } else {

@@ -24,6 +24,7 @@ public class Checks {
     private boolean aclPresent = true;
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
+	private static KeyValuePair hostInfo = new KeyValuePair();
     private DebugWindow debugger = null;
     private static final int MAX = 1024;
     
@@ -139,7 +140,23 @@ public class Checks {
     }
 	public void processIncHash(String hashMessage) {
 		
-		
+		String buffer = hashMessage;
+		String hostName = "";
+		String address = "";
+		while (buffer.indexOf("=") > 0) {
+			hostName = buffer.substring(0, buffer.indexOf("="));
+			if (buffer.indexOf(", ") > 0) {
+				address = buffer.substring(buffer.indexOf("=") + 1, buffer.indexOf(", "));
+				buffer = buffer.substring(buffer.indexOf(", "));
+			} else {
+				address = buffer.substring(buffer.indexOf("=") + 1);
+				buffer = "";
+			}
+			if (hostName.indexOf(".") > 0) {
+				hostName = hostName.substring(0, hostName.indexOf("."));
+			}
+			hostInfo.put(hostName, address);	
+		}
 	}
 	/**
 	 * updates the debug window in the GUI of the application.

@@ -123,13 +123,14 @@ public class KeyValuePair {
 		
 		int index = names.indexOf(host);
 		if ( index >= 0) {
+			update("updated " + names.get(index) + " to " + ipAddress);
 			addresses.set(index, ipAddress);
 		} else {
+			update("added " + host + " at " + ipAddress + " to KeyValuePair");
 			names.add(host);
 			addresses.add(ipAddress);
 		}
 	}
-	
 	/**
 	 * Removes a key/value set from the simple hash-like table.
 	 * @param address The address used to remove the host / address.

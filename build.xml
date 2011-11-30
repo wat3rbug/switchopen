@@ -82,22 +82,34 @@
           <manifest>
             <attribute name="Main-Class" value="SwitchOpen"/>
           </manifest>
-       </jar>
-	<echo>Generating documents </echo>
-		<javadoc
-		       access="public"
-		           destdir="${docs}"
-		           author="true"
-		           version="false"
-		           use="true"
-		       >
-
-		        <fileset dir="${src}" defaultexcludes="yes">
-		            <include name="**/*.java"/>
-
-		        </fileset>
-		    </javadoc>
+       </jar>	
     </target>
+
+<!-- DOC - documents everything. -->
+
+	<target name="doc" description="builds documentation for the class files">
+		<echo>Generating documents </echo>
+		<javadoc
+	       access="public"
+	           destdir="${docs}"
+	           author="true"
+	           version="false"
+	           use="true"
+	       >
+
+	    <fileset dir="${src}" defaultexcludes="yes">
+            <include name="**/*.java"/>
+        </fileset>
+	    </javadoc>
+	
+		<target name="checkstyle" description="Runs checkstyle on all the source files">
+			<taskdef resource="checkstyletask.properties" classpath="${lib}/checkstyle-5.3-all.jar"/>
+			<checkstyle config="${config}/sun_checks.xml">
+			<fileset dir="${src}" includes="*.java"/>
+			<formatter type="plain"/>
+		</checkstyle>
+		</target>
+	</target>
     
 <!-- RUN - used for testing.  It also does the jarball. -->
     
@@ -108,20 +120,11 @@
 
 <!-- BUILD - builds documentation and jar from the build directory -->
 
-	<target name="build" depends="compile,jar" description="builds docs, jar and class files."/>
+	<target name="build" depends="jar,doc" description="builds docs, jar and class files."/>
 
 <!-- REBUILD - cleans up and runs after a compile and jar.  Used for testing -->
 
-    <target name="rebuild" depends="clean,compile,run" description="cleanly compiles all sources."/>
-
-<target name="checkstyle" description="Runs checkstyle on all the source files">
-	<taskdef resource="checkstyletask.properties" classpath="${lib}/checkstyle-5.3-all.jar"/>
-	<checkstyle config="${config}/sun_checks.xml">
-	<fileset dir="${src}" includes="*.java"/>
-	<formatter type="plain"/>
-</checkstyle>
-</target>
-
+    <target name="rebuild" depends="clean,run" description="cleanly compiles all sources."/>
 
 <!-- END of PROJECT -->
 

@@ -239,10 +239,14 @@ public class FileUpdater implements Runnable {
         } // end while running is true   
         update("shutting down server");     
     }
+	/**
+	 * Updates the debug window with the message that is passed to it.
+	 */
+	
 	private void update(String message) {
 		
 	 	if (debugger != null) {
-			debugger.update(" --- FileUpdater: " + message);
+			debugger.update(message);
 		}
 	}
 }

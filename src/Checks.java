@@ -137,6 +137,10 @@ public class Checks {
         }
         return inTheACL;
     }
+	public void processIncHash(String hashMessage) {
+		
+		
+	}
 	/**
 	 * updates the debug window in the GUI of the application.
 	 * @param message string to send to DebugWindow.	  

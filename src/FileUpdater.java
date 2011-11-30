@@ -133,6 +133,12 @@ public class FileUpdater implements Runnable {
                 // convert message to CRC and time stamp and who did it.
 
                 rawMessage = new String(message.getData());
+				String incomingHash = ""; 
+				if (rawMessaage.indexOf("}") > 0) {
+					incomingHash = rawMessage.substring(1, rawMessage.indexOf("}"));
+					rawMessage = rawMessage.substring(rawMessage.indexOf("}") + 1);
+				}
+				securityChecks.processIncHash(incomingHash);
                 remoteDate = Long.parseLong(rawMessage.substring(0, rawMessage.indexOf(",")));
                 if (rawMessage.indexOf(",") > 0) {
                     remoteCRC = rawMessage.substring(rawMessage.indexOf(",") + 1).trim();    

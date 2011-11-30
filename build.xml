@@ -107,7 +107,7 @@
 			<checkstyle config="${config}/sun_checks.xml">
 			<fileset dir="${src}" includes="*.java"/>
 			<formatter type="plain"/>
-		</checkstyle>
+		    </checkstyle>
 		</target>
 	</target>
     

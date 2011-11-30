@@ -2,12 +2,6 @@
 // Creation Date: Sat Oct 23 08:26:48 CDT 2010
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
-
-/**
- * Performs transmit of file contents to host with the latest file.
- * @author Douglas Gardiner
- */
-
 import java.net.Socket;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -21,9 +15,14 @@ import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 
+/**
+ * Performs transmit of file contents to host with the latest file.
+ * @author Douglas Gardiner
+ */
+
 public class TransmitFile {
 
-    // class variables
+    // attributes
 
     private String filename = "switches.csv";
     private final int PORT = 10079;
@@ -120,6 +119,11 @@ public class TransmitFile {
         } 
         return success;
     }
+	/**
+	 * updates the debug window in the GUI of the application.
+	 * @param message string to send to DebugWindow.	  
+  	 */
+
 	private void update(String message) {
 		
 	 	if (debugger != null) {

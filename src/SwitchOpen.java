@@ -2,18 +2,6 @@
 // Creation Date: Fri Apr 03 17:05:03 CDT 2009
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
-
-
-/** The Class  is the heart of the application.  It does mac
- * address conversion, switch location, change of GUI for debug
- * mode and starts a new thread.  The thread is for background network
- * updates. This is used to by simply adding the tag number of the switch.  It 
- * requires  a few things.  The default file is switches.csv.  The file must 
- * also be in the same directory as the program. putty must also be in the 
- * directory if using windows otherwise ssh is used.
- * @author Douglas Gardiner
- */
-
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -30,8 +18,17 @@ import java.util.regex.Matcher;
 import java.util.Calendar;
 import net.sourceforge.napkinlaf.*;
 import java.awt.datatransfer.*;
-
 import java.awt.Toolkit;
+
+/** The Class  is the heart of the application.  It does mac
+ * address conversion, switch location, change of GUI for debug
+ * mode and starts a new thread.  The thread is for background network
+ * updates. This is used to by simply adding the tag number of the switch.  It 
+ * requires  a few things.  The default file is switches.csv.  The file must 
+ * also be in the same directory as the program. putty must also be in the 
+ * directory if using windows otherwise ssh is used.
+ * @author Douglas Gardiner
+ */
 
 public class SwitchOpen {
 
@@ -169,7 +166,6 @@ public class SwitchOpen {
 
 	// popup menu stuff
 
-	
 	inputText.addMouseListener(new MouseClicker());
 	inputTag.addMouseListener(new MouseClicker());
 
@@ -177,6 +173,76 @@ public class SwitchOpen {
     }
     // methods
 
+	/** Converts the MAC address from one setup to something that will work in
+     *  Cisco's user tracker toolbar. Results on changed on the GUI.
+     */
+    
+    private void figureIt() {
+
+        StringBuffer buffer = new StringBuffer(inputText.getText());
+        int len = buffer.length();
+        boolean colons = false;
+        boolean period = false;
+        for (int i = 0; i < len; i++) {
+            if (buffer.charAt(i) == Character.valueOf(':')) {
+                colons = true;
+            }
+            if (buffer.charAt(i) == Character.valueOf('.')) {
+                period = true;
+            }
+        }
+        if (colons) {
+            for (int i = 0; i < len; i++) {
+                if (buffer.charAt(i) == ':') {
+                    buffer.deleteCharAt(i);
+                    buffer.insert(i, '-');
+                }
+            }
+        }  // assumes using 0001.1111.2222 notation
+        if (period) {
+            for (int i = 0; i < len; i++) {
+                if (buffer.charAt(i) == '.') {
+                    buffer.deleteCharAt(i);
+                    buffer.insert(i, '-');
+                    buffer.insert(i - 2, '-');
+                    if (i > 9) {
+                        buffer.insert(i + 4, '-');
+                    }               
+                }
+            }   
+        }
+        outputText.setText(inputText.getText());
+        System.out.println(buffer.toString());
+        inputText.setText(buffer.toString());
+    }
+	/**
+     * Main() method no command line arguments are used
+	 * @param Command line arguments.  Not used
+     */
+    
+    public static void main(String[] args) {
+
+        new SwitchOpen();
+        if (debug) {
+            if (debugger == null) {
+                debugger = new DebugWindow();
+            }
+            backgroundService = new FileUpdater(frame, debugger);
+        } else {
+            backgroundService = new FileUpdater(frame);
+        }
+        Thread server = new Thread(backgroundService, "Server");
+        if (runNetwork) {
+            server.start();
+            if (debugger != null) {
+                debugger.update(" --- Starting server --- ");
+            }
+        } else {
+            if (debugger != null) {
+                debugger.update(" --- Server not started ---");
+            }
+        }
+    }
     /**
      * Opens up the switch file for reading.
      * @param filename the String representation of the filename.
@@ -221,118 +287,7 @@ public class SwitchOpen {
                 JOptionPane.WARNING_MESSAGE);
         }
     }
-    /**
-     * Opens up the file for writing.  Used for imports.
-     * @param filename String representation of the filename to write.
-     */
-
-    private static void writeFile(String filename) {
-
-        /* writes a new switches file, used for imports of other files */
-
-        try {
-            if (debugger != null) {
-                debugger.update("Writing " + filename);
-            }
-            BufferedWriter writer = new BufferedWriter(new 
-            FileWriter(new File(filename)));
-            for (int i = 0; i < switches.size(); i++) {
-                writer.write(switches.get(i) + "\r\n");
-                if (debugger != null) {
-                    debugger.update("Wrote - " + switches.get(i));
-                }
-            }
-            writer.close();
-            if (debugger != null) {
-                debugger.update("Finished writing " + filename);
-            }
-        } catch (FileNotFoundException sf) {
-            if (debugger != null) {
-                debugger.update(switchFile + " is not found");
-                sf.printStackTrace();
-            } 
-            JOptionPane.showMessageDialog(frame, filename + " is in use", 
-                "File problem", JOptionPane.ERROR_MESSAGE);
-        } catch (IOException sd) {
-            if (debugger != null) {
-                sd.printStackTrace();
-            }
-            JOptionPane.showMessageDialog(frame, filename + " is a bad boy", 
-                "File problem", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    /* The start of everything */
-    
-    /**
-     * Main() method no command line arguments are used
-     */
-    
-    public static void main(String[] args) {
-
-        new SwitchOpen();
-        if (debug) {
-            if (debugger == null) {
-                debugger = new DebugWindow();
-            }
-            backgroundService = new FileUpdater(frame, debugger);
-        } else {
-            backgroundService = new FileUpdater(frame);
-        }
-        Thread server = new Thread(backgroundService, "Server");
-        if (runNetwork) {
-            server.start();
-            if (debugger != null) {
-                debugger.update(" --- Starting server --- ");
-            }
-        } else {
-            if (debugger != null) {
-                debugger.update(" --- Server not started ---");
-            }
-        }
-    }
-    /** Converts the MAC address from one setup to something that will work in
-     *  Cisco's user tracker toolbar. Results on changed on the GUI.
-     */
-    
-    private void figureIt() {
-
-        StringBuffer buffer = new StringBuffer(inputText.getText());
-        int len = buffer.length();
-        boolean colons = false;
-        boolean period = false;
-        for (int i = 0; i < len; i++) {
-            if (buffer.charAt(i) == Character.valueOf(':')) {
-                colons = true;
-            }
-            if (buffer.charAt(i) == Character.valueOf('.')) {
-                period = true;
-            }
-        }
-        if (colons) {
-            for (int i = 0; i < len; i++) {
-                if (buffer.charAt(i) == ':') {
-                    buffer.deleteCharAt(i);
-                    buffer.insert(i, '-');
-                }
-            }
-        }  // assumes using 0001.1111.2222 notation
-        if (period) {
-            for (int i = 0; i < len; i++) {
-                if (buffer.charAt(i) == '.') {
-                    buffer.deleteCharAt(i);
-                    buffer.insert(i, '-');
-                    buffer.insert(i - 2, '-');
-                    if (i > 9) {
-                        buffer.insert(i + 4, '-');
-                    }               
-                }
-            }   
-        }
-        outputText.setText(inputText.getText());
-        System.out.println(buffer.toString());
-        inputText.setText(buffer.toString());
-    }
-    /** Activates the search.  It ties the username, password, system 
+	/** Activates the search.  It ties the username, password, system 
      * type to figure out whether to use putty, or ssh, looks for the 
      * DNS name and opens a session.
      */
@@ -447,66 +402,60 @@ public class SwitchOpen {
                 }
         } // end catch block
     }
-    // inner classes
-
     /**
-     * Listening class designed for password and username updates. 
+     * Opens up the file for writing.  Used for imports.
+     * @param filename String representation of the filename to write.
      */
 
-    public class PasswordUpdater implements ActionListener {
+    private static void writeFile(String filename) {
 
-        /* used for reading when password is ready to be read */
+        /* writes a new switches file, used for imports of other files */
 
-        /**
-         * Updates UserAccountWindow based on the command associated with 
-         * the menu Item in the GUI.
-         */
-
-        public void actionPerformed(ActionEvent pu) {
-        
+        try {
             if (debugger != null) {
-                debugger.update("called " + pu.getActionCommand());
+                debugger.update("Writing " + filename);
             }
-            if (pu.getActionCommand().equals("user")  
-                && !UserAccountWindow.exists()) {
-                new UserAccountWindow(USER);
-            } else {
-                if (!UserAccountWindow.exists()) {
-                    new UserAccountWindow(PASSWORD);
+            BufferedWriter writer = new BufferedWriter(new 
+            FileWriter(new File(filename)));
+            for (int i = 0; i < switches.size(); i++) {
+                writer.write(switches.get(i) + "\r\n");
+                if (debugger != null) {
+                    debugger.update("Wrote - " + switches.get(i));
                 }
             }
+            writer.close();
+            if (debugger != null) {
+                debugger.update("Finished writing " + filename);
+            }
+        } catch (FileNotFoundException sf) {
+            if (debugger != null) {
+                debugger.update(switchFile + " is not found");
+                sf.printStackTrace();
+            } 
+            JOptionPane.showMessageDialog(frame, filename + " is in use", 
+                "File problem", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException sd) {
+            if (debugger != null) {
+                sd.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(frame, filename + " is a bad boy", 
+                "File problem", JOptionPane.ERROR_MESSAGE);
         }
     }
-    /**
-     * Listening class designed to bring up the help dialog box. 
-     */
-
-    public class Help implements ActionListener {
-
-        /** 
-         * Brings up the help dialog box 
-         */
-
-        public void actionPerformed(ActionEvent as) {
-
-            String message = "Requirements\n\nPutty must be in the same "
-                + "directory \nas this program.  A switch.csv file \nmust"
-                + " also be in the same directory. It \ncan be created by"
-                + " the import menu \nitem or from a network of others";
-            JOptionPane.showMessageDialog(frame, message, "Help", 
-                JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
+    
+    
+    
+    // inner classes
+     
     /**
      * Listening class designed to bring up the about dialog box. 
      */
 
     public class About implements ActionListener {
 
-        /**
-         * Displays the version number and author 
-         */
+        // methods
 
+		@Override
         public void actionPerformed(ActionEvent ad) {
 
 			String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -523,8 +472,76 @@ public class SwitchOpen {
             JOptionPane.showMessageDialog(frame, message, 
                 "about", JOptionPane.INFORMATION_MESSAGE);
         }
-    }
+    }      
     /**
+ 	 * Performs copy to System clipboard.
+     */	 
+
+    public class Copier implements ActionListener {
+
+		// attributes
+		
+		String text = null;
+
+		// constructors
+		
+		public Copier(String text) {
+
+		    this.text = text;
+		}
+		// methods
+		
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+
+		    // copies selection to the clipboard
+
+		    if (debugger != null) debugger.update("In copy action " + text);
+		    StringSelection ss = new StringSelection(text);
+		    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+	    
+		}
+    }
+	/**
+     * Allows enter key to activate mac address conversions or switch 
+     * login attempts 
+     */
+
+    public class EnterCheck extends KeyAdapter {
+
+        // methods
+
+		@Override
+        public void keyPressed(KeyEvent e) {
+
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                figureIt();
+                runIt();
+            }
+        }
+    }
+	/**
+     * Listening class designed to bring up the help dialog box. 
+     */
+
+    public class Help implements ActionListener {
+
+        /** 
+         * Brings up the help dialog box 
+         */
+		
+		@Override
+        public void actionPerformed(ActionEvent as) {
+
+            String message = "Requirements\n\nPutty must be in the same "
+                + "directory \nas this program.  A switch.csv file \nmust"
+                + " also be in the same directory. It \ncan be created by"
+                + " the import menu \nitem or from a network of others";
+            JOptionPane.showMessageDialog(frame, message, "Help", 
+                JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+	/**
      * Listening class designed to bring up the import file dialog box. 
      */
 
@@ -549,71 +566,16 @@ public class SwitchOpen {
             }
         }
     }
-    /**
-     * Listening class to toggle network updates on or off. 
-     */
-
-    public class UpdaterCheck implements ActionListener {
-
-        /**
-         * Toggles network updates on or off.
-         */
-
-        public void actionPerformed(ActionEvent es) {
-        
-            if (!backgroundService.getRun()) {
-                backgroundService.setRun(true);
-                Thread server = new Thread(backgroundService, "Server");
-                server.start();
-                if (debugger != null) {
-                    debugger.update(" --- Starting server --- ");
-                }
-            }
-            backgroundService.setRun(updating.getState());
-        }
-    }
-    /**
-     * Allows enter key to activate mac address conversions or switch 
-     * login attempts 
-     */
-
-    public class EnterCheck extends KeyAdapter {
-
-        /**
-         * Runs the runit and figureit function based on hitting enter. 
-         */
-
-        public void keyPressed(KeyEvent e) {
-
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                figureIt();
-                runIt();
-            }
-        }
-    }
-    /**
+	/**
      * Allows clicking enter key with the mouse to activate mac address 
      * conversions or switch login attempts 
      */
 
-    public class RunTag implements ActionListener {
-
-        /**
-         * Runs the runit and figureit function based on hitting enter. 
-         */
-
-        public void actionPerformed(ActionEvent ev) {
-
-            figureIt();
-            runIt();
-        }
-    }   
-    /**
-     * Allows right click to cut and paste information.
-     */
-
     public class MouseClicker extends MouseAdapter {
 
+		// methods
+		
+		@Override
 		public void mousePressed(MouseEvent e) {
 
 		    JTextField baseToChange = (JTextField) e.getSource();  
@@ -633,35 +595,53 @@ public class SwitchOpen {
 				pMenuItem.addActionListener(new Paster(baseToChange)); 
 				popup.add(pMenuItem);
 				popup.show(e.getComponent(), e.getX(), e.getY());
-			    }	
-			}
-	    }
-    public class Copier implements ActionListener {
-
-		String text = null;
-
-		public Copier(String text) {
-
-		    this.text = text;
+			}	
 		}
-		public void actionPerformed(ActionEvent ae) {
+	}
+	/**
+     * Updates UserAccountWindow based on the command associated with 
+     * the menu Item in the GUI.
+     */
 
-		    // copies selection to the clipboard
+    public class PasswordUpdater implements ActionListener {
 
-		    if (debugger != null) debugger.update("In copy action " + text);
-		    StringSelection ss = new StringSelection(text);
-		    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
-	    
-		}
+        // methods
+
+		@Override
+        public void actionPerformed(ActionEvent pu) {
+        
+            if (debugger != null) {
+                debugger.update("called " + pu.getActionCommand());
+            }
+            if (pu.getActionCommand().equals("user")  
+                && !UserAccountWindow.exists()) {
+                new UserAccountWindow(USER);
+            } else {
+                if (!UserAccountWindow.exists()) {
+                    new UserAccountWindow(PASSWORD);
+                }
+            }
+        }
     }
+	/**
+	 * Performs pasting to System clipboard contents.
+	 */
+	
     public class Paster implements ActionListener {
 
+		// attributes
+		
 		JTextField text = null;
 
+		// constructors
+		
 		public Paster(JTextField text) {
 
 		    this.text = text;
 		}
+		// methods 
+		
+		@Override
 		public void actionPerformed(ActionEvent ae) {
 
 		    if (debugger != null) debugger.update("In paste action");
@@ -671,9 +651,49 @@ public class SwitchOpen {
 					    text.setText((String) t.getTransferData(DataFlavor.stringFlavor));
 					}	
 			    } catch (UnsupportedFlavorException e) {
+					// do nothing
 			    } catch (IOException e) {
 		    }
 		}
+    }
+	/**
+      * Runs the runit and figureit function based on hitting enter. 
+      */
+
+    public class RunTag implements ActionListener {
+
+		// methods
+       
+		@Override
+        public void actionPerformed(ActionEvent ev) {
+
+            figureIt();
+            runIt();
+        }
+    }   
+ 	/**
+     * Listening class to toggle network updates on or off. 
+     */
+
+    public class UpdaterCheck implements ActionListener {
+
+        /**
+         * Toggles network updates on or off.
+         */
+
+		@Override
+        public void actionPerformed(ActionEvent es) {
+
+            if (!backgroundService.getRun()) {
+                backgroundService.setRun(true);
+                Thread server = new Thread(backgroundService, "Server");
+                server.start();
+                if (debugger != null) {
+                    debugger.update(" --- Starting server --- ");
+                }
+            }
+            backgroundService.setRun(updating.getState());
+        }
     }
 }
 

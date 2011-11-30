@@ -2,16 +2,6 @@
 // Creation Date: Sat Oct 23 07:57:08 CDT 2010
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
-
-/** Handles scheduling for the network operations.  It performs a 
- * broadcast every minute. It handles receiving UDP broadcasts and 
- * decides whether to respond to them or how.  If the host matches 
- * the access control list file, local to the machine, then it 
- * determines whether to receive the newer file or transmit its file 
- * because it is the latest.
- * @author Douglas Gardiner
- */
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.DatagramSocket;
@@ -21,6 +11,15 @@ import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.Calendar;
 import javax.swing.JFrame;
+
+/** Handles scheduling for the network operations.  It performs a 
+ * broadcast every minute. It handles receiving UDP broadcasts and 
+ * decides whether to respond to them or how.  If the host matches 
+ * the access control list file, local to the machine, then it 
+ * determines whether to receive the newer file or transmit its file 
+ * because it is the latest.
+ * @author Douglas Gardiner
+ */
 
 public class FileUpdater implements Runnable {
 
@@ -46,6 +45,9 @@ public class FileUpdater implements Runnable {
      * Creates a scheduler with a reference to the GUI frame and a 
      * debug windowing object. Used for updating the GUI and the 
      * debug window.
+	 * @param frame The reference to the JFrame. Used to allow menu updates. 
+	 * @param passedframe The reference for the DebugWindow to allow updates
+	 * in debug mode.
      */
     
     public FileUpdater(JFrame frame, DebugWindow passedframe) {
@@ -59,6 +61,7 @@ public class FileUpdater implements Runnable {
     /**
     * Creates a scheduler with a reference to the GUI frame.  Used for 
     * updating the GUI.
+	* @param frame The reference to the JFrame.  Used to allow menu updates.
     */
 
     public FileUpdater(JFrame frame) {
@@ -71,17 +74,6 @@ public class FileUpdater implements Runnable {
     
     // methods
 
-    // threadsafe methods here
-
-    /**
-    * Sets the running state of the scheduler.  Used to start and stop the 
-    * service. Designed to be threadsafe.
-    */
-
-    public synchronized void setRun(boolean state) {
-    
-        isRunning = state;
-    }
     /**
     * retrieves the running state of the scheduler.  Designed to be threadsafe.
     * @return boolean current state of scheduler.
@@ -91,7 +83,6 @@ public class FileUpdater implements Runnable {
 
         return isRunning;
     } 
-    // NON threadsafe methods
     
     /* This is the scheduler.  It keeps track of broadcasting, when to receive 
        and when to transmit the file. */
@@ -121,7 +112,7 @@ public class FileUpdater implements Runnable {
             } 
             // listen for message
 
-            localCRC = new Checks().update(filename).trim();
+            localCRC = new Checks().getFileHash(filename).trim();
             DatagramSocket receiver = null;
             ServerSocket socket = null;
             long diffInTime = 0; 
@@ -240,8 +231,18 @@ public class FileUpdater implements Runnable {
         update("shutting down server");     
     }
 	/**
-	 * Updates the debug window with the message that is passed to it.
-	 */
+    * Sets the running state of the scheduler.  Used to start and stop the 
+    * service. Designed to be threadsafe.
+    */
+
+    public synchronized void setRun(boolean state) {
+    
+        isRunning = state;
+    }
+	/**
+	 * updates the debug window in the GUI of the application.
+	 * @param message string to send to DebugWindow.	  
+  	 */
 	
 	private void update(String message) {
 		

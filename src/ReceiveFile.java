@@ -2,12 +2,6 @@
 // Creation Date: Sat Oct 23 08:30:35 CDT 2010
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
-
-/**
- * Opens a serversocket for receipt of the file for an update.  
- * File operations are contained within.
- * @author Douglas Gardiner
- */
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,13 +19,15 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/* This object is for receiving incoming files from a host that has
-   a newer one.  Remember that there must be some sort of signature
-*/
+/**
+ * Opens a serversocket for receipt of the file for an update.  
+ * File operations are contained within.
+ * @author Douglas Gardiner
+ */
 
 public class ReceiveFile {
 
-    // class variables
+    // attributes
 
     private String filename = "switches.csv";
     private boolean runTest = true;
@@ -178,6 +174,11 @@ public class ReceiveFile {
         }
         return success;
     }
+	/**
+	 * updates the debug window in the GUI of the application.
+	 * @param message string to send to DebugWindow.	  
+  	 */
+
 	private void update(String message) {
 		
 	 	if (debugger != null) {

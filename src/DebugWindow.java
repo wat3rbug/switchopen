@@ -2,12 +2,6 @@
 // Creation Date: Sun Oct 17 09:15:33 CDT 2010
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
-/** The File takes care of all debug functions.  It logs debug
- *  output to a file in append mode.  It also opens a debug
- *  window for output so that you can see what is happening.
- * @author Douglas Gardiner
- */
-
 import javax.swing.*;
 import java.awt.BorderLayout;
 import net.sourceforge.napkinlaf.*;
@@ -15,14 +9,19 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.FileWriter;
 
+/** The File takes care of all debug functions.  It logs debug
+ *  output to a file in append mode.  It also opens a debug
+ *  window for output so that you can see what is happening.
+ * @author Douglas Gardiner
+ */
+
 public class DebugWindow {
     
-    
-
-    // class variables
+    // attributes
 
     JTextArea output = null;
     JFrame frame;
+
     // constructors
 
     /**
@@ -89,9 +88,18 @@ public class DebugWindow {
     public void update(String newMessage) {
 
         BufferedWriter writer = null;
+		Throwable t = new Throwable();
+		String title = "";
+		try {
+			StackTraceElement[] elements = t.getStackTrace();
+			title = elements[1].getClassName();
+		} finally {
+			t = null;
+		}
+		String message = title + ": " + newMessage + "\n";
         try {       
             writer = new BufferedWriter(new FileWriter("debug.txt", true));
-            writer.write(newMessage + "\n");
+            writer.write(message);
             writer.flush();
         } catch (IOException ioe) {
              ioe.printStackTrace();
@@ -104,6 +112,6 @@ public class DebugWindow {
                 }
             }
         }   
-        output.append(newMessage + "\n");
+        output.append(message);
     }
 }

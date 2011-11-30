@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 
-/* I will make this more generic when I import it to the library */
+/** 
+ * A generic hash-like data structure.  I needed a hash
+ * that does two way look ups and this is the quickest I coulddo.
+ * @author Douglas Gardiner
+ */
 
 public class KeyValuePair {
 	
@@ -48,7 +52,7 @@ public class KeyValuePair {
 			names.add(name);
 			address = line.substring(line.indexOf("=") + 1);
 			addresses.add(address);
-			updateDebug("Constructor: host " + name + " address " + address);
+			update("Constructor: host " + name + " address " + address);
 		} while (buffer.indexOf(",") >= 0);
 	}
 	/**
@@ -65,18 +69,19 @@ public class KeyValuePair {
 	}
 	// methods
 	
-	/** 
-	 * returns the IP address depending on what is sent.
-	 * @param name  The key to use for returning a value.
+	/**
+	 * returns true if the keypair has something like the string
+	 * sent to it.
+	 * @param name The string to test if there is an entry for it.
 	 */
 	
-	public String getValue(String name) {
+	public boolean containsValue(String name) {
 		
-		int index = names.indexOf(name);
+		int index = addresses.indexOf(name);
 		if (index < 0) {
-			return "not found";
+			return false;
 		} else {
-			return addresses.get(index);
+			return true;
 		}
 	}
 	/**
@@ -93,6 +98,20 @@ public class KeyValuePair {
 			return names.get(index);
 		}
 	}
+	/** 
+	 * returns the IP address depending on what is sent.
+	 * @param name  The key to use for returning a value.
+	 */
+	
+	public String getValue(String name) {
+		
+		int index = names.indexOf(name);
+		if (index < 0) {
+			return "not found";
+		} else {
+			return addresses.get(index);
+		}
+	}	
 	/**
 	 * adds to the array if there isn't something already in
 	 * otherwise it just updates it.
@@ -110,21 +129,7 @@ public class KeyValuePair {
 			addresses.add(ipAddress);
 		}
 	}
-	/**
-	 * returns true if the keypair has something like the string
-	 * sent to it.
-	 * @param name The string to test if there is an entry for it.
-	 */
 	
-	public boolean containsValue(String name) {
-		
-		int index = addresses.indexOf(name);
-		if (index < 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
 	/**
 	 * Removes a key/value set from the simple hash-like table.
 	 * @param address The address used to remove the host / address.
@@ -134,7 +139,7 @@ public class KeyValuePair {
 		
 		int index = addresses.indexOf(address);
 		if (index < 0) {
-			updateDebug(address + " wasn't found");
+			update(address + " wasn't found");
 			return;
 		} else {
 			names.remove(index);
@@ -165,7 +170,7 @@ public class KeyValuePair {
 	 * @param message The message to display at the debug window.
 	 */
 	
-	private void updateDebug(String message) {
+	private void update(String message) {
 	
 		if (debugger != null) {
 			debugger.update(message);

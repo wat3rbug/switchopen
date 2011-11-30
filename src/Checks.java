@@ -2,14 +2,6 @@
 // Creation Date: Fri Oct 22 13:21:14 CDT 2010
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
-
-
-/** 
- * Used for getting a checksum hash of a file.  This provides general
- * security checks for the SwitchFinder application.
- * @author Douglas Gardiner
- */
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
@@ -19,6 +11,12 @@ import java.util.ArrayList;
 import java.net.InetAddress;
 import java.io.IOException;
  
+/** 
+ * Used for getting a checksum hash of a file.  This provides general
+ * security checks for the SwitchFinder application.
+ * @author Douglas Gardiner
+ */
+
 public class Checks {
  
     // class variables
@@ -48,7 +46,19 @@ public class Checks {
     public Checks() {
 	
 		finishConstructor();
-	}
+	}    
+    // methods
+    
+    /**
+     * checks to see if the the ACL file exists and was read.
+     * @return aclPresent true if things worked out / false if the process 
+     * failed for any reason
+     */
+    
+    public boolean exists() {
+    
+        return aclPresent;
+    }  
 	/** 
 	 * Provides functions for both styles of constructors since
 	 * constructor overloading was not working as intended.
@@ -68,49 +78,17 @@ public class Checks {
             String inLine = null;
             while ((inLine = reader.readLine()) != null) {
                 hostnames.add(inLine.toLowerCase());
-                updateDebug(inLine + " allowed");
+                update(inLine + " allowed");
             }
             if (hostnames.isEmpty()) {
                 aclPresent = false;
             }
             reader.close();
         } catch (IOException ioe) {
-            updateDebug("ACL not updated, shutting down server");
+            update("ACL not updated, shutting down server");
             aclPresent = false;
         }
     }
-    
-    // methods
-    
-    /**
-     * checks to see if the the ACL file exists and was read.
-     * @return aclPresent true if things worked out / false if the process 
-     * failed for any reason
-     */
-    
-    public boolean exists() {
-    
-        return aclPresent;
-    }
-    /**
-     * Checks to see if the address given, is in the access control list.
-     * @param remoteAddress Address of the remote host performed the 
-     * broadcast or request.
-     * @return result of the test, false if the host doesn't exist
-     * in the ACLand true if they are in the ACL. 
-     */
-    
-    public boolean inACL(InetAddress remoteAddress) {
-        
-        boolean inTheACL = false;
-        for (int i = 0; i < hostnames.size(); i++) {
-            if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) {
-                inTheACL = true;
-            }
-        }
-        return inTheACL;
-    }
-    
     /**
      * returns the String representation of the SHA1 hash of the filename 
      * as a String.
@@ -119,7 +97,7 @@ public class Checks {
      * @param filename String representation of the filename to be used.
      */
 
-    public static String update(String filename) {
+    public static String getFileHash(String filename) {
         
         StringBuffer buffer = new StringBuffer("");
         try {   
@@ -141,10 +119,33 @@ public class Checks {
         } 
         return buffer.toString();
     }
-	private void updateDebug(String message){
+	/**
+     * Checks to see if the address given, is in the access control list.
+     * @param remoteAddress Address of the remote host performed the 
+     * broadcast or request.
+     * @return result of the test, false if the host doesn't exist
+     * in the ACLand true if they are in the ACL. 
+     */
+    
+    public boolean inACL(InetAddress remoteAddress) {
+        
+        boolean inTheACL = false;
+        for (int i = 0; i < hostnames.size(); i++) {
+            if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) {
+                inTheACL = true;
+            }
+        }
+        return inTheACL;
+    }
+	/**
+	 * updates the debug window in the GUI of the application.
+	 * @param message string to send to DebugWindow.	  
+  	 */
+
+	private void update(String message){
 	
 		if (debugger != null) {
-			debugger.update(" --- Checks: " + message);
+			debugger.update(message);
 		}
 	}
 }

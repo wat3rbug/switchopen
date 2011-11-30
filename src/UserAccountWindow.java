@@ -2,15 +2,14 @@
 // Creation Date: Fri Apr 03 17:06:00 CDT 2009
 // Update Date: Fri Nov 12 20:01:56 CST 2010
 //
+import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.event.*;
 
 /** This class just opens a dialog window for entry either
  * password or username.
  * @author Douglas Gardiner
  */
-
-import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.event.*;
 
 public class UserAccountWindow {
 
@@ -79,6 +78,27 @@ public class UserAccountWindow {
     // methods
 
     /**
+     * Used to make sure a duplicate window isn't created for user name or 
+     * password.
+     * @return true if there is a window open, false if not.
+     */
+
+    public static boolean exists() {
+
+        return inUse;
+    }
+	/**
+	 * updates the debug window in the GUI of the application.
+	 * @param message string to send to DebugWindow.	  
+  	 */
+	
+	private void update(String message) {
+		
+	 	if (debugger != null) {
+			debugger.update(" --- UserAccountWindow: " + message);
+		}
+	}
+	/**
      *  updates the password or username in the Pass storage object.
      */
     
@@ -96,23 +116,6 @@ public class UserAccountWindow {
             frame.dispose();
         }
     }
-
-    /**
-     * Used to make sure a duplicate window isn't created for user name or 
-     * password.
-     * @return true if there is a window open, false if not.
-     */
-
-    public static boolean exists() {
-
-        return inUse;
-    }
-	private void update(String message) {
-		
-	 	if (debugger != null) {
-			debugger.update(" --- UserAccountWindow: " + message);
-		}
-	}
     // inner classes
 
     /**
@@ -122,11 +125,10 @@ public class UserAccountWindow {
 
     public class KeyboardUpdater extends KeyAdapter {
 
-        /**
-         * Updates the password or username.
-         */
-
-        public void keyPressed(KeyEvent e) {
+		// methods
+		
+        @Override
+       	public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 updateThePassword();
@@ -140,10 +142,9 @@ public class UserAccountWindow {
 
     public class MouseUpdater implements ActionListener {
 
-        /**
-         * Updates the password or username.
-         */
-        
+		// methods
+		
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             updateThePassword();

@@ -121,7 +121,7 @@ public class ReceiveFile {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));
                 for (int i = 0; i < fileContents.size(); i++) {
                     writer.write(fileContents.get(i) + "\r\n");
-                    update(" ---- wrote " + fileContents.get(i));
+                    update("wrote " + fileContents.get(i));
                 }
                 update("closing file and TCP socket");
                 fileContents.clear();

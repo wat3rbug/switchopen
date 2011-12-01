@@ -5,6 +5,7 @@
 import java.net.Socket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.ConnectException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.io.FileReader;
@@ -102,6 +103,9 @@ public class TransmitFile {
             reader.close();
             socket.close();
             success = true;
+		} catch (ConnectException ce) {
+			update("unable to setup a port");
+			ce.printStackTrace();
         } catch (SocketException cr) { 
             update("Transmit forced fail");
             if (debugger != null) cr.printStackTrace();

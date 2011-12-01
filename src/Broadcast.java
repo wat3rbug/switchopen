@@ -33,6 +33,7 @@ public class Broadcast {
     private DebugWindow debugger = null;
     private String addressTxt = "255.255.255.255"; 
 	String workingAddress = addressTxt;
+	Checks securityChecks = null;
 	
     // constructors
 
@@ -47,22 +48,26 @@ public class Broadcast {
 
 	/**
      * Creates a UDP Broadcast object with debugging enabled.
+	 * @param securityChecks the reference to checks object
 	 * @param passedframe is the reference to DebugWindow that the object
 	 * will use.
      */
 
-    public Broadcast(DebugWindow passedframe) {
+    public Broadcast(Checks securityChecks, DebugWindow passedframe) {
 
+		this.securityChecks = securityChecks;
         debugger = passedframe;
         finishConstructor();
     }
     /**
      * Creates a UDP Broadcast object.
+	 * @param securityChecks the reference to checks object.
      */
 
-    public Broadcast() {
+    public Broadcast(Checks securityChecks) {
     
-        finishConstructor();
+        this.securityChecks = securityChecks;
+		finishConstructor();
     }
     // methods 
    
@@ -119,12 +124,13 @@ public class Broadcast {
             InetAddress address = InetAddress.getByName(workingAddress);
             broadcastSocket.connect(address, port);
             update("Opened port to " + address.getHostAddress());
+			update("hash " + securityChecks.toString());
             String rawMessage = (new Long(this.getFileDate()).toString()) +
- 				"," + this.getFileCRC();
+ 				"," + this.getFileCRC() + securityChecks.toString();
             byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
-            update("Sent message: " + this.getFileDate());
+            update("Sent message: " + rawMessage);
             broadcastSocket.disconnect();
             broadcastSocket.close();
         } catch (UnknownHostException uhe) {

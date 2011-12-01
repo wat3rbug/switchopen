@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /** 
  * A generic hash-like data structure.  I needed a hash
@@ -12,7 +14,7 @@ public class KeyValuePair {
 	
 	private static ArrayList<String> names = new ArrayList<String>();
 	private static ArrayList<String> addresses = new ArrayList<String>();
-	private DebugWindow debugger;
+	private DebugWindow debugger = null;
 	
 	// constructors
 	
@@ -22,8 +24,7 @@ public class KeyValuePair {
 	
 	public KeyValuePair() {
 		
-	}
-	
+	}	
 	/**
 	 * Constructor with empty set and reference to the debug window.
 	 * @param debug The reference to the DebugWindow.
@@ -32,6 +33,7 @@ public class KeyValuePair {
 	public KeyValuePair(DebugWindow debug) {
 		
 		debugger = debug;
+		update("Constructor");
 	}
 	/**
 	 * Constructor that allows for adding with a long hash-like
@@ -149,16 +151,43 @@ public class KeyValuePair {
 	}
 	/**
 	 * builds a simple output of the key value pair as String text.
+	 * It updates the local address during output.
 	 */
 	
 	public String toString() {
 		
 		// fix this cause empty is a failure
 		if (names.isEmpty()) {
-			return "empty";
+			return "{}";
+		}
+		String hostName = "";
+		String hostFQDN = "";
+		String localAddress = "";
+		try {
+			hostName = InetAddress.getLocalHost().getHostName();
+			hostFQDN = InetAddress.getLocalHost().getCanonicalHostName();
+			localAddress = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException uhe) {
+			// disregard if not found
+		}
+		// failsafe if no address given
+		if (localAddress.isEmpty() || localAddress.equals("")) {
+			localAddress = "0.0.0.0";
 		}
 		String output = "{";
+		String testName = "";
 		for (int i = 0; i < names.size(); i++) {
+			
+			// strip FQDN off for test
+			if (names.get(i).indexOf(".") > 0) {
+				testName = names.get(i).substring(0, names.get(i).indexOf("."));
+			} else {
+				testName = names.get(i);
+			}
+			// test to see if name matches local name
+			if (testName.equals(hostName) || testName.equals(hostFQDN)) {
+				addresses.set(i, localAddress);
+			}
 			output += addresses.get(i) + "=" + names.get(i);
 			if (i + 1 < names.size()) {
 				output += ", ";

@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.net.InetAddress;
 import java.io.IOException;
+import java.net.UnknownHostException;
  
 /** 
  * Used for getting a checksum hash of a file.  This provides general
@@ -77,9 +78,22 @@ public class Checks {
             BufferedReader reader = new BufferedReader(new
  				FileReader(hostFileHandle));
             String inLine = null;
+			String address = null;
             while ((inLine = reader.readLine()) != null) {
                 hostnames.add(inLine.toLowerCase());
-                update(inLine + " allowed");
+				try {					
+					address = InetAddress.getByName(inLine).getHostAddress();
+				} catch (UnknownHostException uhe) {
+					// disregard if not found
+				}
+				// failsafe if no address given
+				if (address.isEmpty() || address.equals("")) {
+					address = "0.0.0.0";
+				}				
+				// if name is not an address and address is known
+				// update hostInfo
+				hostInfo.put(inLine, address);
+				update(inLine + " allowed");
             }
             if (hostnames.isEmpty()) {
                 aclPresent = false;
@@ -131,11 +145,11 @@ public class Checks {
     public boolean inACL(InetAddress remoteAddress) {
         
         boolean inTheACL = false;
-        for (int i = 0; i < hostnames.size(); i++) {
-            if (remoteAddress.getHostName().toLowerCase().equals(hostnames.get(i))) {
-                inTheACL = true;
-            }
-        }
+		String remoteName = remoteAddress.getHostName().toLowerCase();
+		String remoteFQDN = remoteAddress.getCanonicalHostName().toLowerCase();
+        if (hostnames.indexOf(remoteName) >= 0 || hostnames.indexOf(remoteFQDN) >= 0) {
+			inTheACL = true;
+		}	
         return inTheACL;
     }
 	public void processIncHash(String hashMessage) {
@@ -143,20 +157,33 @@ public class Checks {
 		String buffer = hashMessage;
 		String hostName = "";
 		String address = "";
+		update("raw data " + hashMessage);
 		while (buffer.indexOf("=") > 0) {
-			hostName = buffer.substring(0, buffer.indexOf("="));
-			if (buffer.indexOf(", ") > 0) {
-				address = buffer.substring(buffer.indexOf("=") + 1, buffer.indexOf(", "));
-				buffer = buffer.substring(buffer.indexOf(", "));
+			address = buffer.substring(0, buffer.indexOf("="));
+			update("address: " + address);
+			buffer = buffer.substring(buffer.indexOf("=") + 1);
+			if (buffer.indexOf(", ") >= 0) {
+				hostName = buffer.substring(0, buffer.indexOf(", "));
+				buffer = buffer.substring(buffer.indexOf(", ") + 2);
 			} else {
-				address = buffer.substring(buffer.indexOf("=") + 1);
+				hostName = buffer;
 				buffer = "";
 			}
+			// strip of FQDN
 			if (hostName.indexOf(".") > 0) {
 				hostName = hostName.substring(0, hostName.indexOf("."));
 			}
+			update("host: " + hostName);
 			hostInfo.put(hostName, address);	
 		}
+	}
+	/**
+	 * returns the string of a hash from the KeyValuePair
+	 */
+	
+	public String toString() {
+		
+		return hostInfo.toString();
 	}
 	/**
 	 * updates the debug window in the GUI of the application.

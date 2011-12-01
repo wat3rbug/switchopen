@@ -81,7 +81,7 @@ public class TransmitFile {
             reader = new BufferedReader(new FileReader(newFile));
             update("Address - " + address.toString() + "\tport " + PORT);
             socket = new Socket(address, PORT);
-            socket.setTcpNoDelay(false);    // turns off nagles
+            //socket.setTcpNoDelay(false);    // turns on nagles
             if (debugger != null) {
                  if (socket.isBound()) {
                     update("output found port " + socket.getPort());

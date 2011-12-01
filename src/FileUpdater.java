@@ -56,7 +56,7 @@ public class FileUpdater implements Runnable {
         debugger = passedframe;
 		securityChecks = new Checks(debugger);
         setRun(securityChecks.exists());
-        beacon = new Broadcast(debugger);
+        beacon = new Broadcast(securityChecks, debugger);
     }
     /**
     * Creates a scheduler with a reference to the GUI frame.  Used for 
@@ -69,7 +69,7 @@ public class FileUpdater implements Runnable {
         this.frame = frame;
 		securityChecks = new Checks();
         setRun(securityChecks.exists());
-        beacon = new Broadcast();         
+        beacon = new Broadcast(securityChecks);         
     }
     
     // methods
@@ -83,10 +83,6 @@ public class FileUpdater implements Runnable {
 
         return isRunning;
     } 
-    
-    /* This is the scheduler.  It keeps track of broadcasting, when to receive 
-       and when to transmit the file. */
-    
     /**
      * The scheduling thread run method. Stopped by using the setRun() method.
      */
@@ -134,9 +130,9 @@ public class FileUpdater implements Runnable {
 
                 rawMessage = new String(message.getData());
 				String incomingHash = ""; 
-				if (rawMessage.indexOf("}") > 0) {
-					incomingHash = rawMessage.substring(1, rawMessage.indexOf("}"));
-					rawMessage = rawMessage.substring(rawMessage.indexOf("}") + 1);
+				if (rawMessage.indexOf("{") > 0) {
+					incomingHash = rawMessage.substring(rawMessage.indexOf("{") + 1, rawMessage.indexOf("}"));
+					rawMessage = rawMessage.substring(0, rawMessage.indexOf("{") - 1);
 					securityChecks.processIncHash(incomingHash);
 				}	
 				if (rawMessage.indexOf(",") < 0) {

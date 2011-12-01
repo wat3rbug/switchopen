@@ -130,7 +130,7 @@ public class FileUpdater implements Runnable {
 
                 rawMessage = new String(message.getData());
 				String incomingHash = ""; 
-				if (rawMessage.indexOf("{") > 0) {
+				if (rawMessage.indexOf("{}") >= 0 && rawMessage.indexOf("{") > 0 ) {
 					incomingHash = rawMessage.substring(rawMessage.indexOf("{") + 1, rawMessage.indexOf("}"));
 					rawMessage = rawMessage.substring(0, rawMessage.indexOf("{") - 1);
 					securityChecks.processIncHash(incomingHash);

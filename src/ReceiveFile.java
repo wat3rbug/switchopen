@@ -182,7 +182,7 @@ public class ReceiveFile {
 	private void update(String message) {
 		
 	 	if (debugger != null) {
-			debugger.update(" --- ReceiveFile: " + message);
+			debugger.update(message);
 		}
 	}
 }

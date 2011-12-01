@@ -105,7 +105,6 @@ public class TransmitFile {
             success = true;
 		} catch (ConnectException ce) {
 			update("unable to setup a port");
-			ce.printStackTrace();
         } catch (SocketException cr) { 
             update("Transmit forced fail");
             if (debugger != null) cr.printStackTrace();

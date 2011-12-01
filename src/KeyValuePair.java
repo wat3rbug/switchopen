@@ -94,9 +94,12 @@ public class KeyValuePair {
 	public String getKey(String address) {
 		
 		int index = addresses.indexOf(address);
+		update("address given: " + address);
 		if (index < 0) {
+			update("name: not found");
 			return "not found";
 		} else {
+			update("name: " + names.get(index));
 			return names.get(index);
 		}
 	}

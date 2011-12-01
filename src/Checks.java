@@ -25,7 +25,7 @@ public class Checks {
     private boolean aclPresent = true;
     private String hostFile = "hosts.txt";
     private ArrayList<String> hostnames = new ArrayList<String>();
-	private static KeyValuePair hostInfo = new KeyValuePair();
+	private static KeyValuePair hostInfo = null;
     private DebugWindow debugger = null;
     private static final int MAX = 1024;
     
@@ -39,6 +39,7 @@ public class Checks {
     public Checks(DebugWindow passedframe) {
         
         debugger = passedframe;
+		hostInfo = new KeyValuePair(debugger);
         finishConstructor();
     }
     /**
@@ -147,9 +148,14 @@ public class Checks {
         boolean inTheACL = false;
 		String remoteName = remoteAddress.getHostName().toLowerCase();
 		String remoteFQDN = remoteAddress.getCanonicalHostName().toLowerCase();
+		String address = remoteAddress.getHostAddress();
         if (hostnames.indexOf(remoteName) >= 0 || hostnames.indexOf(remoteFQDN) >= 0) {
 			inTheACL = true;
-		}	
+		}
+		String testName = hostInfo.getKey(address);
+		if (hostnames.indexOf(testName) >= 0) {
+			inTheACL = true;
+		}
         return inTheACL;
     }
 	public void processIncHash(String hashMessage) {

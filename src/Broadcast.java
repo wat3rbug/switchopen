@@ -130,7 +130,7 @@ public class Broadcast {
             byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
-            update("Sent message: " + rawMessage);
+            update("Sent message: " + rawMessage + " to " + workingAddress);
             broadcastSocket.disconnect();
             broadcastSocket.close();
         } catch (UnknownHostException uhe) {

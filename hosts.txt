@@ -1,0 +1,9 @@
+zeus
+GARDINER-DOUG.ndc.nasa.gov
+neo
+morpheus
+morpheus-2
+zeus.ndc.nasa.gov
+zeus.jsc.nasa.gov
+jsc-nnm.ndc.nasa.gov
+jsc-nnm.jsc.nasa.gov

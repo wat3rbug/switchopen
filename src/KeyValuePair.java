@@ -124,11 +124,9 @@ public class KeyValuePair {
 	public void put(String host, String ipAddress) {
 		
 		int index = names.indexOf(host);
-		if ( index >= 0) {
-			update("updated " + names.get(index) + " to " + ipAddress);
+		if ( index >= 0 && !ipAddress.equals("0.0.0.0")) {
 			addresses.set(index, ipAddress);
 		} else {
-			update("added " + host + " at " + ipAddress + " to KeyValuePair");
 			names.add(host);
 			addresses.add(ipAddress);
 		}

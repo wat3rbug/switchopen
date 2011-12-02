@@ -14,7 +14,7 @@ public class KeyValuePair {
 	
 	private static ArrayList<String> addresses = new ArrayList<String>();
 	private static ArrayList<String> hostnames = new ArrayList<String>();
-	private static final String NEXT = ", ";
+	private static final String NXT_PR_MRK = ", ";
 	private static final String DEFAULT_IP = "0.0.0.0";
 	private DebugWindow debugger = null;
 	
@@ -50,14 +50,14 @@ public class KeyValuePair {
 		String tmpName = "";
 		String tmpAddress = "";
 		do {
-			line = buffer.substring(0, buffer.indexOf(NEXT));
-			buffer = buffer.substring(buffer.indexOf(NEXT + NEXT.length()));
+			line = buffer.substring(0, buffer.indexOf(NXT_PR_MRK));
+			buffer = buffer.substring(buffer.indexOf(NXT_PR_MRK + NXT_PR_MRK.length()));
 			tmpName = line.substring(0, line.indexOf("="));
 			hostnames.add(tmpName);
 			tmpAddress = line.substring(line.indexOf("=") + 1);
 			addresses.add(tmpAddress);
 			update("Constructor: host " + tmpName + " address " + tmpAddress);
-		} while (buffer.indexOf(NEXT) >= 0);
+		} while (buffer.indexOf(NXT_PR_MRK) >= 0);
 	}
 	/**
 	 * Constructor that allows for adding with a long hash-like
@@ -126,7 +126,7 @@ public class KeyValuePair {
 	public void put(String host, String ipAddress) {
 		
 		int index = hostnames.indexOf(host);
-		if ( index >= 0 && !ipAddress.equals(DEFAULT_IP)) {
+		if (index >= 0 && !ipAddress.equals(DEFAULT_IP)) {
 			addresses.set(index, ipAddress);
 		} else {
 			hostnames.add(host);

@@ -28,6 +28,7 @@ public class FileUpdater implements Runnable {
     private static boolean isRunning = true; 
     private static final int SEC_PER_MIN = 60;
     private static final int SEC_LENGTH = 1000;
+	private static final int MIN_PER_HR = 60;
     private String fileDate = null;
     private String filename = "switches.csv";
     private final int PORT = 10077;
@@ -112,7 +113,7 @@ public class FileUpdater implements Runnable {
             DatagramSocket receiver = null;
             ServerSocket socket = null;
             long diffInTime = 0; 
-            long limitToCheck = SEC_LENGTH * SEC_PER_MIN;
+            long limitToCheck = 10 * SEC_LENGTH * SEC_PER_MIN;
             Calendar localTime = Calendar.getInstance();
             Calendar remoteTime = Calendar.getInstance();
             localTime.setTimeInMillis(beacon.getFileDate());

@@ -130,7 +130,7 @@ public class TransmitFile {
 	private void update(String message) {
 		
 	 	if (debugger != null) {
-			debugger.update(" --- TransmitFile: " + message);
+			debugger.update(message);
 		}
 	}
 }

@@ -19,13 +19,13 @@ public class Pass {
 	/**
      * Retrieves username or password based on boolean argument.  True 
      * retrieves username, false returns password.
-     * @param decider boolean toggle for username or password.
+     * @param trueForUserName boolean toggle for username or password.
      * @return String password or username based on boolean sent as argument.
      */
 
-    public static String getInfo(final boolean decider) {
+    public static String getInfo(final boolean trueForUserName) {
 
-        if (decider) {
+        if (trueForUserName) {
             return username;
         } else {
             return password;
@@ -35,12 +35,12 @@ public class Pass {
      * Used for updating user information boolean argument is to decide whether 
      * it is username or password.  True for password and False for username.
      * @param newInfo username / password based on boolean parameter
-     * @param decider boolean true - username, false - password
+     * @param trueForUserName boolean true - username, false - password
      */
 
-    public static void setInfo(final String newInfo, final boolean decider) {
+    public static void setInfo(final String newInfo, final boolean trueForUserName) {
 
-        if (decider) {
+        if (trueForUserName) {
             username = newInfo;
         } else {
             password = newInfo;

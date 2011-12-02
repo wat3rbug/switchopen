@@ -90,7 +90,7 @@ public class FileUpdater implements Runnable {
     
     public void run() {
 
-        //beacon.sendMessage();
+        beacon.sendMessage();
         Calendar timer = Calendar.getInstance();
         long loopTimeStart = System.currentTimeMillis();
         InetAddress remoteAddress = null;
@@ -127,15 +127,18 @@ public class FileUpdater implements Runnable {
                 receiver.setSoTimeout(SEC_LENGTH * 15);
                 receiver.receive(message);
                 update("Received message: " + message.getData());
+
                 // convert message to CRC and time stamp and who did it.
 
                 rawMessage = new String(message.getData());
+
+				// remove hash from message and process it
 				String incomingHash = ""; 
 				if (rawMessage.indexOf("{}") >= 0 && rawMessage.indexOf("{") > 0 ) {
 					incomingHash = rawMessage.substring(rawMessage.indexOf("{") + 1, rawMessage.indexOf("}"));
 					rawMessage = rawMessage.substring(0, rawMessage.indexOf("{") - 1);
 					securityChecks.processIncHash(incomingHash);
-				}	
+				}	// no hash - older versions
 				if (rawMessage.indexOf(",") < 0) {
 					update("wrong format for message");
 				} else {

@@ -23,11 +23,12 @@ public class Checks {
     // class variables
     
     private boolean aclPresent = true;
-    private String hostFile = "hosts.txt";
-    private ArrayList<String> hostnames = new ArrayList<String>();
-	private static KeyValuePair hostInfo = null;
     private DebugWindow debugger = null;
-    private static final int MAX = 1024;
+	private static final String UNKNOWN_IP_ADDR = "0.0.0.0";
+	private String hostFile = "hosts.txt";
+    private static KeyValuePair hostInfo = null;
+	private ArrayList<String> hostnames = new ArrayList<String>();
+	private static final int MAX_BYTE = 1024;
     
     // constructors
     
@@ -79,21 +80,21 @@ public class Checks {
             BufferedReader reader = new BufferedReader(new
  				FileReader(hostFileHandle));
             String inLine = null;
-			String address = null;
+			String ipAddress = null;
             while ((inLine = reader.readLine()) != null) {
                 hostnames.add(inLine.toLowerCase());
 				try {					
-					address = InetAddress.getByName(inLine).getHostAddress();
+					ipAddress = InetAddress.getByName(inLine).getHostAddress();
 				} catch (UnknownHostException uhe) {
 					// disregard if not found
 				}
 				// failsafe if no address given
-				if (address.isEmpty() || address.equals("")) {
-					address = "0.0.0.0";
+				if (ipAddress.isEmpty() || ipAddress.equals("")) {
+					ipAddress = UNKNOWN_IP_ADDR;
 				}				
 				// if name is not an address and address is known
 				// update hostInfo
-				hostInfo.put(inLine, address);
+				hostInfo.put(inLine, ipAddress);
 				update(inLine + " allowed");
             }
             if (hostnames.isEmpty()) {
@@ -119,10 +120,10 @@ public class Checks {
         try {   
             MessageDigest md = MessageDigest.getInstance("SHA1");
             FileInputStream fis = new FileInputStream(filename);
-            byte[] dataBytes = new byte[MAX];          
-            int nread = 0;
-            while ((nread = fis.read(dataBytes)) != -1) {
-                md.update(dataBytes, 0, nread);
+            byte[] dataBytes = new byte[MAX_BYTE];          
+            int bytesRead = 0;
+            while ((bytesRead = fis.read(dataBytes)) != -1) {
+                md.update(dataBytes, 0, bytesRead);
             }
             byte[] mdbytes = md.digest();
             for (int i = 0; i < mdbytes.length; i++) {
@@ -158,6 +159,13 @@ public class Checks {
 		}
         return inTheACL;
     }
+	/**
+	 * Takes the String of the message received - date and file hash is already 
+	 * stripped.  This method updates the hash if there is anything.
+	 * @param hashMessage The hash string of hosts and addresses minus enclosing
+	 * brackets.
+	 */
+	
 	public void processIncHash(String hashMessage) {
 		
 		String buffer = hashMessage;
@@ -187,7 +195,7 @@ public class Checks {
 	 * returns the string of a hash from the KeyValuePair
 	 */
 	
-	public String toString() {
+	public String getHostHashStr() {
 		
 		return hostInfo.toString();
 	}

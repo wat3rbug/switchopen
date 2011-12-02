@@ -19,9 +19,9 @@ public class DebugWindow {
     
     // attributes
 
-    JTextArea output = null;
     JFrame frame;
-
+	JTextArea outputWindow = null;
+    
     // constructors
 
     /**
@@ -33,12 +33,12 @@ public class DebugWindow {
     public DebugWindow() {
 
         frame = new JFrame("Debug output");
-        output = new JTextArea(15, 60);
+        outputWindow = new JTextArea(15, 60);
         JPanel outputPanel = new JPanel();
-        JScrollPane messageScroller = new JScrollPane(output);
-        String destination = "net.sourceforge.napkinlaf.NapkinLookAndFeel";
+        JScrollPane messageScroller = new JScrollPane(outputWindow);
+        String looknfeelName = "net.sourceforge.napkinlaf.NapkinLookAndFeel";
         try {
-            UIManager.setLookAndFeel(destination);
+            UIManager.setLookAndFeel(looknfeelName);
         } catch (ClassNotFoundException es) {
             es.printStackTrace();
         } catch (InstantiationException et) {
@@ -46,7 +46,7 @@ public class DebugWindow {
         } catch (IllegalAccessException er) {
             System.out.println("Now sure what to say anymore");
         } catch (UnsupportedLookAndFeelException ev) {
-            System.out.println("cannot do " + destination);
+            System.out.println("cannot do " + looknfeelName);
             ev.printStackTrace();
         }
         // build the screen
@@ -58,14 +58,14 @@ public class DebugWindow {
 			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         messageScroller.setVerticalScrollBarPolicy(
 			ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        output.setLineWrap(true);
-        output.setWrapStyleWord(true);
+        outputWindow.setLineWrap(true);
+        outputWindow.setWrapStyleWord(true);
         BorderLayout layout = new BorderLayout();
         JPanel background = new JPanel(layout);
-        JPanel contents = new JPanel();
+        JPanel contentPanel = new JPanel();
         background.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        contents.add(outputPanel);
-        background.add(contents);
+        contentPanel.add(outputPanel);
+        background.add(contentPanel);
         frame.getContentPane().add(background);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         SwingUtilities.updateComponentTreeUI(frame);
@@ -112,6 +112,6 @@ public class DebugWindow {
                 }
             }
         }   
-        output.append(message);
+        outputWindow.append(message);
     }
 }

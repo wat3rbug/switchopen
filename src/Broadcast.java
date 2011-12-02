@@ -25,15 +25,15 @@ public class Broadcast {
     
     // class variables
 
-    private String filename = "switches.csv";
-    private static File switchFile;
-    private static long fileDate = 0;
-    private DatagramSocket broadcastSocket;
-    private static final int port = 10077;
-    private DebugWindow debugger = null;
-    private String addressTxt = "255.255.255.255"; 
-	String workingAddress = addressTxt;
+    private static final String DEF_IP_ADDR = "255.255.255.255"; 
+	private DatagramSocket broadcastSocket;
+	private DebugWindow debugger = null;
+	private static long fileDate = 0;
+	private String filename = "switches.csv";
+	private static final int PORT = 10077;
 	Checks securityChecks = null;
+	private static File switchFile;
+    String workingAddress = DEF_IP_ADDR;
 	
     // constructors
 
@@ -122,11 +122,12 @@ public class Broadcast {
             broadcastSocket.setBroadcast(true);
             DatagramPacket message;
             InetAddress address = InetAddress.getByName(workingAddress);
-            broadcastSocket.connect(address, port);
+            broadcastSocket.connect(address, PORT);
             update("Opened port to " + address.getHostAddress());
 			update("hash " + securityChecks.toString());
-            String rawMessage = (new Long(this.getFileDate()).toString()) +
- 				"," + this.getFileCRC() + securityChecks.toString();
+			String fileDateStr = new Long(this.getFileDate()).toString();
+            String rawMessage = fileDateStr + "," + this.getFileCRC();
+ 			rawMessage += securityChecks.getHostHashStr();
             byte[] sendBuff = (rawMessage.getBytes());
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
@@ -135,22 +136,12 @@ public class Broadcast {
             broadcastSocket.close();
         } catch (UnknownHostException uhe) {
             
-        /* Useless stuff here except debug trace */
+        // its looking at localhost -?!
             update("Broadcast failure");
-                uhe.printStackTrace();
         } catch (SocketException se) {
             update("Broadcast failure");
-                se.printStackTrace();
         } catch (IOException ioe) {     
-            if (debugger != null) {
-                update("Broadcast failure");
-                if (ioe.getMessage().matches("No route to host")) {
-                    update("Check cable or make sure wireless "
-						+ "is turned on");
-                } else {
-                    ioe.printStackTrace();
-                }
-            }  
+            update("Check cable or make sure wireless is turned on");             
         }
         update("End ");
     }
@@ -164,7 +155,7 @@ public class Broadcast {
     public void sendMessage(String tempAddr) {
 	
 		if (tempAddr == null || tempAddr.equals("")) {
-		    workingAddress = addressTxt;
+		    workingAddress = DEF_IP_ADDR;
 		} else {
 		    workingAddress = tempAddr;
 		}

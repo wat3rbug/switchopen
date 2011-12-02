@@ -12,8 +12,10 @@ public class KeyValuePair {
 	
 	// attributes
 	
-	private static ArrayList<String> names = new ArrayList<String>();
 	private static ArrayList<String> addresses = new ArrayList<String>();
+	private static ArrayList<String> hostnames = new ArrayList<String>();
+	private static final String NEXT = ", ";
+	private static final String DEFAULT_IP = "0.0.0.0";
 	private DebugWindow debugger = null;
 	
 	// constructors
@@ -30,9 +32,9 @@ public class KeyValuePair {
 	 * @param debug The reference to the DebugWindow.
 	 */
 	
-	public KeyValuePair(DebugWindow debug) {
+	public KeyValuePair(DebugWindow debugRef) {
 		
-		debugger = debug;
+		debugger = debugRef;
 		update("Constructor");
 	}
 	/**
@@ -45,17 +47,17 @@ public class KeyValuePair {
 		
 		String buffer = input.substring(1, input.indexOf("}") - 1);
 		String line = "";
-		String name = "";
-		String address = "";
+		String tmpName = "";
+		String tmpAddress = "";
 		do {
-			line = buffer.substring(0, buffer.indexOf(", "));
-			buffer = buffer.substring(buffer.indexOf(", " + 2));
-			name = line.substring(0, line.indexOf("="));
-			names.add(name);
-			address = line.substring(line.indexOf("=") + 1);
-			addresses.add(address);
-			update("Constructor: host " + name + " address " + address);
-		} while (buffer.indexOf(",") >= 0);
+			line = buffer.substring(0, buffer.indexOf(NEXT));
+			buffer = buffer.substring(buffer.indexOf(NEXT + NEXT.length()));
+			tmpName = line.substring(0, line.indexOf("="));
+			hostnames.add(tmpName);
+			tmpAddress = line.substring(line.indexOf("=") + 1);
+			addresses.add(tmpAddress);
+			update("Constructor: host " + tmpName + " address " + tmpAddress);
+		} while (buffer.indexOf(NEXT) >= 0);
 	}
 	/**
 	 * Constructor that allows for adding with a long hash-like
@@ -77,9 +79,9 @@ public class KeyValuePair {
 	 * @param name The string to test if there is an entry for it.
 	 */
 	
-	public boolean containsValue(String name) {
+	public boolean containsValue(String passedHostName) {
 		
-		int index = addresses.indexOf(name);
+		int index = addresses.indexOf(passedHostName);
 		if (index < 0) {
 			return false;
 		} else {
@@ -91,13 +93,13 @@ public class KeyValuePair {
 	 * @param address Address associated with the hostname.
 	 */
 	
-	public String getKey(String address) {
+	public String getKey(String passedAddress) {
 		
-		int index = addresses.indexOf(address);
+		int index = addresses.indexOf(passedAddress);
 		if (index < 0) {
 			return "not found";
 		} else {
-			return names.get(index);
+			return hostnames.get(index);
 		}
 	}
 	/** 
@@ -105,9 +107,9 @@ public class KeyValuePair {
 	 * @param name  The key to use for returning a value.
 	 */
 	
-	public String getValue(String name) {
+	public String getValue(String passedHostName) {
 		
-		int index = names.indexOf(name);
+		int index = hostnames.indexOf(passedHostName);
 		if (index < 0) {
 			return "not found";
 		} else {
@@ -123,11 +125,11 @@ public class KeyValuePair {
 	
 	public void put(String host, String ipAddress) {
 		
-		int index = names.indexOf(host);
-		if ( index >= 0 && !ipAddress.equals("0.0.0.0")) {
+		int index = hostnames.indexOf(host);
+		if ( index >= 0 && !ipAddress.equals(DEFAULT_IP)) {
 			addresses.set(index, ipAddress);
 		} else {
-			names.add(host);
+			hostnames.add(host);
 			addresses.add(ipAddress);
 		}
 	}
@@ -136,14 +138,14 @@ public class KeyValuePair {
 	 * @param address The address used to remove the host / address.
 	 */
 	
-	public void remove(String address) {
+	public void remove(String passedAddress) {
 		
-		int index = addresses.indexOf(address);
+		int index = addresses.indexOf(passedAddress);
 		if (index < 0) {
-			update(address + " wasn't found");
+			update(passedAddress + " wasn't found");
 			return;
 		} else {
-			names.remove(index);
+			hostnames.remove(index);
 			addresses.remove(index);
 		}
 	}
@@ -155,7 +157,7 @@ public class KeyValuePair {
 	public String toString() {
 		
 		// fix this cause empty is a failure
-		if (names.isEmpty()) {
+		if (hostnames.isEmpty()) {
 			return "{}";
 		}
 		String hostName = "";
@@ -170,24 +172,24 @@ public class KeyValuePair {
 		}
 		// failsafe if no address given
 		if (localAddress.isEmpty() || localAddress.equals("")) {
-			localAddress = "0.0.0.0";
+			localAddress = DEFAULT_IP;
 		}
 		String output = "{";
 		String testName = "";
-		for (int i = 0; i < names.size(); i++) {
+		for (int i = 0; i < hostnames.size(); i++) {
 			
 			// strip FQDN off for test
-			if (names.get(i).indexOf(".") > 0) {
-				testName = names.get(i).substring(0, names.get(i).indexOf("."));
+			if (hostnames.get(i).indexOf(".") > 0) {
+				testName = hostnames.get(i).substring(0, hostnames.get(i).indexOf("."));
 			} else {
-				testName = names.get(i);
+				testName = hostnames.get(i);
 			}
 			// test to see if name matches local name
 			if (testName.equals(hostName) || testName.equals(hostFQDN)) {
 				addresses.set(i, localAddress);
 			}
-			output += addresses.get(i) + "=" + names.get(i);
-			if (i + 1 < names.size()) {
+			output += addresses.get(i) + "=" + hostnames.get(i);
+			if (i + 1 < hostnames.size()) {
 				output += ", ";
 			}
 		}

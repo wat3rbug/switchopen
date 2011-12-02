@@ -90,7 +90,7 @@ public class FileUpdater implements Runnable {
     
     public void run() {
 
-        beacon.sendMessage();
+        //beacon.sendMessage();
         Calendar timer = Calendar.getInstance();
         long loopTimeStart = System.currentTimeMillis();
         InetAddress remoteAddress = null;

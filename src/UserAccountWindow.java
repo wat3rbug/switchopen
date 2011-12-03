@@ -15,47 +15,50 @@ public class UserAccountWindow {
 
     // variables
 
-    private static boolean inUse = false;
     private static final boolean USER = true;
     private static final boolean PASSWORD = false;
-    private static boolean whichIsIt = PASSWORD; 
-    JFrame frame = new JFrame();
-    JLabel passwordLabel = new JLabel("Password");
-    JLabel userNameLabel = new JLabel("Username");
-    JTextField username = new JTextField(10);
-    JPasswordField passwordEntry = new JPasswordField(10);
-    JButton enter = new JButton("Enter");
-    BorderLayout layout = new BorderLayout();
-    JPanel background = new JPanel(layout);
     JPanel contents = new JPanel();
     private DebugWindow debugger;
-
+	JButton enter = new JButton("Enter");
+	JFrame frame = new JFrame();
+	private static boolean inUse = false;
+	BorderLayout layout = new BorderLayout();
+	JPanel background = new JPanel(layout);
+	JPasswordField passwordEntry = new JPasswordField(10);
+	JLabel passwordLabel = new JLabel("Password");
+    JLabel userNameLabel = new JLabel("Username");
+    JTextField username = new JTextField(10);
+	private static boolean whichIsIt = PASSWORD; 
+    
     // constructors
 
     /**
      * Creates the user account window with a reference to the debug window.
-     * @param decider boolean for which window: true for user / false for 
+     * @param isUser boolean for which window: true for user / false for 
      * password.
      * @param passedframe the reference to the debug window for output.
      */
 
-    public UserAccountWindow(boolean decider, DebugWindow passedframe) {
+    public UserAccountWindow(boolean isUser, DebugWindow passedframe) {
     
-        new UserAccountWindow(decider);
+        new UserAccountWindow(isUser);
         debugger = passedframe;
     }
     /**
      * Creates the user account window with a reference to the debug window.
-     * @param decider boolean for which window: true for user / false for 
+     * @param isUser boolean for which window: true for user / false for 
      * password.
      */
 
-    public UserAccountWindow(boolean decider) {
+    public UserAccountWindow(boolean isUser) {
     
         inUse = true;
         contents.setLayout(new BoxLayout(contents, BoxLayout.X_AXIS));
-        whichIsIt = decider;
-        if (decider == USER) {
+        whichIsIt = isUser;
+		
+		// decide whether to have user or password window and setup
+		
+        if (isUser == USER) {
             update("Opening user window");
             contents.add(userNameLabel);
             contents.add(username);
@@ -66,6 +69,8 @@ public class UserAccountWindow {
             contents.add(passwordEntry);
             passwordEntry.addKeyListener(new KeyboardUpdater());
         }
+		// common elements
+		
         contents.add(enter);
         enter.addActionListener(new MouseUpdater());
         background.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -95,14 +100,14 @@ public class UserAccountWindow {
 	private void update(String message) {
 		
 	 	if (debugger != null) {
-			debugger.update(" --- UserAccountWindow: " + message);
+			debugger.update(message);
 		}
 	}
 	/**
      *  updates the password or username in the Pass storage object.
      */
     
-    private void updateThePassword() {
+    private void updateUsrOrPasswd() {
 
         if (whichIsIt == USER) {
             update("updating username");
@@ -125,13 +130,11 @@ public class UserAccountWindow {
 
     public class KeyboardUpdater extends KeyAdapter {
 
-		// methods
-		
         @Override
        	public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                updateThePassword();
+                updateUsrOrPasswd();
             }
         }
     }
@@ -142,12 +145,10 @@ public class UserAccountWindow {
 
     public class MouseUpdater implements ActionListener {
 
-		// methods
-		
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            updateThePassword();
+            updateUsrOrPasswd();
         }
     }
 }

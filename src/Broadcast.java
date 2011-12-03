@@ -29,10 +29,10 @@ public class Broadcast {
 	private DatagramSocket broadcastSocket;
 	private DebugWindow debugger = null;
 	private static long fileDate = 0;
-	private String filename = "switches.csv";
+	private static String filename = "switches.csv";
 	private static final int PORT = 10077;
 	Checks securityChecks = null;
-	private static File switchFile;
+	private static File switchFile = new File(filename);
     String workingAddress = DEF_IP_ADDR;
 	
     // constructors

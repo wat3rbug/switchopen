@@ -18,8 +18,6 @@ public class KeyValuePair {
 	private static final String DEFAULT_IP = "0.0.0.0";
 	private DebugWindow debugger = null;
 	
-	// constructors
-	
 	/**
 	 * Constructor with an empty set.
 	 */

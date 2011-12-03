@@ -25,43 +25,44 @@ public class TransmitFile {
 
     // attributes
 
-    private String filename = "switches.csv";
-    private final int PORT = 10079;
-    private InetAddress address;
-    private boolean runTest = true;
-    private JFrame frame;
-    private boolean success = true;
-    private DebugWindow debugger = null;
     private static final String EOF = "-1";
-
+	private static final int ERROR = JOptionPane.ERROR_MESSAGE;
+	private final int PORT = 10079;
+    private InetAddress destAddress;
+    private DebugWindow debugger = null;
+	private String filename = "switches.csv";
+	private JFrame frame;
+	private boolean runTest = true;
+    private boolean success = true;
+    
     // constructors
 
     /**
      * Creates TransmitFile object with reference to main GUI frame and the IP
      * address of the host requesting.
      * @param frame The reference for main GUI.
-     * @param address The IP address of the host receiving the file 
+     * @param destAddress The IP address of the host receiving the file 
      * transmission.
      * @param passedframe The reference the to debugging window for updates.
      */
     
-    public TransmitFile(JFrame frame, InetAddress address, DebugWindow passedframe) {
+    public TransmitFile(JFrame frame, InetAddress destAddress, DebugWindow passedframe) {
 
-        this(frame, address);
+        this(frame, destAddress);
         debugger = passedframe;
     }
     /**
      * Creates TransmitFile object with reference to main GUI frame and the IP 
      * address of the host requesting.
      * @param frame The reference for main GUI.
-     * @param address The IP address of the host receiving the file 
+     * @param destAddress The IP address of the host receiving the file 
      * transmission.
      */
 
-    public TransmitFile(JFrame frame, InetAddress address) {
+    public TransmitFile(JFrame frame, InetAddress destAddress) {
 
         this.frame = frame;
-        this.address = address;
+        this.destAddress = destAddress;
     }
     // methods
 
@@ -80,15 +81,14 @@ public class TransmitFile {
             update("Start transmit");
             File newFile = new File(filename);
             reader = new BufferedReader(new FileReader(newFile));
-            update("Address - " + address.toString() + "\tport " + PORT);
-            socket = new Socket(address, PORT);
-            //socket.setTcpNoDelay(false);    // turns on nagles
-            if (debugger != null) {
-                 if (socket.isBound()) {
-                    update("output found port " + socket.getPort());
-                 } else {
-                    update("cannot bind outgoing " + socket.getPort());
-                }
+            update("Address - " + destAddress.getHostAddress() + "\tport " + PORT);
+            socket = new Socket(destAddress, PORT);
+            socket.setTcpNoDelay(false);    // turns on nagles
+            if (socket.isBound()) {
+                update("output found port " + socket.getPort());
+            } else {
+                update("cannot bind outgoing " + socket.getPort());
+				throw new ConnectException();
             }
             PrintWriter writer = new PrintWriter(new BufferedWriter(new 
                 OutputStreamWriter(socket.getOutputStream())), true);
@@ -105,19 +105,17 @@ public class TransmitFile {
             success = true;
 		} catch (ConnectException ce) {
 			update("unable to setup a port");
+			success = false;
         } catch (SocketException cr) { 
             update("Transmit forced fail");
-            if (debugger != null) cr.printStackTrace();
             success = false;
         } catch (SecurityException se) {
-            JOptionPane.showMessageDialog(frame, "No permissions to read this file", "File Permissions", 
-                JOptionPane.ERROR_MESSAGE);
+			String popupMsg = "No permissions to read this file";
+            JOptionPane.showMessageDialog(frame, popupMsg, "File Permissions", ERROR);
             update("Transmit File failure");
-            if (debugger != null) se.printStackTrace();
             success = false;
         } catch (IOException ioe) {
-            	update("Transmit File failure");
-                if (debugger != null) ioe.printStackTrace();
+            update("Transmit File failure");
             success = false;
         } 
         return success;

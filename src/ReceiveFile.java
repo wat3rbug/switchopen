@@ -29,15 +29,18 @@ public class ReceiveFile {
 
     // attributes
 
-    private String filename = "switches.csv";
-    private boolean runTest = true;
-    private final int PORT = 10079;
-    private JFrame frame;
-    private static final int SEC_LENGTH = 1000;
-    private boolean success = true;
-    private DebugWindow debugger = null;
     private static final String EOF = "-1";
-
+	private static final int ERROR = JOptionPane.ERROR_MESSAGE;
+	private static final String FILE_NAME = "switches.csv";
+	private static final int INFO = JOptionPane.INFORMATION_MESSAGE;
+    private static final int PORT = 10079;
+	private static final int SEC_LENGTH = 1000;
+	private static final String TITLE = "SwitchFinder Update";
+	private boolean runTest = true;
+    private DebugWindow debugger = null;
+	private JFrame frame;
+    private boolean success = true;
+    
     // constructors
 
     /**
@@ -111,9 +114,9 @@ public class ReceiveFile {
                 reader.close();
                 socket.close();
    
-                // make sure not to create an empty file
+                // make sure not to append to an existing file
             
-                File newFile = new File(filename);
+                File newFile = new File(FILE_NAME);
                 if (newFile.exists()) {
                     newFile.delete();
                 } 
@@ -127,16 +130,18 @@ public class ReceiveFile {
                 fileContents.clear();
                 writer.flush();
                 writer.close();         
-                update(Calendar.getInstance().getTime() + "\n --- Leaving receive file process ---");
-                JOptionPane.showMessageDialog(frame, "Update successful from " + doubleCheck.getHostName(), 
-                    "SwitchFinder Update", JOptionPane.INFORMATION_MESSAGE);
+				update("Leaving receive file process");
+				String popupMsg = "Update successful from ";
+				popupMsg += doubleCheck.getHostName();
+				JOptionPane.showMessageDialog(frame, popupMsg, TITLE, INFO);
                 success = true;
             } else {
                 success = false;
             }
         } catch (FileNotFoundException fnfe) {
-            JOptionPane.showMessageDialog(frame, "Something is blocking\nwrite permissions to " + filename, "File in Use", 
-                    JOptionPane.ERROR_MESSAGE);
+			String popupMsg = "Something is blocking\nwrite permissions to ";
+			popupMsg += FILE_NAME;
+            JOptionPane.showMessageDialog(frame, popupMsg, "File in Use", ERROR);
                 if (debugger != null) {
                     fnfe.printStackTrace();
                 }
@@ -153,8 +158,9 @@ public class ReceiveFile {
                 be.printStackTrace();
             }
         } catch (SecurityException se) {
-            JOptionPane.showMessageDialog(frame, "No permissions to write read" 
-                + " this file", "File Permissions", JOptionPane.ERROR_MESSAGE);
+			String popupMsg = "No permissions to write read";
+			popupMsg += " this file";
+            JOptionPane.showMessageDialog(frame, popupMsg, "File Permissions", ERROR);
             update("Receive File failure");
             if (debugger != null) se.printStackTrace();
             success = false;

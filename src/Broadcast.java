@@ -21,8 +21,7 @@ import java.net.SocketException;
  */
 
 public class Broadcast {
-
-    
+   
     // class variables
 
     private static final String DEF_IP_ADDR = "255.255.255.255"; 
@@ -129,6 +128,7 @@ public class Broadcast {
             String rawMessage = fileDateStr + "," + this.getFileCRC();
  			rawMessage += securityChecks.getHostHashStr();
             byte[] sendBuff = (rawMessage.getBytes());
+			update("broadcast size is " + sendBuff.length);
             message = new DatagramPacket(sendBuff, sendBuff.length);
             broadcastSocket.send(message);
             update("Sent message: " + rawMessage + " to " + workingAddress);

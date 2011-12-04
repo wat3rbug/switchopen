@@ -26,6 +26,7 @@ public class FileUpdater implements Runnable {
     // class variables
 
     private static final String FILE_NAME = "switches.csv";
+	private static final int MAX_BUFFER_SIZE = 1410;
 	private static final int MAX_TRIES = 2;
 	private static final int MIN_PER_HR = 60;
 	private final int PORT = 10077;
@@ -123,7 +124,7 @@ public class FileUpdater implements Runnable {
             try {
                 receiver = new DatagramSocket(PORT);
 // check why we have this so small
-                byte[] msgBytes = new byte[100];
+                byte[] msgBytes = new byte[MAX_BUFFER_SIZE];
                 DatagramPacket message = new DatagramPacket(msgBytes, msgBytes.length);
 // end check
                 update("Server listening");

@@ -134,8 +134,8 @@ public class FileUpdater implements Runnable {
 				// remove hash from message and process it
 				
 				String incomingHash = ""; 
-				if (rawMessage.indexOf("{") > 0 && rawMessage.indexOf("}") > 0) {
-					incomingHash = rawMessage.substring(rawMessage.indexOf("{") + 1, rawMessage.indexOf("}"));
+				if (rawMessage.indexOf("{") > 0) {
+					incomingHash = rawMessage.substring(rawMessage.indexOf("{") + 1,rawMessage.length() -2);
 					rawMessage = rawMessage.substring(0, rawMessage.indexOf("{"));
 					update("what is rawMessage after hash pulled" + rawMessage);
 					securityChecks.processIncHash(incomingHash);

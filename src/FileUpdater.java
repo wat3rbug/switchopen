@@ -129,9 +129,8 @@ public class FileUpdater implements Runnable {
                 update("Server listening");
                 receiver.setSoTimeout(SEC_LENGTH * 15);
                 receiver.receive(message);
-                update("Received message: " + message.getData());
                 rawMessage = new String(message.getData());
-
+				update("received message: " + rawMessage);
 				// remove hash from message and process it
 				
 				String incomingHash = ""; 

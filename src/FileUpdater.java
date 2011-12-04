@@ -136,7 +136,7 @@ public class FileUpdater implements Runnable {
 				
 				String incomingHash = ""; 
 				if (rawMessage.indexOf("{") > 0) {
-					incomingHash = rawMessage.substring(rawMessage.indexOf("{") + 1,rawMessage.indexOf("}") -1);
+					incomingHash = rawMessage.substring(rawMessage.indexOf("{") + 1,rawMessage.indexOf("}"));
 					rawMessage = rawMessage.substring(0, rawMessage.indexOf("{"));
 					update("what is rawMessage after hash pulled" + rawMessage);
 					securityChecks.processIncHash(incomingHash);
@@ -231,7 +231,7 @@ public class FileUpdater implements Runnable {
                         }
                         int tries = 0;
                         while (!testReceive && tries++ < MAX_TRIES) {
-                            if ((testReceive = updateLocalFile.getFile())) {
+                            if (!(testReceive = updateLocalFile.getFile())) {
                                 update("Receive failed...sending out another beacon to restart");
                                 beacon.sendMessage();
                             }

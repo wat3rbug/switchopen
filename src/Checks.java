@@ -188,7 +188,8 @@ public class Checks {
 				hostName = hostName.substring(0, hostName.indexOf("."));
 			}
 			update("host: " + hostName);
-			hostInfo.put(hostName, address);	
+			hostInfo.put(hostName, address);
+			address = UNKNOWN_IP_ADDR;	
 		}
 	}
 	/**

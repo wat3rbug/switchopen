@@ -49,6 +49,7 @@ public class Checks {
     
     public Checks() {
 	
+		hostInfo = new KeyValuePair();
 		finishConstructor();
 	}    
     // methods
@@ -189,7 +190,7 @@ public class Checks {
 			}
 			update("host: " + hostName);
 			hostInfo.put(hostName, address);
-			address = UNKNOWN_IP_ADDR;	
+			address = "";	
 		}
 	}
 	/**

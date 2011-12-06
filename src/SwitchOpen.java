@@ -40,7 +40,7 @@ public class SwitchOpen {
     private static final boolean PASSWORD = false;
 	private static final int WARNING = JOptionPane.WARNING_MESSAGE;
     static FileUpdater backgroundService = null;
-	private static boolean debug = true;
+	private static boolean debug = false;
     static DebugWindow debugger = null;
 	String directory = null;
 	static JFrame frame;
@@ -425,7 +425,7 @@ public class SwitchOpen {
 			
 			Calendar fileStamp_ms = Calendar.getInstance();
 			fileStamp_ms.setTimeInMillis(Broadcast.getFileDate());
-			String message = "Version: 2.1\nCreation Date: 20 March 2009\n"
+			String message = "Version: 2.3\nCreation Date: 20 March 2009\n"
                 + "Author: Douglas Gardiner\n" 
 				+ getFileDate(fileStamp_ms);
             JOptionPane.showMessageDialog(frame, message, "about", INFO);

@@ -148,6 +148,7 @@ public class Checks {
     public boolean inACL(InetAddress remoteAddress) {
         
         boolean inTheACL = false;
+// next line gave a null pointer error?
 		String remoteName = remoteAddress.getHostName().toLowerCase();
 		String remoteFQDN = remoteAddress.getCanonicalHostName().toLowerCase();
 		String address = remoteAddress.getHostAddress();

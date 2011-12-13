@@ -40,7 +40,7 @@ public class SwitchOpen {
     private static final boolean PASSWORD = false;
 	private static final int WARNING = JOptionPane.WARNING_MESSAGE;
     static FileUpdater backgroundService = null;
-	private static boolean debug = false;
+	private static boolean debug = true;
     static DebugWindow debugger = null;
 	String directory = null;
 	static JFrame frame;
@@ -299,14 +299,18 @@ public class SwitchOpen {
         } else {
             command = "xterm -e ssh ";
         }
-        String commandLine;
-        if (userInfo.getInfo(PASSWORD) != null && command.startsWith("putty")) {
-            commandLine = command + "-pw " + userInfo.getInfo(PASSWORD) + " ";
-        } else {
-            commandLine = command;
-        }
-		if (userInfo.getInfo(USER) != null && command.startsWith("xterm")) {
-            commandLine = command + "-l " + userInfo.getInfo(USER) + " ";
+        String commandLine = command; // should clean this
+		if (command.startsWith("putty")) {
+			if (userInfo.getInfo(USER) != null) {
+				commandLine += "-l " + userInfo.getInfo(USER) + " ";
+			}
+			if (userInfo.getInfo(PASSWORD) != null) {
+				commandLine += "-pw " + userInfo.getInfo(PASSWORD) + " ";
+			}
+		} else { // i didn't test for linux because only mac and windows used
+			if (userInfo.getInfo(USER) != null) {
+				commandLine += userInfo.getInfo(USER) + "@";
+			}
 		}
         if (testString.length() < 1) {
             return;
@@ -353,19 +357,17 @@ public class SwitchOpen {
         inputTag.setText("");
         try {
             String switchNlogin = "";      
-            if (userInfo.getInfo(USER) != null) {
-                    switchNlogin = userInfo.getInfo(USER) + "@";
-            }
             switchNlogin += validIp;
             if (command.startsWith("xterm")) {
-                switchNlogin += " ";
+                switchNlogin += "\n";
             }
             update(commandLine + switchNlogin);
 			commandLine += switchNlogin;
             Process child = Runtime.getRuntime().exec(commandLine);
        } catch (IOException e) {
             update("Something didn't work");
-			String popupMsg = "Either putty is in " + directory + " or you have bigger issues";
+			e.printStackTrace();
+			String popupMsg = "Either putty is NOT in the directory\nor you have bigger issues";
             JOptionPane.showMessageDialog(frame, popupMsg, "Putty?", ERROR);
         } 
     }

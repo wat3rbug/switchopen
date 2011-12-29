@@ -366,7 +366,6 @@ public class SwitchOpen {
             Process child = Runtime.getRuntime().exec(commandLine);
        } catch (IOException e) {
             update("Something didn't work");
-			e.printStackTrace();
 			String popupMsg = "Either putty is NOT in the directory\nor you have bigger issues";
             JOptionPane.showMessageDialog(frame, popupMsg, "Putty?", ERROR);
         } 

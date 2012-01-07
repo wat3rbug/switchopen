@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import net.sourceforge.napkinlaf.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
@@ -40,7 +41,7 @@ public class SwitchOpen {
     private static final boolean PASSWORD = false;
 	private static final int WARNING = JOptionPane.WARNING_MESSAGE;
     static FileUpdater backgroundService = null;
-	private static boolean debug = true;
+	private static boolean debug = false;
     static DebugWindow debugger = null;
 	String directory = null;
 	static JFrame frame;
@@ -425,7 +426,10 @@ public class SwitchOpen {
         public void actionPerformed(ActionEvent ad) {
 			
 			Calendar fileStamp_ms = Calendar.getInstance();
+			//GregorianCalendar fileStamp_ms = new GregorianCalendar();
 			fileStamp_ms.setTimeInMillis(Broadcast.getFileDate());
+			//fileStamp_ms.roll(Calendar.DAY_OF_WEEK, false);
+			//fileStamp_ms.roll(Calendar.DAY_OF_WEEK, false);
 			String message = "Version: 2.3\nCreation Date: 20 March 2009\n"
                 + "Author: Douglas Gardiner\n" 
 				+ getFileDate(fileStamp_ms);
@@ -442,8 +446,8 @@ public class SwitchOpen {
 			String updateMsg = "Last Update: ";
 			String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
 				"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-			String days[] = {"Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
-			updateMsg += days[tempTimeStamp_ms.get(Calendar.DAY_OF_WEEK)];
+			String days[] = {"Sun","Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
+			updateMsg += days[tempTimeStamp_ms.get(Calendar.DAY_OF_WEEK) - 1];
 			updateMsg += " " + tempTimeStamp_ms.get(Calendar.DAY_OF_MONTH);
 			updateMsg += " " + months[tempTimeStamp_ms.get(Calendar.MONTH)];
 			updateMsg += " " + tempTimeStamp_ms.get(Calendar.YEAR);

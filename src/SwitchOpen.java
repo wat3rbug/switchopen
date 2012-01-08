@@ -509,10 +509,10 @@ public class SwitchOpen {
         public void actionPerformed(ActionEvent ad) {
 
 			String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-			String days[] = {"Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
+			String days[] = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
 			Calendar fileStamp = Calendar.getInstance();
 			fileStamp.setTimeInMillis(Broadcast.getFileDate());
-			String fileDate = "Last Update: " + days[fileStamp.get(Calendar.DAY_OF_WEEK)] 
+			String fileDate = "Last Update: " + days[fileStamp.get(Calendar.DAY_OF_WEEK) -1] 
 				+ " " + fileStamp.get(Calendar.DAY_OF_MONTH) + " "
 				+ months[fileStamp.get(Calendar.MONTH)] + " "
 				+ fileStamp.get(Calendar.YEAR);

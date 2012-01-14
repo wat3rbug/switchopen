@@ -7,3 +7,5 @@ putty.exe
 lib
 src/SwitchOpen.tmproj
 config/*
+*.old
+*.cdd

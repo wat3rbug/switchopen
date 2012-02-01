@@ -82,6 +82,7 @@ public class Checks {
  				FileReader(hostFileHandle));
             String inLine = null;
 			String ipAddress = null;
+			String lastIPAddress = "255.255.255.255";
             while ((inLine = reader.readLine()) != null) {
                 hostnames.add(inLine.toLowerCase());
 				try {					
@@ -90,11 +91,12 @@ public class Checks {
 					// disregard if not found
 				}
 				// failsafe if no address given
-				if (ipAddress.isEmpty() || ipAddress.equals("")) {
+				if (ipAddress.isEmpty() || ipAddress.equals("") || ipAddress.equals(lastIPAddress)) {
 					ipAddress = UNKNOWN_IP_ADDR;
 				}				
 				// if name is not an address and address is known
 				// update hostInfo
+				lastIPAddress = ipAddress;
 				hostInfo.put(inLine, ipAddress);
 				update(inLine + " allowed");
             }
